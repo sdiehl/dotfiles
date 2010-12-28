@@ -8,8 +8,7 @@ import XMonad.Hooks.SetWMName
 
 main :: IO ()
 
-myBorderWidth   = 1
-
+myBorderWidth   = 5
 myNumlockMask   = mod2Mask
  
 main = xmonad defaultConfig
@@ -17,6 +16,7 @@ main = xmonad defaultConfig
         , terminal = "sakura"
         , keys = newKeys
         , startupHook = setWMName "LG3D"
+        , borderWidth = myBorderWidth
         }
         
 myWorkspaces = ["1","2","3","4","5","6","7","8","9","0"]
@@ -29,6 +29,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) =
         , ((modm, xK_x), spawn "xscreensaver-command -lock")
         , ((modm, xK_F1), spawn "ncmpcpp next")
         , ((modm, xK_F2), spawn "ncmpcpp toggle")
+        , ((modm, xK_grave), spawn "xterm -e vifm")
      ]
      ++
      [((m .|. modm, k), 
