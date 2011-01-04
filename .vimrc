@@ -4,10 +4,10 @@ filetype plugin on
 filetype plugin indent on
 filetype indent on
 
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+"autocmd FileType python set omnifunc=pythoncomplete#Complete
+"autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+"autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+"autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd BufNewFile,BufRead *.coffee set filetype=coffee
 autocmd BufNewFile,BufRead *Cakefile set filetype=coffee
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
@@ -34,7 +34,8 @@ set t_Co=256color
 set mouse=a
 set guioptions-=m
 set guioptions-=r
-set guioptions-=t
+set guioptions-=T
+set guioptions-=L
 
 set wrapmargin=15
 set textwidth=65
@@ -57,6 +58,7 @@ map <Leader>n :NERDTreeToggle<CR>
 map <Leader>j :JSLintUpdate<CR>
 map <Leader>t :noautocmd vimgrep /TODO/j **/*.py<CR>:cw<CR>
 map <Leader>u :source $MYVIMRC<CR>
+map <F12> :!kill -HUP `cat gunicorn.pid`<CR>
 
 noremap <F11> :set invpaste paste?<CR>
 set pastetoggle=<F11>
