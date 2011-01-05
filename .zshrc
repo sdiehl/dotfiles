@@ -1,7 +1,7 @@
 export EDITOR=vim
 set -o vi
 
-zstyle :compinstall filename '/home/stephen/.zshrc'
+zstyle :compinstall filename '$HOME/.zshrc'
 autoload -Uz compinit
 compinit
 
@@ -21,14 +21,19 @@ setopt LIST_ROWS_FIRST        # completion options left-to-right, top-to-bottom
 setopt LIST_TYPES             # show file types in list
 setopt MARK_DIRS              # adds slash to end of completed dirs
 setopt NUMERIC_GLOB_SORT      # sort numerically first, before alpha
-setopt PROMPT_SUBST           # sub values in prompt (though it seems to work anyway haha)
+setopt PROMPT_SUBST           # sub values in prompt
 setopt RM_STAR_WAIT           # pause before confirming rm *
 setopt SHARE_HISTORY          # share history between open shells
+
+# Python Virtualenv Stuff
+export WORKON_HOME=~/.virtualenvs
+source /usr/bin/virtualenvwrapper.sh
 
 # Aliases
 
 alias ls="ls --color -h"
 alias screen="screen -q"
+alias pure="pure -q"
 alias myip="/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'"
 
 # Git stuff
@@ -36,7 +41,7 @@ alias gst='git status'
 alias gl='git pull origin $(parse_git_branch)'
 alias glr='git pull --rebase origin $(parse_git_branch)'
 alias gp='git push origin $(parse_git_branch)'
-alias gd='git diff | meld'
+alias gd='git diff --no-ext-diff -w "$@" | vim -R -'
 alias gc='git commit -v'
 alias gca='git commit -v -a'
 alias gb='git branch'
@@ -70,3 +75,25 @@ zstyle ':completion:*:processes-names' command \
 zstyle ':completion:*:processes' command \
     "ps c $SWITCH -o pid -o command | uniq"
 unset SWITCH
+
+# Extract Archives
+ex () {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xjf $1        ;;
+            *.tar.gz)    tar xzf $1     ;;
+            *.bz2)       bunzip2 $1       ;;
+            *.rar)       rar x $1     ;;
+            *.gz)        gunzip $1     ;;
+            *.tar)       tar xf $1        ;;
+            *.tbz2)      tar xjf $1      ;;
+            *.tgz)       tar xzf $1       ;;
+            *.zip)       unzip $1     ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1    ;;
+            *)           echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
