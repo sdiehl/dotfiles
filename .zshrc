@@ -1,4 +1,7 @@
 export EDITOR=vim
+
+export GREP_OPTIONS='--color=auto'
+export GREP_COLOR='1;32'
 set -o vi
 
 zstyle :compinstall filename '$HOME/.zshrc'
@@ -31,6 +34,7 @@ source /usr/bin/virtualenvwrapper.sh
 
 # Aliases
 
+alias vol="alsamixer"
 alias ls="ls --color -h"
 alias screen="screen -q"
 alias pure="pure -q"
@@ -40,7 +44,7 @@ alias myip="/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print
 alias gst='git status'
 alias gl='git pull origin $(parse_git_branch)'
 alias glr='git pull --rebase origin $(parse_git_branch)'
-alias gp='git push origin $(parse_git_branch)'
+#alias gp='git push origin $(parse_git_branch)'
 alias gd='git diff --no-ext-diff -w "$@" | vim -R -'
 alias gc='git commit -v'
 alias gca='git commit -v -a'

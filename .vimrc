@@ -15,6 +15,8 @@ autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,
 autocmd FileType python set ft=python.django " For SnipMate
 autocmd FileType html set ft=htmldjango.html " For SnipMate
 
+set tw=110
+
 "X Clipboard
 set clipboard=unnamed
 
@@ -60,6 +62,7 @@ map <Leader>j :JSLintUpdate<CR>
 map <Leader>t :noautocmd vimgrep /TODO/j **/*.py<CR>:cw<CR>
 map <Leader>u :source $MYVIMRC<CR>
 map <F12> :!kill -HUP `cat gunicorn.pid`<CR>
+map cv :CoffeeView<CR>
 
 noremap <F11> :set invpaste paste?<CR>
 set pastetoggle=<F11>
