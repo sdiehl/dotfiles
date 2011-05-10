@@ -101,6 +101,7 @@ map <Leader>t :noautocmd vimgrep /TODO/j **/*.py<CR>:cw<CR>
 map <Leader>u :source $MYVIMRC<CR>
 map <F12> :!kill -HUP `cat gunicorn.pid`<CR>
 map <Leader>ig :IndentGuidesToggle<CR>
+nnoremap <silent> <leader>jb :call g:Jsbeautify()<cr>
 
 " Coffeescript Stuff
 let coffee_compile_on_save=1
