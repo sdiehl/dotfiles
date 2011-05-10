@@ -1,0 +1,5 @@
+*.pyc
+.svn
+_trial_temp/
+/pyflakes.egg-info/
+/build
