@@ -46,6 +46,10 @@ autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,
 autocmd FileType python set ft=python.django " For SnipMate
 autocmd FileType html set ft=htmldjango.html " For SnipMate
 
+autocmd BufNewFile,BufRead *.tpl set filetype=haml
+autocmd FileType haml set noexpandtab
+autocmd FileType haml set shiftwidth=2 tabstop=2 softtabstop=2
+
 " Close autocomplet window upon selection
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
@@ -89,25 +93,38 @@ let python_highlight_all = 1
 let g:tex_flavor = "latex"
 
 
-map <Leader>p :!pure -i %<CR>
-map <Leader>y :!python2 %<CR>
-map <Leader>h :!ghc % <CR>!./a.out<CR>
-map <Leader>c :call CompileRunGcc()<CR>
+"map <Leader>p :!pure -i %<CR>
+"map <Leader>y :!python2 %<CR>
+"map <Leader>h :!ghc % <CR>!./a.out<CR>
+"map <Leader>c :call CompileRunGcc()<CR>
 map <silent> <Leader>m :!make > /dev/null &<CR>
 map <Leader>f :FufBuffer<CR>
 map <Leader>n :NERDTreeToggle<CR>
-map <Leader>j :JSLintUpdate<CR>
-map <Leader>t :noautocmd vimgrep /TODO/j **/*.py<CR>:cw<CR>
 map <Leader>u :source $MYVIMRC<CR>
 map <F12> :!kill -HUP `cat gunicorn.pid`<CR>
 map <Leader>ig :IndentGuidesToggle<CR>
-nnoremap <silent> <leader>jb :call g:Jsbeautify()<cr>
+
+" Javascript
+map <silent> <leader>jb :call g:Jsbeautify()<CR>
+map <Leader>jl :JSLintUpdate<CR>
+
+" Python
+map <silent> <leader>jb :call g:Jsbeautify()<CR>
+map <Leader>t :noautocmd vimgrep /TODO/j **/*.py<CR>:cw<CR>
+map <silent> <Leader>pl :call Pep8()<CR>
 
 " Coffeescript Stuff
 let coffee_compile_on_save=1
 map cv :CoffeeView<CR>
 map cm :CoffeeMake<CR>
 
+func! Todos()
+    exec "noautocmd vimgrep /TODO/j **/*.py"
+    exec "cw"
+endfunc
+
+command! Todo :call Todos()
+command! Pep8 :call Pep8()
 
 func! CompileRunGcc()
   exec "w"
@@ -123,7 +140,7 @@ endfunc
 if has("gui_running") 
     " For gvim
     colorscheme darkspectrum
-    set guifont=Monaco\ 10
+    set guifont=Monaco\ 8
 else
     " For terminal
     colorscheme molokai
