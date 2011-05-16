@@ -64,6 +64,7 @@ endfunction
 
 
 function! s:CoffeeMake() range 
+  "exec "w"
 
   let compile_command = 'coffee -c '
   let current_file = shellescape(expand('%:p'))
@@ -85,7 +86,8 @@ function! s:CoffeeMake() range
     redir END
 
     " read in the errors temp file 
-    execute "silent! cfile " . quickfix_tmpfile_name
+    "execute "silent! cfile " . quickfix_tmpfile_name
+    execute "cfile " . quickfix_tmpfile_name
 
     " open the quicfix window
     botright copen
@@ -105,9 +107,9 @@ command! -range=% -narg=0 CoffeeExec :<line1>,<line2>call s:CoffeeExec()
 
 " Compile Coffeescript File
 command! CoffeeCompile call s:CoffeeFile()
-command! -bang -bar -nargs=* CoffeeMake call s:CoffeeMake()
+command! CoffeeMake call s:CoffeeMake()
 
 " Compile the current file on write.
 if exists("coffee_compile_on_save")
-  autocmd BufWritePost *.coffee silent call s:CoffeeMake()
+  autocmd BufWritePost *.coffee :CoffeeMake
 endif
