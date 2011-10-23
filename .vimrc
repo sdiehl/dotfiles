@@ -19,21 +19,21 @@ imap <c-space> <c-x><c-o>
 let g:SuperTabDefaultCompletionType = "context"
 
 " Add the virtualenv's site-packages to vim path
-py << EOF
-import os.path
-import sys
-import vim
-if 'VIRTUALENV' in os.environ:
-    project_base_dir = os.environ['VIRTUAL_ENV']
-    sys.path.insert(0, project_base_dir)
-    activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-    execfile(activate_this, dict(__file__=activate_this))
-EOF
+"py << EOF
+"import os.path
+"import sys
+"import vim
+"if 'VIRTUALENV' in os.environ:
+    "project_base_dir = os.environ['VIRTUAL_ENV']
+    "sys.path.insert(0, project_base_dir)
+    "activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+    "execfile(activate_this, dict(__file__=activate_this))
+"EOF
 
-" Load up virtualenv's vimrc if it exists
-if filereadable($VIRTUAL_ENV . '/.vimrc')
-    source $VIRTUAL_ENV/.vimrc
-endif
+"" Load up virtualenv's vimrc if it exists
+"if filereadable($VIRTUAL_ENV . '/.vimrc')
+    "source $VIRTUAL_ENV/.vimrc
+"endif
 
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
@@ -75,7 +75,7 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
-set t_Co=256color
+set t_Co=256
 set mouse=a
 set guioptions-=m
 set guioptions-=r
@@ -114,7 +114,7 @@ map <Leader>t :noautocmd vimgrep /TODO/j **/*.py<CR>:cw<CR>
 map <silent> <Leader>pl :call Pep8()<CR>
 
 " Coffeescript Stuff
-let coffee_compile_on_save=1
+let coffee_compile_on_save=0
 map cv :CoffeeView<CR>
 map cm :CoffeeMake<CR>
 

@@ -1,3 +1,4 @@
+xset b off # get rid of f#&*ing beep
 export EDITOR=vim
 
 export GREP_OPTIONS='--color=auto'
@@ -5,8 +6,8 @@ export GREP_COLOR='1;32'
 set -o vi
 
 zstyle :compinstall filename '$HOME/.zshrc'
-autoload -Uz compinit
-compinit
+autoload -Uz compinit && compinit
+autoload -U colors && colors
 
 setopt AUTO_CD                # cd if no matching command
 setopt AUTO_PARAM_SLASH       # adds slash at end of tabbed dirs
@@ -27,10 +28,6 @@ setopt NUMERIC_GLOB_SORT      # sort numerically first, before alpha
 setopt PROMPT_SUBST           # sub values in prompt
 setopt RM_STAR_WAIT           # pause before confirming rm *
 setopt SHARE_HISTORY          # share history between open shells
-
-# Python Virtualenv Stuff
-export WORKON_HOME=~/.virtualenvs
-source /usr/bin/virtualenvwrapper.sh
 
 # Aliases
 
@@ -101,3 +98,35 @@ ex () {
         echo "'$1' is not a valid file"
     fi
 }
+
+VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2
+
+# Haskell PATH
+PATH=$PATH:$HOME/.cabal/bin
+
+# Haskell PATH
+#
+
+function zle-line-init zle-keymap-select {
+  zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+
+bindkey -v
+
+# if mode indicator wasn't setup by theme, define default
+if [[ "$MODE_INDICATOR" == "" ]]; then
+  MODE_INDICATOR="%{$fg_bold[red]%}<%{$fg[red]%}<<%{$reset_color%}"
+fi
+
+function vi_mode_prompt_info() {
+  echo "${${KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/}"
+}
+
+function git_diff() {
+  git diff --no-ext-diff -w "$@" | vim -R -
+}
+
+alias work='source /home/stephen/.zshrc_python'

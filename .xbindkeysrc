@@ -1,0 +1,20 @@
+"mpc toggle"
+XF86AudioPlay
+
+"mpc stop"
+XF86AudioStop
+
+"mpc prev"
+XF86AudioPrev
+
+"mpc next"
+XF86AudioNext
+
+"amixer sset Master 2-"
+XF86AudioLowerVolume
+
+"amixer sset Master 2+"
+XF86AudioRaiseVolume
+
+"amixer sset Master toggle"
+XF86AudioMute
