@@ -5,18 +5,19 @@ set background=dark
 set wildmenu                  " Menu completion in command mode on <Tab>
 set wildmode=full             " <Tab> cycles between all matching choices.
 " Ignore these files when completing
-set wildignore+=*.o,*.obj,.git,*.pyc 
+"set wildignore+=*.o,*.obj,.git,*.pyc
+set wildignore+=*.o,*.obj,.git,*.pyc,*png
 
 """ Insert completion
 " don't select first item, follow typing in autocomplete
 set pumheight=6             " Keep a small completion window
 set completeopt=menuone,menu,longest,preview
-let OmniCpp_MayCompleteDot = 1 " autocomplete after .
-imap <c-space> <c-x><c-o>
+"let OmniCpp_MayCompleteDot = 1 " autocomplete after .
+"imap <c-space> <c-x><c-o>
 
 " Tab Completion Stuff
 " Try different completion methods depending on its context
-let g:SuperTabDefaultCompletionType = "context"
+"let g:SuperTabDefaultCompletionType = "context"
 
 " Add the virtualenv's site-packages to vim path
 "py << EOF
@@ -43,8 +44,6 @@ autocmd BufNewFile,BufRead *.coffee set filetype=coffee
 autocmd BufNewFile,BufRead *Cakefile set filetype=coffee
 autocmd BufNewFile,BufRead *.pure set filetype=pure.purestd
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-autocmd FileType python set ft=python.django " For SnipMate
-autocmd FileType html set ft=htmldjango.html " For SnipMate
 
 autocmd BufNewFile,BufRead *.tpl set filetype=haml
 autocmd FileType haml set noexpandtab
@@ -57,13 +56,14 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 set tw=110
 
 "X Clipboard
-set clipboard=unnamed
+set clipboard=unnamedplus,autoselect
+
 noremap <F11> :set invpaste paste?<CR>
 set pastetoggle=<F11>
 set showmode
 
 set shellslash
-set ofu=syntaxcomplete#Complete#
+"set ofu=syntaxcomplete#Complete#
 set grepprg=grep\ -nH\ $*
 set nocompatible
 set showmatch
@@ -75,7 +75,7 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
-set t_Co=256
+"set t_Co=256
 set mouse=a
 set guioptions-=m
 set guioptions-=r
@@ -98,7 +98,6 @@ let g:tex_flavor = "latex"
 "map <Leader>h :!ghc % <CR>!./a.out<CR>
 "map <Leader>c :call CompileRunGcc()<CR>
 map <silent> <Leader>m :!make > /dev/null &<CR>
-map <Leader>f :FufBuffer<CR>
 map <Leader>n :NERDTreeToggle<CR>
 map <Leader>u :source $MYVIMRC<CR>
 map <F12> :!kill -HUP `cat gunicorn.pid`<CR>
@@ -110,8 +109,9 @@ map <Leader>jl :JSLintUpdate<CR>
 
 " Python
 map <silent> <leader>jb :call g:Jsbeautify()<CR>
-map <Leader>t :noautocmd vimgrep /TODO/j **/*.py<CR>:cw<CR>
+"map <Leader>t :noautocmd vimgrep /TODO/j **/*.py<CR>:cw<CR>
 map <silent> <Leader>pl :call Pep8()<CR>
+map <silent> <Leader>c :CoveragePy report<CR>
 
 " Coffeescript Stuff
 let coffee_compile_on_save=0
@@ -139,12 +139,17 @@ endfunc
 
 if has("gui_running") 
     " For gvim
-    colorscheme darkspectrum
-    set guifont=Monaco\ 8
+    colorscheme fnaqevan
+    set guifont=Monaco\ 10
+
+    hi Normal guifg=White
 else
     " For terminal
     colorscheme molokai
     set guifont=ProggyCleanTT\ 12
 endif
 
+map <C-J> <C-W>j<C-W>_
+map <C-K> <C-W>k<C-W>_
 
+hi Conceal guibg=DarkGrey guifg=DarkGrey

@@ -36,6 +36,7 @@ alias ls="ls --color -h"
 alias screen="screen -q"
 alias pure="pure -q"
 alias myip="/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'"
+alias nose='nosetests -s --rednose'
 
 # Git stuff
 alias gst='git status'
@@ -49,6 +50,7 @@ alias gb='git branch'
 alias gba='git branch -a'
 alias gr="git reset --hard HEAD"
 alias grn="git log --format=oneline  --abbrev-commit --no-merges"
+alias gfa="git fetch --all"
 
 ###
 # get the name of the branch we are on

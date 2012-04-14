@@ -130,3 +130,4 @@ function git_diff() {
 }
 
 alias work='source /home/stephen/.zshrc_python'
+alias warp='wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf'
