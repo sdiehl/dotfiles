@@ -1,13 +1,13 @@
-"mpc toggle"
+"ncmpcpp toggle"
 XF86AudioPlay
 
-"mpc stop"
+"ncmpcpp stop"
 XF86AudioStop
 
-"mpc prev"
+"ncmpcpp prev"
 XF86AudioPrev
 
-"mpc next"
+"ncmpcpp next"
 XF86AudioNext
 
 "amixer sset Master 2-"
