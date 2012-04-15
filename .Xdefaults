@@ -8,7 +8,8 @@ Xft.rgba: rgb
 
 *background: #222222
 *foreground: #eeeeee
-*cursorColor: #B15C00 
+
+*cursorColor: #ff0000
  
 !! black dark/light
 *color0: #222222
@@ -39,5 +40,5 @@ Xft.rgba: rgb
 *color14: #009199
 
 !! white dark/light
-*color7: #bbbbbb
-*color15: #eeeeee  
+!*color7: #bbbbbb
+!*color15: #eeeeee  
