@@ -1,9 +1,3 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/stephen/GIT/beautiful-beamer/fonts'
-let g:netrw_dirhist_2='/usr/lib/python2.7/site-packages/docutils'
-let g:netrw_dirhist_3='/home/stephen/GIT/live-python/.git'
-let g:netrw_dirhist_4='/home/stephen/.vim/ftplugin'
-let g:netrw_dirhist_5='/home/stephen/GIT/wise/wise/static/js/autocomplete'
-let g:netrw_dirhist_6='/home/stephen/.vim/ftplugin/python'
-let g:netrw_dirhist_7='/home/stephen/Homework/CompSim/project/c'
+let g:netrw_dirhist_cnt =1
+let g:netrw_dirhist_1='/home/stephen/.vim/ftplugin/python/pyflakes'

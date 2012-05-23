@@ -1,18 +1,15 @@
 
 import textwrap
-import _ast
 
 from twisted.trial import unittest
 
-from pyflakes import checker
+from pyflakes import checker, ast
 
 
 class Test(unittest.TestCase):
 
-    def flakes(self, input, *expectedOutputs, **kw):
-        ast = compile(textwrap.dedent(input), "<test>", "exec",
-                      _ast.PyCF_ONLY_AST)
-        w = checker.Checker(ast, **kw)
+    def flakes(self, input, *expectedOutputs):
+        w = checker.Checker(ast.parse(textwrap.dedent(input)))
         outputs = [type(o) for o in w.messages]
         expectedOutputs = list(expectedOutputs)
         outputs.sort()
