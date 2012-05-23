@@ -1,59 +1,35 @@
 syntax on                     " syntax highlighing
 filetype on                   " try to detect filetypes
 filetype plugin indent on     " enable loading indent file for filetype
-set background=dark
+
 set wildmenu                  " Menu completion in command mode on <Tab>
 set wildmode=full             " <Tab> cycles between all matching choices.
-" Ignore these files when completing
-"set wildignore+=*.o,*.obj,.git,*.pyc
 set wildignore+=*.o,*.obj,.git,*.pyc,*png
+set pumheight=12             " Keep a small completion window
+set completeopt=menuone,menu,longest
 
-""" Insert completion
-" don't select first item, follow typing in autocomplete
-set pumheight=6             " Keep a small completion window
-set completeopt=menuone,menu,longest,preview
-"let OmniCpp_MayCompleteDot = 1 " autocomplete after .
-"imap <c-space> <c-x><c-o>
+au FileType python set omnifunc=pythoncomplete#Complete
+let g:SuperTabDefaultCompletionType = "context"
 
-" Tab Completion Stuff
-" Try different completion methods depending on its context
-"let g:SuperTabDefaultCompletionType = "context"
+set smartcase
+set smarttab
+set smartindent
+set autoindent
 
-" Add the virtualenv's site-packages to vim path
-"py << EOF
-"import os.path
-"import sys
-"import vim
-"if 'VIRTUALENV' in os.environ:
-    "project_base_dir = os.environ['VIRTUAL_ENV']
-    "sys.path.insert(0, project_base_dir)
-    "activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-    "execfile(activate_this, dict(__file__=activate_this))
-"EOF
-
-"" Load up virtualenv's vimrc if it exists
-"if filereadable($VIRTUAL_ENV . '/.vimrc')
-    "source $VIRTUAL_ENV/.vimrc
-"endif
-
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd BufNewFile,BufRead *.coffee set filetype=coffee
 autocmd BufNewFile,BufRead *Cakefile set filetype=coffee
 autocmd BufNewFile,BufRead *.pure set filetype=pure.purestd
+autocmd BufNewFile,BufRead *.t set filetype=slipstream
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 
-autocmd BufNewFile,BufRead *.tpl set filetype=haml
-autocmd FileType haml set noexpandtab
-autocmd FileType haml set shiftwidth=2 tabstop=2 softtabstop=2
-
-" Close autocomplet window upon selection
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+" Autofix all whitespace on save
+autocmd BufWritePre *.py :%s/\s\+$//e
+" Delete all trailing empty lines on files
+autocmd BufWritePre *.py :%s/\(\s*\n\)\+\%$//e
 
 set tw=110
+set statusline=%f\ %m%r\ [%Y]%=%(\ %l,%v\ @\ %p%%\ of\ %L\ %)
+set formatprg=par
 
 "X Clipboard
 set clipboard=unnamedplus,autoselect
@@ -63,7 +39,6 @@ set pastetoggle=<F11>
 set showmode
 
 set shellslash
-"set ofu=syntaxcomplete#Complete#
 set grepprg=grep\ -nH\ $*
 set nocompatible
 set showmatch
@@ -86,17 +61,12 @@ set wrapmargin=15
 set textwidth=65
 set grepprg=grep\ -nH\ $*
 set wrap nowrap
+set laststatus=2
 
 " Latex Stuff
 let g:tex_flavor='latex'
-let python_highlight_all = 1
-let g:tex_flavor = "latex"
+let python_highlight_all=1
 
-
-"map <Leader>p :!pure -i %<CR>
-"map <Leader>y :!python2 %<CR>
-"map <Leader>h :!ghc % <CR>!./a.out<CR>
-"map <Leader>c :call CompileRunGcc()<CR>
 map <silent> <Leader>m :!make > /dev/null &<CR>
 map <Leader>n :NERDTreeToggle<CR>
 map <Leader>u :source $MYVIMRC<CR>
@@ -111,20 +81,39 @@ map <Leader>jl :JSLintUpdate<CR>
 map <silent> <leader>jb :call g:Jsbeautify()<CR>
 "map <Leader>t :noautocmd vimgrep /TODO/j **/*.py<CR>:cw<CR>
 map <silent> <Leader>pl :call Pep8()<CR>
-map <silent> <Leader>c :CoveragePy report<CR>
+map <silent> <Leader>t :CtrlP()<CR>
+
+command -bang -nargs=? QFix call QFixToggle(<bang>0)
+function! QFixToggle(forced)
+  if exists("g:qfix_win") && a:forced == 0
+    cclose
+    unlet g:qfix_win
+  else
+    copen 10
+    let g:qfix_win = bufnr("$")
+  endif
+endfunction
+
+"map <silent> <Leader>c :CoveragePy report<CR>
+map <silent> <Leader>c :QFix<CR>
 
 " Coffeescript Stuff
-let coffee_compile_on_save=0
-map cv :CoffeeView<CR>
-map cm :CoffeeMake<CR>
+"let coffee_compile_on_save=0
+"map cv :CoffeeView<CR>
+"map cm :CoffeeMake<CR>
 
 func! Todos()
     exec "noautocmd vimgrep /TODO/j **/*.py"
     exec "cw"
 endfunc
 
+func! Flush()
+    exec "!find . -name \".*.swp\" | xargs rm -f"
+endfunc
+
 command! Todo :call Todos()
 command! Pep8 :call Pep8()
+command! Flush :call Flush()
 
 func! CompileRunGcc()
   exec "w"
@@ -132,24 +121,39 @@ func! CompileRunGcc()
   exec "! ./%<"
 endfunc
 
-func! MakeRun()
-  exec "w"
-  exec "make"
-endfunc
-
-if has("gui_running") 
+if has("gui_running")
     " For gvim
-    colorscheme fnaqevan
+    colorscheme solarized
     set guifont=Monaco\ 10
 
     hi Normal guifg=White
 else
     " For terminal
-    colorscheme molokai
+    "colorscheme molokai
+    colorscheme xoria256
     set guifont=ProggyCleanTT\ 12
+    autocmd FocusGained * call s:CommandTFlush()
+
 endif
 
-map <C-J> <C-W>j<C-W>_
-map <C-K> <C-W>k<C-W>_
+nnoremap <C-j> <C-W>w<C-W>_
 
-hi Conceal guibg=DarkGrey guifg=DarkGrey
+" tab navigation like firefox
+map tn :tabnext<CR>
+map tp :tabprevious<CR>
+
+map <C-t> :tabnew<CR>
+map <C-w> :tabclose<CR>
+
+vmap a= :Tabularize /=<CR>
+vmap a; :Tabularize /:<CR>
+vmap a, :Tabularize /,<CR>
+
+highlight SpellBad term=underline gui=underline guisp=Blue
+
+" Rope
+map gt :RopeGotoDefinition<CR>
+
+" Quick Fix Window for Pyflakes
+map cn :cn<CR>
+map co :QFix<CR>

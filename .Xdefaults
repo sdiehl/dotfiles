@@ -1,9 +1,11 @@
-Xft.dpi: 96
+Xft.dpi: 102
 Xft.lcdfilter: lcddefault
 Xft.antialias: true
 Xft.hinting:true
 Xft.hintstyle: hintfull
 Xft.rgba: rgb
+URxvt*buffered: false
+
 *customization: -color
 
 *background: #222222
@@ -42,3 +44,4 @@ Xft.rgba: rgb
 !! white dark/light
 !*color7: #bbbbbb
 !*color15: #eeeeee  
+!
