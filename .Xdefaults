@@ -5,6 +5,9 @@ Xft.hinting:true
 Xft.hintstyle: hintfull
 Xft.rgba: rgb
 URxvt*buffered: false
+URxvt*termName:screen-256color
+URxvt.perl-ext:
+URxvt.perl-ext-common:
 
 *customization: -color
 

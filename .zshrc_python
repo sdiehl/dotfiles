@@ -37,6 +37,8 @@ alias screen="screen -q"
 alias pure="pure -q"
 alias myip="/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'"
 alias nose='nosetests -s --rednose'
+alias dev='python qexec/web/devserver.py --nodb --reloader --debug'
+alias die='killall -9 python'
 
 # Git stuff
 alias gst='git status'
@@ -51,6 +53,9 @@ alias gba='git branch -a'
 alias gr="git reset --hard HEAD"
 alias grn="git log --format=oneline  --abbrev-commit --no-merges"
 alias gfa="git fetch --all"
+alias gci="git commit --interactive"
+alias gco='git checkout'
+compdef gco=git
 
 ###
 # get the name of the branch we are on
@@ -63,7 +68,6 @@ function parse_git_dirty {
 }
 
 # Tab completion
-
 zstyle ':completion:*:*:kill:*' menu yes select
 zstyle ':completion:*:kill:*'   force-list always
 zstyle ':completion:*' completer _complete _match _approximate
@@ -195,7 +199,7 @@ compdef ggpush=git
 alias ggpnp='git pull origin $(current_branch) && git push origin $(current_branch)'
 compdef ggpnp=git
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$reset_color%}%{$fg[blue]%}"
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$reset_color%}%{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$reset_color%}"
@@ -237,4 +241,4 @@ git_custom_status() {
 }
 
 
-PROMPT='[%1~]$(git_custom_status)$b'
+PROMPT='[%1~] $(git_custom_status) $b'

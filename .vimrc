@@ -10,6 +10,8 @@ set completeopt=menuone,menu,longest
 
 au FileType python set omnifunc=pythoncomplete#Complete
 let g:SuperTabDefaultCompletionType = "context"
+let g:ropevim_vim_completion=1
+let g:ropevim_extended_complete=1
 
 set smartcase
 set smarttab
@@ -83,7 +85,7 @@ map <silent> <leader>jb :call g:Jsbeautify()<CR>
 map <silent> <Leader>pl :call Pep8()<CR>
 map <silent> <Leader>t :CtrlP()<CR>
 
-command -bang -nargs=? QFix call QFixToggle(<bang>0)
+command! -bang -nargs=? QFix call QFixToggle(<bang>0)
 function! QFixToggle(forced)
   if exists("g:qfix_win") && a:forced == 0
     cclose
@@ -123,7 +125,8 @@ endfunc
 
 if has("gui_running")
     " For gvim
-    colorscheme solarized
+    "colorscheme molokai
+    colorscheme jellybeans
     set guifont=Monaco\ 10
 
     hi Normal guifg=White
@@ -150,10 +153,51 @@ vmap a; :Tabularize /:<CR>
 vmap a, :Tabularize /,<CR>
 
 highlight SpellBad term=underline gui=underline guisp=Blue
+highlight Error term=underline gui=underline guibg=#00ff00
 
 " Rope
 map gt :RopeGotoDefinition<CR>
+map rr :RopeRename<CR>
+map rai :RopeAutoImport<CR>
+map roi :RopeOrganizeImports<CR>
+map rvt :VimroomToggle<CR>
 
 " Quick Fix Window for Pyflakes
 map cn :cn<CR>
 map co :QFix<CR>
+map cc :RopeLuckyAssist<CR>
+
+" Git
+map gd :Gdiff<CR>
+map gb :Gblame<CR>
+" Git checkout at block level
+vmap do :diffget<CR>
+
+map fb :set guifont=Monaco\ 10<CR>:set lines=999 columns=999<CR>
+map fs :set guifont=Monaco\ 8<CR>:set lines=999 columns=999<CR>
+
+if (&tildeop)
+  nmap gcw guw~l
+  nmap gcW guW~l
+  nmap gciw guiw~l
+  nmap gciW guiW~l
+  nmap gcis guis~l
+  nmap gc$ gu$~l
+  nmap gcgc guu~l
+  nmap gcc guu~l
+  vmap gc gu~l
+else
+  nmap gcw guw~h
+  nmap gcW guW~h
+  nmap gciw guiw~h
+  nmap gciW guiW~h
+  nmap gcis guis~h
+  nmap gc$ gu$~h
+  nmap gcgc guu~h
+  nmap gcc guu~h
+  vmap gc gu~h
+endif
+
+let ropevim_vim_completion = 1
+let ropevim_extended_complete = 1
+let g:ropevim_autoimport_modules = []
