@@ -25,6 +25,9 @@ import XMonad.Layout.Spiral
 import XMonad.Layout.Accordion
 import XMonad.Layout.Grid
 
+import XMonad.Layout.MultiToggle
+import XMonad.Layout.MultiToggle.Instances
+
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
@@ -38,7 +41,7 @@ myNumlockMask   = mod2Mask
 
 -- Width of the window border in pixels.
 --
-myBorderWidth   = 1
+myBorderWidth   = 3
 
 -- modMask lets you specify which modkey you want to use. The default
 -- is mod1Mask ("left alt").  You may also consider using mod3Mask
@@ -61,7 +64,7 @@ myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 -- Border colors for unfocused and focused windows, respectively.
 --
 myNormalBorderColor  = "#dddddd"
-myFocusedBorderColor = "#0000ff"
+myFocusedBorderColor = "#ff0000"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -79,6 +82,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
+
+    , ((modm,               xK_f     ), sendMessage $ Toggle FULL )
 
      -- Rotate through the available layout algorithms
     , ((modm,               xK_space ), sendMessage NextLayout)
@@ -187,11 +192,14 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = tiled ||| Mirror tiled ||| Full ||| Accordion ||| Grid
+
+myLayout = 
+  mkToggle (NOBORDERS ?? FULL ?? EOT)
+  {-$ tiled ||| Mirror tiled ||| Full ||| Accordion ||| Grid-}
+  $ tiled ||| Mirror tiled ||| Accordion ||| Grid
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
-     spiraled  =  spiral (6/7)
 
      -- The default number of windows in the master pane
      nmaster = 1

@@ -1,4 +1,5 @@
 xset b off # get rid of f#&*ing beep
+bindkey -v
 export EDITOR=vim
 
 export GREP_OPTIONS='--color=auto'
@@ -34,7 +35,6 @@ setopt SHARE_HISTORY          # share history between open shells
 alias vol="alsamixer"
 alias ls="ls --color -h"
 alias screen="screen -q"
-alias pure="pure -q"
 alias myip="/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'"
 
 # Git stuff
@@ -61,6 +61,7 @@ function parse_git_dirty {
 }
 
 # Tab completion
+# --------------
 
 zstyle ':completion:*:*:kill:*' menu yes select
 zstyle ':completion:*:kill:*'   force-list always
@@ -99,13 +100,24 @@ ex () {
     fi
 }
 
+# Python Environment
+# ------------------
+
 VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2
 
-# Haskell PATH
-PATH=$PATH:$HOME/.cabal/bin
+# Haskell Environment
+# -------------------
 
-# Haskell PATH
-#
+# Add GHC & Haskell Platform to PATH if present
+if [ -d "$HOME/.haskell/bin" ]; then
+    export PATH=$PATH:$HOME/.haskell/bin
+fi
+
+# ... and any installed Cabal packages
+if [ -d "$HOME/.cabal/bin" ]; then
+    export PATH=$PATH:$HOME/.cabal/bin
+fi
+
 
 function zle-line-init zle-keymap-select {
   zle reset-prompt
@@ -113,8 +125,6 @@ function zle-line-init zle-keymap-select {
 
 zle -N zle-line-init
 zle -N zle-keymap-select
-
-bindkey -v
 
 # if mode indicator wasn't setup by theme, define default
 if [[ "$MODE_INDICATOR" == "" ]]; then
@@ -131,3 +141,5 @@ function git_diff() {
 
 alias work='source /home/stephen/.zshrc_python'
 alias warp='wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf'
+alias q='work && cd /home/stephen/quant/qsm && workon qsm;'
+alias ghci='ghci -v0'
