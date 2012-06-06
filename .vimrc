@@ -100,7 +100,7 @@ endfunction
 map <silent> <Leader>c :QFix<CR>
 
 " Coffeescript Stuff
-"let coffee_compile_on_save=0
+let coffee_compile_on_save=0
 "map cv :CoffeeView<CR>
 "map cm :CoffeeMake<CR>
 
