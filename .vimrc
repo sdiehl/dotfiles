@@ -1,3 +1,4 @@
+nnoremap <buffer> o <CR><C-W>p
 syntax on                     " syntax highlighing
 filetype on                   " try to detect filetypes
 filetype plugin indent on     " enable loading indent file for filetype
@@ -88,7 +89,7 @@ map <silent> <Leader>t :CtrlP()<CR>
 command! -bang -nargs=? QFix call QFixToggle(<bang>0)
 function! QFixToggle(forced)
   if exists("g:qfix_win") && a:forced == 0
-    cclose
+    ccl
     unlet g:qfix_win
   else
     copen 10
@@ -97,7 +98,7 @@ function! QFixToggle(forced)
 endfunction
 
 "map <silent> <Leader>c :CoveragePy report<CR>
-map <silent> <Leader>c :QFix<CR>
+"map <silent> <Leader>c :QFix<CR>
 
 " Coffeescript Stuff
 let coffee_compile_on_save=0
@@ -136,7 +137,6 @@ else
     colorscheme xoria256
     set guifont=ProggyCleanTT\ 12
     autocmd FocusGained * call s:CommandTFlush()
-
 endif
 
 nnoremap <C-j> <C-W>w<C-W>_
@@ -163,8 +163,8 @@ map roi :RopeOrganizeImports<CR>
 map rvt :VimroomToggle<CR>
 
 " Quick Fix Window for Pyflakes
-map cn :cn<CR>
-map co :QFix<CR>
+map cn :call CycleErrors()<CR>
+map <silent> co :QFix<CR><CR>
 map cc :RopeLuckyAssist<CR>
 
 " Git
@@ -201,3 +201,22 @@ endif
 let ropevim_vim_completion = 1
 let ropevim_extended_complete = 1
 let g:ropevim_autoimport_modules = []
+
+map <Space> }}
+map ;; \\w
+
+set incsearch
+map ff /\c
+
+function! CycleErrors()
+  try
+    cn
+  catch /^Vim\%((\a\+)\)\=:E553/
+    "try
+      "next
+    "catch /^Vim\%((\a\+)\)\=:E16[35]/
+    cc 1
+    "endtry
+  catch /^Vim\%((\a\+)\)\=:E42/
+  endtry
+endfunction

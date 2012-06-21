@@ -34,8 +34,8 @@ import XMonad.Layout.MultiToggle.Instances
 myTerminal      = "urxvt"
 
 -- Whether focus follows the mouse pointer.
-myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
+{-myFocusFollowsMouse :: Bool-}
+myFocusFollowsMouse = False
 
 myNumlockMask   = mod2Mask
 
