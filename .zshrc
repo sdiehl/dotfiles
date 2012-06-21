@@ -118,6 +118,11 @@ if [ -d "$HOME/.cabal/bin" ]; then
     export PATH=$PATH:$HOME/.cabal/bin
 fi
 
+# ... and any installed Cabal packages
+if [ -d "$HOME/AgdaStdLib/src" ]; then
+    export PATH=$PATH:$HOME/.cabal/bin
+fi
+
 
 function zle-line-init zle-keymap-select {
   zle reset-prompt
@@ -143,3 +148,5 @@ alias work='source /home/stephen/.zshrc_python'
 alias warp='wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf'
 alias q='work && cd /home/stephen/quant/qsm && workon qsm;'
 alias ghci='ghci -v0'
+alias pst="ps -Leo pid,tid,comm"
+alias siteget="wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows"
