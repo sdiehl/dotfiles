@@ -150,3 +150,25 @@ alias q='work && cd /home/stephen/quant/qsm && workon qsm;'
 alias ghci='ghci -v0'
 alias pst="ps -Leo pid,tid,comm"
 alias siteget="wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows"
+
+alias qt="cd /home/stephen/quant/qsm && nose -x tests"
+alias zt="cd /home/stephen/quant/qsm/zipline_repo && nose tests"
+
+
+waits () {
+    CMD=$@
+    echo $CMD
+    while :
+    do
+        echo "reading"
+        read -s -n 1 key
+        echo $key
+
+        if [[ $key = "" ]]
+        then
+            reset
+            date
+            eval $CMD
+        fi
+    done
+}
