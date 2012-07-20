@@ -85,6 +85,8 @@ snippet pdb
 	import pdb; pdb.set_trace()
 snippet rdb
 	import rdb; rdb.set_trace()
+snippet pub
+	import pudb; pudb.set_trace()
 snippet aeq
 	self.assertEqual
 snippet init
@@ -102,3 +104,14 @@ snippet green
 	gevent.joinall([
 		gevent.spawn(${1}),
 	])
+snippet utest
+	from unittest2 import TestCase
+	from logbook.compat import LoggingHandler
+
+	class ${1}(TestCase):
+		def setUp(self):
+			self.log_handler = LoggingHandler()
+			self.log_handler.push_application()
+
+		def tearDown(self):
+			self.log_handler.pop_application()

@@ -1,4 +1,3 @@
-nnoremap <buffer> o <CR><C-W>p
 syntax on                     " syntax highlighing
 filetype on                   " try to detect filetypes
 filetype plugin indent on     " enable loading indent file for filetype
@@ -23,7 +22,7 @@ autocmd BufNewFile,BufRead *.coffee set filetype=coffee
 autocmd BufNewFile,BufRead *Cakefile set filetype=coffee
 autocmd BufNewFile,BufRead *.pure set filetype=pure.purestd
 autocmd BufNewFile,BufRead *.t set filetype=slipstream
-autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 
 " Autofix all whitespace on save
 autocmd BufWritePre *.py :%s/\s\+$//e
@@ -42,7 +41,6 @@ set pastetoggle=<F11>
 set showmode
 
 set shellslash
-set grepprg=grep\ -nH\ $*
 set nocompatible
 set showmatch
 
@@ -73,7 +71,6 @@ let python_highlight_all=1
 map <silent> <Leader>m :!make > /dev/null &<CR>
 map <Leader>n :NERDTreeToggle<CR>
 map <Leader>u :source $MYVIMRC<CR>
-map <F12> :!kill -HUP `cat gunicorn.pid`<CR>
 map <Leader>ig :IndentGuidesToggle<CR>
 
 " Javascript
@@ -83,8 +80,10 @@ map <Leader>jl :JSLintUpdate<CR>
 " Python
 map <silent> <leader>jb :call g:Jsbeautify()<CR>
 "map <Leader>t :noautocmd vimgrep /TODO/j **/*.py<CR>:cw<CR>
-map <silent> <Leader>pl :call Pep8()<CR>
 map <silent> <Leader>t :CtrlP()<CR>
+
+" Tags
+nmap <F8> :TagbarToggle<CR>
 
 command! -bang -nargs=? QFix call QFixToggle(<bang>0)
 function! QFixToggle(forced)
@@ -97,11 +96,8 @@ function! QFixToggle(forced)
   endif
 endfunction
 
-"map <silent> <Leader>c :CoveragePy report<CR>
-"map <silent> <Leader>c :QFix<CR>
-
 " Coffeescript Stuff
-let coffee_compile_on_save=0
+"let coffee_compile_on_save=0
 "map cv :CoffeeView<CR>
 "map cm :CoffeeMake<CR>
 
@@ -128,9 +124,11 @@ if has("gui_running")
     " For gvim
     "colorscheme molokai
     colorscheme jellybeans
-    set guifont=Monaco\ 10
+    colorscheme kellys
+    "set guifont=Monaco\ 10
+    set guifont=Envy\ Code\ R\ 9
 
-    hi Normal guifg=White
+    "hi Normal guifg=White
 else
     " For terminal
     "colorscheme molokai
@@ -139,14 +137,15 @@ else
     autocmd FocusGained * call s:CommandTFlush()
 endif
 
-nnoremap <C-j> <C-W>w<C-W>_
+"nnoremap <C-j> <C-W>w<C-W>_
+nnoremap <C-j> <C-W>w
 
 " tab navigation like firefox
 map tn :tabnext<CR>
 map tp :tabprevious<CR>
 
 map <C-t> :tabnew<CR>
-map <C-w> :tabclose<CR>
+"map <C-w> :tabclose<CR>
 
 vmap a= :Tabularize /=<CR>
 vmap a; :Tabularize /:<CR>
@@ -157,6 +156,7 @@ highlight Error term=underline gui=underline guibg=#00ff00
 
 " Rope
 map gt :RopeGotoDefinition<CR>
+
 map rr :RopeRename<CR>
 map rai :RopeAutoImport<CR>
 map roi :RopeOrganizeImports<CR>
@@ -164,8 +164,13 @@ map rvt :VimroomToggle<CR>
 
 " Quick Fix Window for Pyflakes
 map cn :call CycleErrors()<CR>
-map <silent> co :QFix<CR><CR>
-map cc :RopeLuckyAssist<CR>
+map co :QFix<CR><CR>
+imap <C-space> <Esc>a<Space><Esc>:call RopeLuckyAssistInsertMode()<CR>i
+
+fun! RopeLuckyAssistInsertMode()
+    call RopeLuckyAssist()
+    return ""
+endfunction
 
 " Git
 map gd :Gdiff<CR>
@@ -202,11 +207,23 @@ let ropevim_vim_completion = 1
 let ropevim_extended_complete = 1
 let g:ropevim_autoimport_modules = []
 
+" Fast Navigation
 map <Space> }}
+map <S-Space> {{
+
+" Fast Navigation
+" EasyMotion
 map ;; \\w
 
+" Go to last edited line one keystroke 
+map ` g;
+
+" Case insensitive search
 set incsearch
 map ff /\c
+
+" Inelegant grepping
+nmap <c-f> :vimgrep  **/*.py<left><left><left><left><left><left><left><left>
 
 function! CycleErrors()
   try
@@ -220,3 +237,40 @@ function! CycleErrors()
   catch /^Vim\%((\a\+)\)\=:E42/
   endtry
 endfunction
+
+
+let ropevim_codeassist_maxfixes=10
+let ropevim_guess_project=1
+let ropevim_vim_completion=1
+let ropevim_enable_autoimport=1
+let ropevim_extended_complete=1
+
+let g:pyflakes_use_quickfix = 1
+
+let g:Powerline_symbols = 'fancy'
+
+function! TogglePyflakesQuickfix()
+    if g:pyflakes_use_quickfix == 1
+        echo "Disabled Pyflakes Quickfix"
+        let g:pyflakes_use_quickfix = 0
+        if &filetype == "Python"
+            silent PyflakesUpdate
+        endif
+        call QFixToggle(0)
+        call setqflist([])
+    else
+        echo "Enabled Pyflakes Quickfix"
+        let g:pyflakes_use_quickfix = 1
+        if &filetype == "Python"
+            silent PyflakesUpdate
+        endif
+        call QFixToggle(1)
+    endif
+endfunction
+
+noremap <f4> :call TogglePyflakesQuickfix()<cr>
+let g:tagbar_autofocus = 1
+
+
+map <silent><F3> :NEXTCOLOR<cr> 
+map <silent><F2> :PREVCOLOR<cr> 

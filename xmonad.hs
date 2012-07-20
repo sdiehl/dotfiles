@@ -1,12 +1,3 @@
---
--- xmonad example config file.
---
--- A template showing all available configuration hooks,
--- and how to override the defaults in your own xmonad.hs conf file.
---
--- Normally, you'd only override those defaults you care about.
---
-
 import XMonad
 import Data.Monoid
 import System.Exit
@@ -35,7 +26,7 @@ myTerminal      = "urxvt"
 
 -- Whether focus follows the mouse pointer.
 {-myFocusFollowsMouse :: Bool-}
-myFocusFollowsMouse = False
+myFocusFollowsMouse = True
 
 myNumlockMask   = mod2Mask
 
@@ -49,6 +40,11 @@ myBorderWidth   = 3
 -- "windows key" is usually mod4Mask.
 --
 myModMask       = mod4Mask
+
+numPadKeys = [ xK_KP_End,  xK_KP_Down,  xK_KP_Page_Down -- 1, 2, 3
+             , xK_KP_Left, xK_KP_Begin, xK_KP_Right     -- 4, 5, 6
+             , xK_KP_Home, xK_KP_Up,    xK_KP_Page_Up   -- 7, 8, 9
+             , xK_KP_Insert] -- 0
 
 -- The default number of workspaces (virtual screens) and their names.
 -- By default we use numeric strings, but any string may be used as a
@@ -76,6 +72,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch dmenu
     , ((modm,               xK_p     ), spawn "dmenu_run")
+
+    , ((modm .|. shiftMask, xK_l     ), spawn "xlock -mode matrix")
 
     -- launch gmrun
     , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
@@ -160,6 +158,11 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
         | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+    ++
+
+    [((m .|. modm, k), windows $ f i)
+        | (i, k) <- zip myWorkspaces numPadKeys
+        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
 
 
 ------------------------------------------------------------------------
