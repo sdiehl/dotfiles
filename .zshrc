@@ -146,14 +146,14 @@ function git_diff() {
 
 alias work='source /home/stephen/.zshrc_python'
 alias warp='wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf'
-alias q='work && cd /home/stephen/quant/qsm && workon qsm;'
 alias ghci='ghci -v0'
 alias pst="ps -Leo pid,tid,comm"
 alias siteget="wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows"
 
-alias qt="cd /home/stephen/quant/qsm && nose -x tests"
-alias zt="cd /home/stephen/quant/qsm/zipline_repo && nose tests"
+alias s="work && workon science"
 
+alias pudb="python -m pudb.run"
+alias pdb="python -m pdb"
 
 waits () {
     CMD=$@
@@ -172,3 +172,5 @@ waits () {
         fi
     done
 }
+
+
