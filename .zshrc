@@ -155,6 +155,10 @@ alias s="work && workon science"
 alias pudb="python -m pudb.run"
 alias pdb="python -m pdb"
 
+alias ass="astyle --style=1tbs --lineend=linux --convert-tabs --preserve-date --fill-empty-lines --pad-header --indent-switches --align-pointer=name --align-reference=name --pad-oper"
+alias pvalgrind="valgrind --tool=memcheck --suppressions=/home/stephen/valgrind-python.supp --leak-check=summary python"
+alias pvalgrindv="valgrind --tool=memcheck --leak-check=full --suppressions=/home/stephen/valgrind-python.supp python"
+
 waits () {
     CMD=$@
     echo $CMD
@@ -173,4 +177,4 @@ waits () {
     done
 }
 
-
+export PATH="/usr/lib/colorgcc/bin:$PATH"
