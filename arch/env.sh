@@ -15,6 +15,8 @@ pacman -S ca-certificates
 pacman -S dbus-core
 pacman -S hwdetect
 pacman -S gcc
+pacman -S clang
+pacman -S llvm
 pacman -S glibc
 pacman -S glib2
 
@@ -92,6 +94,11 @@ pacman -S python2-virtualenv
 
 #pip install virtualenv
 pip install virtualenvwrapper
+
+# Numeric libs in site-packages
+pacman -S python2-numpy
+pacman -S python2-scipy
+pacman -S python2-matplotlib
 
 pacman -S pypy
 
