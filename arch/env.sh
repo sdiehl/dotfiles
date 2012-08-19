@@ -87,6 +87,25 @@ pacman -S dzen2
 cabal install xmonad
 xmonad --recompile
 
+# Essential Haskell
+cabal install stm
+cabal install pandoc
+cabal install lens
+cabal install lens
+cabal install categories
+cabal install network
+cabal install HTTP
+cabal install unix
+cabal install process
+cabal install quickcheck
+cabal install parsec
+cabal install cloud
+cabal install hmatrix
+cabal install vect
+cabal install pipes
+cabal install uniplate
+#cabal install hakyll
+
 # Python
 pacman -S python2
 pacman -S python2-pip
