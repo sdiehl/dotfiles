@@ -1,3 +1,8 @@
+" Stephen Diehl .vimrc
+" Most aimed at Haskell / Python / C / LaTeX 
+"
+" This is about 5 years of love. Feel free to copy any of it!
+
 syntax on                     " syntax highlighing
 filetype on                   " try to detect filetypes
 filetype plugin indent on     " enable loading indent file for filetype
@@ -8,6 +13,9 @@ set wildignore+=*.o,*.obj,.git,*.pyc,*png
 set pumheight=12             " Keep a small completion window
 set completeopt=menuone,menu,longest
 
+" ----------------------------------------------
+" Autcompletion
+" ----------------------------------------------
 au FileType python set omnifunc=pythoncomplete#Complete
 let g:SuperTabDefaultCompletionType = "context"
 let g:ropevim_vim_completion=1
@@ -18,19 +26,48 @@ set smarttab
 set smartindent
 set autoindent
 
-autocmd BufNewFile,BufRead *.coffee set filetype=coffee
-autocmd BufNewFile,BufRead *Cakefile set filetype=coffee
+" ----------------------------------------------
+" Less Uesd Languages
+" ----------------------------------------------
+autocmd BufNewFile,BufRead *.agda set filetype=agda
+autocmd BufNewFile,BufRead *.ocaml set filetype=ocaml
+autocmd BufNewFile,BufRead *.go set filetype=go
 autocmd BufNewFile,BufRead *.pure set filetype=pure.purestd
-autocmd BufNewFile,BufRead *.t set filetype=slipstream
-autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+autocmd BufNewFile,BufRead *.js set filetype=javascript
+autocmd BufNewFile,BufRead *.coffee set filetype=coffee
+" ----------------------------------------------
 
+" ----------------------------------------------
+" C
+" ----------------------------------------------
+autocmd BufEnter *.c set formatprg=astyle\ --style=1tbs
+autocmd BufEnter *.c compiler splint
+autocmd BufWritePre *.c :%s/\s\+$//e
+
+" ----------------------------------------------
+" Haskell
+" ----------------------------------------------
+autocmd Bufenter *.hs compiler ghc
+"autocmd Bufenter *.hs compiler hlint
+autocmd BufEnter *.hs set formatprg=pointfree
+vmap gw :!djinn<CR>
+
+" ----------------------------------------------
+" Python
+" ----------------------------------------------
+autocmd BufNewFile,BufRead *.py set formatprg=par
+
+" ----------------------------------------------
+" Autofix Python Whitespace
+" ----------------------------------------------
 " Autofix all whitespace on save
 autocmd BufWritePre *.py :%s/\s\+$//e
 " Delete all trailing empty lines on files
 autocmd BufWritePre *.py :%s/\(\s*\n\)\+\%$//e
+" ----------------------------------------------
 
 set tw=110
-set statusline=%f\ %m%r\ [%Y]%=%(\ %l,%v\ @\ %p%%\ of\ %L\ %)
+"set statusline=%f\ %m%r\ [%Y]%=%(\ %l,%v\ @\ %p%%\ of\ %L\ %)
 set formatprg=par
 
 "X Clipboard
@@ -68,22 +105,38 @@ set laststatus=2
 let g:tex_flavor='latex'
 let python_highlight_all=1
 
+" The Line of Power
+let g:Powerline_symbols = 'fancy'
+
 map <silent> <Leader>m :!make > /dev/null &<CR>
 map <Leader>n :NERDTreeToggle<CR>
 map <Leader>u :source $MYVIMRC<CR>
 map <Leader>ig :IndentGuidesToggle<CR>
 
-" Javascript
+" ----------------------------------------------
+" CTRL+P
+" ----------------------------------------------
+map <silent> <Leader>t :CtrlP()<CR>
+
+" ----------------------------------------------
+" Haskell
+" ----------------------------------------------
+" Type Refresh
+map tu :call GHC_BrowseAll()<CR>
+" Type Lookup
+map tt :call GHC_ShowType(0)<CR>
+" Type Infer
+map tw :call GHC_ShowType(1)<CR>
+
+" ----------------------------------------------
+" Javascript, ick
+" ----------------------------------------------
 map <silent> <leader>jb :call g:Jsbeautify()<CR>
 map <Leader>jl :JSLintUpdate<CR>
 
-" Python
-map <silent> <leader>jb :call g:Jsbeautify()<CR>
-"map <Leader>t :noautocmd vimgrep /TODO/j **/*.py<CR>:cw<CR>
-map <silent> <Leader>t :CtrlP()<CR>
+" configure browser for haskell_doc.vim
+let g:haddock_browser = "chromium"
 
-" Tags
-nmap <F8> :TagbarToggle<CR>
 
 command! -bang -nargs=? QFix call QFixToggle(<bang>0)
 function! QFixToggle(forced)
@@ -106,13 +159,19 @@ func! Todos()
     exec "cw"
 endfunc
 
+" ----------------------------------------------
+" Flush
+" ----------------------------------------------
+" Flush swap files recursively in this directory, usefull if Vim
+" crashes.
+command! Flush :call Flush()
 func! Flush()
     exec "!find . -name \".*.swp\" | xargs rm -f"
 endfunc
+" ----------------------------------------------
 
 command! Todo :call Todos()
 command! Pep8 :call Pep8()
-command! Flush :call Flush()
 
 func! CompileRunGcc()
   exec "w"
@@ -124,9 +183,8 @@ if has("gui_running")
     " For gvim
     "colorscheme molokai
     colorscheme jellybeans
-    colorscheme kellys
-    "set guifont=Monaco\ 10
-    set guifont=Envy\ Code\ R\ 9
+    set guifont=Monaco\ 10
+    "set guifont=Envy\ Code\ R\ 9
 
     "hi Normal guifg=White
 else
@@ -162,21 +220,20 @@ map rai :RopeAutoImport<CR>
 map roi :RopeOrganizeImports<CR>
 map rvt :VimroomToggle<CR>
 
-" Quick Fix Window for Pyflakes
-map cn :call CycleErrors()<CR>
-map co :QFix<CR><CR>
-imap <C-space> <Esc>a<Space><Esc>:call RopeLuckyAssistInsertMode()<CR>i
-
 fun! RopeLuckyAssistInsertMode()
     call RopeLuckyAssist()
     return ""
 endfunction
 
-" Git
+" ----------------------------------------------
+" Git Version Traversal
+" ----------------------------------------------
 map gd :Gdiff<CR>
 map gb :Gblame<CR>
 " Git checkout at block level
 vmap do :diffget<CR>
+map gd :Gdiff<CR>
+" ----------------------------------------------
 
 map fb :set guifont=Monaco\ 10<CR>:set lines=999 columns=999<CR>
 map fs :set guifont=Monaco\ 8<CR>:set lines=999 columns=999<CR>
@@ -207,37 +264,37 @@ let ropevim_vim_completion = 1
 let ropevim_extended_complete = 1
 let g:ropevim_autoimport_modules = []
 
+" ----------------------------------------------
 " Fast Navigation
+" ----------------------------------------------
+" Use space to jump between paragraphs
 map <Space> }}
 map <S-Space> {{
 
-" Fast Navigation
-" EasyMotion
-map ;; \\w
-
 " Go to last edited line one keystroke 
 map ` g;
+" ----------------------------------------------
 
-" Case insensitive search
+
+" ----------------------------------------------
+" Searching
+" ----------------------------------------------
 set incsearch
 map ff /\c
-
 " Inelegant grepping
 nmap <c-f> :vimgrep  **/*.py<left><left><left><left><left><left><left><left>
+" ----------------------------------------------
 
-function! CycleErrors()
-  try
-    cn
-  catch /^Vim\%((\a\+)\)\=:E553/
-    "try
-      "next
-    "catch /^Vim\%((\a\+)\)\=:E16[35]/
-    cc 1
-    "endtry
-  catch /^Vim\%((\a\+)\)\=:E42/
-  endtry
-endfunction
 
+" ----------------------------------------------
+" EasyMotion
+" ----------------------------------------------
+map ;; \\w
+" ----------------------------------------------
+
+" ----------------------------------------------
+" Ropevim + Python
+" ----------------------------------------------
 
 let ropevim_codeassist_maxfixes=10
 let ropevim_guess_project=1
@@ -245,9 +302,15 @@ let ropevim_vim_completion=1
 let ropevim_enable_autoimport=1
 let ropevim_extended_complete=1
 
-let g:pyflakes_use_quickfix = 1
+" ----------------------------------------------
+" PyFlakes
+" ----------------------------------------------
+" Quick Fix Window for Pyflakes
+map cn :call CycleErrors()<CR>
+map co :QFix<CR><CR>
+imap <C-space> <Esc>a<Space><Esc>:call RopeLuckyAssistInsertMode()<CR>i
 
-let g:Powerline_symbols = 'fancy'
+let g:pyflakes_use_quickfix = 1
 
 function! TogglePyflakesQuickfix()
     if g:pyflakes_use_quickfix == 1
@@ -269,8 +332,26 @@ function! TogglePyflakesQuickfix()
 endfunction
 
 noremap <f4> :call TogglePyflakesQuickfix()<cr>
+
+function! CycleErrors()
+  try
+    cn
+  catch /^Vim\%((\a\+)\)\=:E553/
+    "try
+      "next
+    "catch /^Vim\%((\a\+)\)\=:E16[35]/
+    cc 1
+    "endtry
+  catch /^Vim\%((\a\+)\)\=:E42/
+  endtry
+endfunction
+" ----------------------------------------------
+
+
+" ----------------------------------------------
+" Tagbar
+" ----------------------------------------------
+nmap <leader>= :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
+" ----------------------------------------------
 
-
-map <silent><F3> :NEXTCOLOR<cr> 
-map <silent><F2> :PREVCOLOR<cr> 

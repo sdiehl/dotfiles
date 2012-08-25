@@ -110,6 +110,9 @@ export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2
 export WORKON_HOME=~/.virtualenvs
 source /usr/bin/virtualenvwrapper.sh
 
+# Pythonz
+source $HOME/.pythonz/etc/bashrc
+
 # Haskell PATH
 PATH=$PATH:$HOME/.cabal/bin
 

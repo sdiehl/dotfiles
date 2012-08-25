@@ -104,6 +104,9 @@ cabal install hmatrix
 cabal install vect
 cabal install pipes
 cabal install uniplate
+cabal install pointfree
+cabal install pointful
+cabal install djinn
 #cabal install hakyll
 
 # Python

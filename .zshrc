@@ -159,6 +159,11 @@ alias ass="astyle --style=1tbs --lineend=linux --convert-tabs --preserve-date --
 alias pvalgrind="valgrind --tool=memcheck --suppressions=/home/stephen/valgrind-python.supp --leak-check=summary python"
 alias pvalgrindv="valgrind --tool=memcheck --leak-check=full --suppressions=/home/stephen/valgrind-python.supp python"
 
+# For when you need to prove free theorems fast!
+alias pf="pointfree"
+alias pt="pointful"
+alias dj="djinn"
+
 waits () {
     CMD=$@
     echo $CMD
