@@ -37,9 +37,15 @@ function MakeGreen(...) "{{{1
   if error != ''
     call s:Bar("red", error)
   else
-    call s:Bar("green","All tests passed")
+    call s:Bar("green","Good")
   endif
 endfunction
+
+function MakeRed(...) "{{{1
+    call s:Bar("red", "Bad")
+endfunction
+
+
 "}}}1
 "
 " Utility Functions" {{{1
