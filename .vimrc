@@ -35,6 +35,7 @@ autocmd BufNewFile,BufRead *.go set filetype=go
 autocmd BufNewFile,BufRead *.pure set filetype=pure.purestd
 autocmd BufNewFile,BufRead *.js set filetype=javascript
 autocmd BufNewFile,BufRead *.coffee set filetype=coffee
+autocmd BufNewFile,BufRead *.md set filetype=markdown
 " ----------------------------------------------
 
 " ----------------------------------------------
@@ -122,12 +123,27 @@ map <silent> <Leader>t :CtrlP()<CR>
 " Haskell
 " ----------------------------------------------
 " Type Refresh
-map tu :call GHC_BrowseAll()<CR>
+map <silent> tu :call GHC_BrowseAll()<CR>
 " Type Lookup
 map tt :call GHC_ShowType(0)<CR>
 " Type Infer
 map tw :call GHC_ShowType(1)<CR>
+" Type Infer
+map ti :call GHC_ShowInfo()<CR>
+map trai :call GHC_MkImportsExplicit()<CR>
 
+map <Leader>s :SyntasticToggleMode<CR>
+if has("gui_running")
+  map tghc :popup ]OPTIONS_GHC<cr>
+else
+  map tghc :emenu ]OPTIONS_GHC.
+endif
+
+if has("gui_running")
+  map tlo :popup ]LANGUAGES_GHC<cr>
+else
+  map tlo :emenu ]LANGUAGES_GHC.
+endif
 " ----------------------------------------------
 " Javascript, ick
 " ----------------------------------------------

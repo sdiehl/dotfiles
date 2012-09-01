@@ -236,7 +236,9 @@ if !exists("*s:RunPyflakes")
         let b:qf_window_count = -1
         
         python << EOF
-for w in check(vim.current.buffer):
+
+errors = check(vim.current.buffer)
+for w in errors:
     vim.command('let s:matchDict = {}')
     vim.command("let s:matchDict['lineNum'] = " + str(w.lineno))
     vim.command("let s:matchDict['message'] = '%s'" % vim_quote(w.message % w.message_args))
@@ -298,6 +300,7 @@ if !exists("*s:GetPyflakesMessage")
             call s:WideMsg(s:pyflakesMatch['message'])
             let b:showing_message = 1
             return
+            call :MakeRed()
         endif
 
         " otherwise, if we're showing a message, clear it

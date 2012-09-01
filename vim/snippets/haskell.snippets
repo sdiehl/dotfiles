@@ -1,0 +1,91 @@
+snippet dat
+	data ${1} = ${2}
+
+snippet new
+	newtype ${1} = ${2}
+
+snippet :
+	${1:f} :: ${2} -> ${3}
+
+snippet m
+	${1} = do
+		${2}
+
+snippet arr
+	${1:f} ${2:x} = proc ${3:$2} do
+		${4} <- ${5} -< ${6:$2}
+		returnA ${7}
+
+snippet pragma GADTs
+	{-# Language GADTs #-}
+
+snippet pragma NoMonomorphismRestriction
+	{-# Language NoMonomorphismRestriction #-}
+
+snippet pragma DeriveFunctor
+	{-# Language DeriveFunctor #-}
+
+snippet pragma MultiParamTypeClasses
+	{-# Language MultiParamTypeClasses #-}
+
+snippet pragma FlexibleContexts
+	{-# Language FlexibleContexts #-}
+
+snippet pragma RankNTypes
+	{-# Language RankNTypes #-}
+
+snippet pragma ExistentialQuantification
+	{-# Language ExistentialQuantification #-}
+
+snippet ->
+	${1:m a} -> ${2:a}
+snippet tup
+	(${1:a}, ${2:b})
+snippet tup2
+	(${1:a}, ${2:b}, ${3:c})
+snippet tup3
+	(${1:a}, ${2:b}, ${3:c}, ${4:d})
+snippet rec
+	${1:Record} { ${2:recFieldA} = ${3:undefined}
+				, ${4:recFieldB} = ${5:undefined}
+				}
+snippet case
+	case ${1:something} of
+		${2} -> ${3}
+snippet let
+	let ${1} = ${2}
+	in ${3}
+snippet where
+	where
+		${1:fn} = ${2:undefined}
+snippet if
+	if ${1:condition}
+	   then ${2:expression}
+	   else ${3:expression}
+
+snippet \
+	\ ${1:pattern} -> ${2:expression}
+
+snippet [|]
+	[${3:foo }$1 | ${1:x} <- ${2:xs} ]
+
+snippet 2=
+	${1:name} ${2:pattern} = ${3:undefined}
+	$1 ${4:pattern} = ${5:undefined}
+
+snippet ::
+	${1:name} :: ${2:Type} -> ${3:Type}
+
+snippet =>
+	(${1:Class} ${2:Type var}) => ${3:$2}
+
+snippet =
+	${1:name} ${2:pattern} = ${3:undefined}
+
+snippet def
+	${1:name} :: ${2:Type} -> ${3:Type}
+
+snippet def[]
+	${1:name} :: [${2:Type}] -> ${3:Type}
+	$1 [] = ${4:undefined}
+	$1 ${5:(x:xs)} = ${6:undefined}
