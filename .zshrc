@@ -104,6 +104,7 @@ ex () {
 # ------------------
 
 VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2
+export PATH=/home/stephen/continuum/anaconda/bin:$PATH
 
 # Haskell Environment
 # -------------------
@@ -145,6 +146,7 @@ function git_diff() {
 }
 
 alias work='source /home/stephen/.zshrc_python'
+
 alias warp='wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf'
 alias ghci='ghci -v0'
 alias pst="ps -Leo pid,tid,comm"
@@ -163,6 +165,9 @@ alias pvalgrindv="valgrind --tool=memcheck --leak-check=full --suppressions=/hom
 alias pf="pointfree"
 alias pt="pointful"
 alias dj="djinn"
+
+# J programming language
+alias j="jfe --console"
 
 waits () {
     CMD=$@

@@ -9,7 +9,7 @@ filetype plugin indent on     " enable loading indent file for filetype
 
 set wildmenu                  " Menu completion in command mode on <Tab>
 set wildmode=full             " <Tab> cycles between all matching choices.
-set wildignore+=*.o,*.obj,.git,*.pyc,*png
+set wildignore+=*.o,*.obj,.git,*.pyc,*png,*.h5,*.swo
 set pumheight=12             " Keep a small completion window
 set completeopt=menuone,menu,longest
 
@@ -371,3 +371,5 @@ nmap <leader>= :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
 " ----------------------------------------------
 
+ab teh the
+ab sefl self

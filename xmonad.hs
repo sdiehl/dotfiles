@@ -23,7 +23,7 @@ import XMonad.Layout.MultiToggle.Instances
 
 import Graphics.X11.Xlib.Extras (none)
 
-myTerminal      = "urxvt"
+myTerminal      = "sakura"
 myFocusFollowsMouse = True
 myNumlockMask   = mod2Mask
 myBorderWidth   = 3
@@ -114,8 +114,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Restart xmonad
     , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
 
-    , ((modm .|. shiftMask, xK_j),  nextWS)
-    , ((modm .|. shiftMask, xK_k),  prevWS)
+    , ((modm .|. shiftMask, xK_h),  nextWS)
+    {-, ((modm .|. shiftMask, xK_l),  prevWS)-}
 
     , ((0,          xK_Alt_R), windows W.focusDown)
     , ((0,          xK_Alt_L), windows W.focusUp)

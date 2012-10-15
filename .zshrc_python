@@ -36,7 +36,8 @@ alias ls="ls --color -h"
 alias screen="screen -q"
 alias pure="pure -q"
 alias myip="/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'"
-alias nose='nosetests -s --rednose'
+alias nose='nosetests -s -v --rednose --detailed'
+alias nosep='nosetests -s -v --rednose --pdb --pdb-failure'
 alias dev='python qexec/web/devserver.py --nodb --reloader --debug'
 alias die='killall -9 python'
 
