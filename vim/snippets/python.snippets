@@ -113,3 +113,27 @@ snippet utest
 
 		def tearDown(self):
 			self.log_handler.pop_application()
+snippet bar
+	#------------------------------------------------------------------------
+	# ${1}
+	#------------------------------------------------------------------------
+snippet exc
+	class ${1}(Exception):
+		def __init__(self, args):
+			self.args = args
+		def __str__(self):
+			return ${2}
+snippet ni
+	raise NotImplementedError
+snippet cman
+	class ${1}
+
+		def __init__(self, obj):
+			self.obj = obj
+
+		def __enter__(self):
+			${2}
+
+		def __exit__(self, exception_type, exception_val, trace):
+			${3}
+	        return True
