@@ -4,6 +4,8 @@ export EDITOR=vim
 
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;32'
+
+export PATH="/usr/lib/colorgcc/bin:$PATH"
 set -o vi
 
 zstyle :compinstall filename '$HOME/.zshrc'
@@ -30,7 +32,22 @@ setopt PROMPT_SUBST           # sub values in prompt
 setopt RM_STAR_WAIT           # pause before confirming rm *
 setopt SHARE_HISTORY          # share history between open shells
 
-# Aliases
+# Work ZSH config is a extension of this file
+alias work='source /home/stephen/.zshrc_python'
+
+# Networking
+alias warp='wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf'
+alias ghci='ghci -v0'
+alias pst="ps -Leo pid,tid,comm"
+alias siteget="wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows"
+
+# TODO: deprecate this in favor of Anaconda
+alias s="work && workon science"
+
+# J programming language
+alias j="jfe --console"
+
+# General System Aliases
 
 alias vol="alsamixer"
 alias ls="ls --color -h"
@@ -49,6 +66,11 @@ alias gb='git branch'
 alias gba='git branch -a'
 alias gr="git reset --hard HEAD"
 alias grn="git log --format=oneline  --abbrev-commit --no-merges"
+alias gfa="git fetch --all"
+alias gci="git commit --interactive"
+alias gco='git checkout'
+compdef gco=git
+
 
 ###
 # get the name of the branch we are on
@@ -103,6 +125,7 @@ ex () {
 # Python Environment
 # ------------------
 
+# Use Anaconda by Default
 VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2
 export PATH=/home/stephen/continuum/anaconda/bin:$PATH
 
@@ -121,7 +144,7 @@ fi
 
 # ... and any installed Cabal packages
 if [ -d "$HOME/AgdaStdLib/src" ]; then
-    export PATH=$PATH:$HOME/.cabal/bin
+    export PATH=$PATH:$HOME/AgdaStdLib/src
 fi
 
 
@@ -145,30 +168,6 @@ function git_diff() {
   git diff --no-ext-diff -w "$@" | vim -R -
 }
 
-alias work='source /home/stephen/.zshrc_python'
-
-alias warp='wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf'
-alias ghci='ghci -v0'
-alias pst="ps -Leo pid,tid,comm"
-alias siteget="wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows"
-
-alias s="work && workon science"
-
-alias pudb="python -m pudb.run"
-alias pdb="python -m pdb"
-
-alias ass="astyle --style=1tbs --lineend=linux --convert-tabs --preserve-date --fill-empty-lines --pad-header --indent-switches --align-pointer=name --align-reference=name --pad-oper"
-alias pvalgrind="valgrind --tool=memcheck --suppressions=/home/stephen/valgrind-python.supp --leak-check=summary python"
-alias pvalgrindv="valgrind --tool=memcheck --leak-check=full --suppressions=/home/stephen/valgrind-python.supp python"
-
-# For when you need to prove free theorems fast!
-alias pf="pointfree"
-alias pt="pointful"
-alias dj="djinn"
-
-# J programming language
-alias j="jfe --console"
-
 waits () {
     CMD=$@
     echo $CMD
@@ -187,4 +186,3 @@ waits () {
     done
 }
 
-export PATH="/usr/lib/colorgcc/bin:$PATH"
