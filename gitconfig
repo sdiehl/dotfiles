@@ -1,0 +1,12 @@
+[difftool]
+	prompt = false
+[diff]
+	tool = vimdiff
+[merge]
+	tool = vimdiff
+[push]
+	default = current
+[web]
+    browser = chromium
+[color]
+	ui = auto

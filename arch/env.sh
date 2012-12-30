@@ -3,7 +3,6 @@ mkdir /home/stephen
 pacman -Sy
 
 # Operating System
-pacman -S kernel26
 pacman -S linux
 
 # Arch
@@ -27,6 +26,11 @@ pacman -S wireless_tools
 pacman -S wpa_supplicant
 pacman -S wpa_supplicant_gui
 pacman -S wget
+
+# Terminals
+pacman -S urxvt-unicode
+pacman -S sakura
+pacman -S xterm
 
 # Laptop
 pacman -S cpufrequtils
@@ -107,7 +111,8 @@ cabal install uniplate
 cabal install pointfree
 cabal install pointful
 cabal install djinn
-#cabal install hakyll
+cabal install pandoc
+cabal install hakyll
 
 # Python
 pacman -S python2
@@ -139,6 +144,7 @@ pacman -S vifm
 pacman -S tmux
 pacman -S feh
 pacman -S unclutter
+pacman -S xlock
 
 # Media
 pacman -S mpd
@@ -149,6 +155,10 @@ pacman -S vlc
 # Latex
 pacman -S texlive-bin
 pacman -S texlive-core
+pacman -S texinfo
+pacman -S texlive-latexextra
+pacman -S texlive-pictures
+pacman -S texlive-pstricks
 
 # IRC
 pacman -S irssi
@@ -163,6 +173,7 @@ pip install cython
 
 pacman -S lua
 pacman -S go
+pacman -S scala
 
 # Databases
 pacman -Q postgres

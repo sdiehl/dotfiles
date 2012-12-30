@@ -230,6 +230,7 @@ highlight Error term=underline gui=underline guibg=#00ff00
 
 " Rope
 map gt :RopeGotoDefinition<CR>
+map gt :RopeGotoDefinition<CR>
 
 map rr :RopeRename<CR>
 map rai :RopeAutoImport<CR>
@@ -289,6 +290,7 @@ map <S-Space> {{
 
 " Go to last edited line one keystroke 
 map ` g;
+map gl <C-^> 
 " ----------------------------------------------
 
 
