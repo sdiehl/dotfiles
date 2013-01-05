@@ -159,6 +159,10 @@ pacman -S texinfo
 pacman -S texlive-latexextra
 pacman -S texlive-pictures
 pacman -S texlive-pstricks
+pacman -S ghostscript
+
+# Drawing
+pacman -S inkscape
 
 # IRC
 pacman -S irssi
@@ -174,6 +178,11 @@ pip install cython
 pacman -S lua
 pacman -S go
 pacman -S scala
+
+# PLT
+pacman -S ocaml
+pacman -S coq
+pacman -S agda
 
 # Databases
 pacman -Q postgres
