@@ -147,6 +147,11 @@ if [ -d "$HOME/AgdaStdLib/src" ]; then
     export PATH=$PATH:$HOME/AgdaStdLib/src
 fi
 
+# ... and CUDA
+if [ -d "/opt/cuda/bin" ]; then
+    export PATH=$PATH:/opt/cuda/bin
+fi
+
 
 function zle-line-init zle-keymap-select {
   zle reset-prompt

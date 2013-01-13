@@ -14,10 +14,22 @@ pacman -S ca-certificates
 pacman -S dbus-core
 pacman -S hwdetect
 pacman -S gcc
+pacman -S gcc-fortran
+pacman -S gcc-libs
 pacman -S clang
+pacman -S valgrind
 pacman -S llvm
 pacman -S glibc
 pacman -S glib2
+
+# Math
+pacman -S mpfr
+pacman -S gmp
+pacman -S cloog
+pacman -S isl
+pacman -S blas
+pacman -S lapack
+pacman -S arpack
 
 # Network
 pacman -S dhcpcd
@@ -26,6 +38,8 @@ pacman -S wireless_tools
 pacman -S wpa_supplicant
 pacman -S wpa_supplicant_gui
 pacman -S wget
+pacman -S wireshark-cli
+pacman -S wireshark-gtk
 
 # Terminals
 pacman -S urxvt-unicode
@@ -38,6 +52,7 @@ pacman -S laptop-mode-tools
 pacman -S xbindkeys
 pacman -S xf86-input-evdev
 pacman -S xf86-input-synaptics
+pacman -S powertop
 
 # Drivers
 pacman -S xf86-video-intel
@@ -56,10 +71,6 @@ pacman -S make
 pacman -S patch
 pacman -S pkg-config
 pacman -S htop
-
-# Compression
-pacman -S bzip2
-pacman -S unrar
 
 # Shell
 pacman -S zsh
@@ -92,6 +103,7 @@ cabal install xmonad
 xmonad --recompile
 
 # Essential Haskell
+cabal install cabal-dev
 cabal install stm
 cabal install pandoc
 cabal install lens
@@ -102,10 +114,13 @@ cabal install HTTP
 cabal install unix
 cabal install process
 cabal install quickcheck
+cabal install hashtable
 cabal install parsec
 cabal install cloud
 cabal install hmatrix
 cabal install vect
+cabal install repa
+cabal install accelerate
 cabal install pipes
 cabal install uniplate
 cabal install pointfree
@@ -145,6 +160,7 @@ pacman -S tmux
 pacman -S feh
 pacman -S unclutter
 pacman -S xlock
+pacman -S epdfview
 
 # Media
 pacman -S mpd
@@ -169,27 +185,57 @@ pacman -S irssi
 
 # Dev
 pacman -S zeromq
+pacman -S openmpi
 pacman -S gdb
 pacman -S libevent
 pacman -S libev
-pacman -S blas
+pacman -S gc
 pip install cython
 
 pacman -S lua
 pacman -S go
 pacman -S scala
+pacman -S scala
+pacman -S openjdk6
+pacman -S julia-git
+pacman -S jsoftware
 
 # PLT
 pacman -S ocaml
 pacman -S coq
-pacman -S agda
+pacman -S strategoxt
+pacman -S libaterm
+pacman -S antlr2
+cabal install agda
+
+# GPU Programming
+pacman -S libcl
+pacman -S opencl-nvidia
+pacman -S cuda
 
 # Databases
 pacman -Q postgres
 pacman -S redis
+pacman -S hdf5
+
+# Compression
+pacman -S xz
+pacman -S tar
+pacman -S gzip
+pacman -S bzip2
+pacman -S unrar
+
+# Codecs
+pacman -S mpg123
 
 # Fonts
 pacman -S ttf-bitstream-vera
 pacman -S ttf-dejavu
 pacman -S ttf-freefont
+pacman -S ttf-inconsolata-g
 pacman -S ttf-liberation
+pacman -S monaco-linux-font
+
+# Misc
+pacman -S par
+pacman -S fuse
