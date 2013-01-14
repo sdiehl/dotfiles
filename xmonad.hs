@@ -5,23 +5,15 @@ import System.Exit
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
-import XMonad.Util.Run(spawnPipe)
-
 import XMonad.Actions.CycleWS
 
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.UrgencyHook
-import XMonad.Hooks.ManageHelpers
 
-import XMonad.Layout.Spiral
 import XMonad.Layout.Accordion
 import XMonad.Layout.Grid
 
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
-
-import Graphics.X11.Xlib.Extras (none)
 
 myTerminal      = "sakura"
 myFocusFollowsMouse = True
@@ -39,6 +31,7 @@ myFocusedBorderColor = "#ff0000"
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
 --
+myKeys ::  XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch a terminal
@@ -109,7 +102,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
     -- Quit xmonad
-    , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
+    , ((modm .|. shiftMask, xK_q     ), io exitSuccess)
 
     -- Restart xmonad
     , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
@@ -185,6 +178,7 @@ myLayout =
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , className =? "feh"            --> doFloat
+    , className =? "inkscape"       --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     ]
 
