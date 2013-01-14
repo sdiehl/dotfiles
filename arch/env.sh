@@ -190,6 +190,7 @@ pacman -S gdb
 pacman -S libevent
 pacman -S libev
 pacman -S gc
+pacman -S nginx
 pip install cython
 
 pacman -S lua
