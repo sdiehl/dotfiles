@@ -203,6 +203,7 @@ pacman -S jsoftware
 # PLT
 pacman -S ocaml
 pacman -S coq
+pacman -S pure
 pacman -S strategoxt
 pacman -S libaterm
 pacman -S antlr2
