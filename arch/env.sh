@@ -203,7 +203,7 @@ pip install cython
 pacman -S lua
 pacman -S go
 pacman -S scala
-pacman -S scala
+pacman -S rust
 pacman -S openjdk6
 pacman -S julia-git
 pacman -S jsoftware
@@ -213,6 +213,7 @@ pacman -S ocaml
 pacman -S coq
 pacman -S twelf
 pacman -S pure
+pacman -S maude
 pacman -S erlang
 pacman -S strategoxt
 pacman -S libaterm
