@@ -30,6 +30,11 @@ pacman -S isl
 pacman -S blas
 pacman -S lapack
 pacman -S arpack
+pacman -S pari
+pacman -S atlas-lapack
+pacman -S openblas
+pacman -S cblas
+pacman -S gap-math
 
 # Network
 pacman -S dhcpcd
@@ -109,6 +114,7 @@ cabal install pandoc
 cabal install lens
 cabal install lens
 cabal install categories
+cabal install diagrams
 cabal install network
 cabal install HTTP
 cabal install unix
