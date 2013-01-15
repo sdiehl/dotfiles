@@ -204,7 +204,9 @@ pacman -S jsoftware
 # PLT
 pacman -S ocaml
 pacman -S coq
+pacman -S twelf
 pacman -S pure
+pacman -S erlang
 pacman -S strategoxt
 pacman -S libaterm
 pacman -S antlr2
