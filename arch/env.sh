@@ -22,20 +22,6 @@ pacman -S llvm
 pacman -S glibc
 pacman -S glib2
 
-# Math
-pacman -S mpfr
-pacman -S gmp
-pacman -S cloog
-pacman -S isl
-pacman -S blas
-pacman -S lapack
-pacman -S arpack
-pacman -S pari
-pacman -S atlas-lapack
-pacman -S openblas
-pacman -S cblas
-pacman -S gap-math
-
 # Network
 pacman -S dhcpcd
 pacman -S dhclient
@@ -50,6 +36,7 @@ pacman -S wireshark-gtk
 pacman -S urxvt-unicode
 pacman -S sakura
 pacman -S xterm
+pacman -S st
 
 # Laptop
 pacman -S cpufrequtils
@@ -93,6 +80,20 @@ pacman -S rxvt-unicode
 
 git clone git://github.com/sdiehl/dotfiles.git
 cp dotfiles/.* /home/stephen
+
+# Math
+pacman -S mpfr
+pacman -S gmp
+pacman -S cloog
+pacman -S isl
+pacman -S blas
+pacman -S lapack
+pacman -S arpack
+pacman -S pari
+pacman -S atlas-lapack
+pacman -S openblas
+pacman -S cblas
+#pacman -S gap-math
 
 # Haskell
 pacman -S ghc
