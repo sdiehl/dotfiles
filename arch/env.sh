@@ -110,6 +110,12 @@ xmonad --recompile
 
 # Essential Haskell
 cabal install cabal-dev
+cabal install containers
+cabal install directory
+cabal install filepath
+cabal install mtl
+cabal install transformers
+cabal install text
 cabal install stm
 cabal install pandoc
 cabal install lens
@@ -124,6 +130,8 @@ cabal install cereal
 cabal install criterion
 cabal install process
 cabal install quickcheck
+cabal install smallcheck
+#cabal install smartcheck
 cabal install hashtable
 cabal install parsec
 cabal install happy
