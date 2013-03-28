@@ -12,6 +12,7 @@ set wildmode=full             " <Tab> cycles between all matching choices.
 set wildignore+=*.o,*.obj,.git,*.pyc,*png,*.h5,*.swo
 set pumheight=12             " Keep a small completion window
 set completeopt=menuone,menu,longest
+set conceallevel=0
 
 " ----------------------------------------------
 " Autcompletion
@@ -375,3 +376,26 @@ let g:tagbar_autofocus = 1
 
 ab teh the
 ab sefl self
+
+"inoremap <leader>forall ∀
+"inoremap <leader>exists ∃
+"inoremap <leader>not ¬
+"inoremap <leader>implies ⇒
+"inoremap <leader>equivalent ⇔
+"inoremap <leader>and ∧
+"inoremap <leader>or ∨
+"
+
+ab _alpha α
+ab _beta β
+ab _turn ⊢ 
+ab _Gamma Γ 
+ab _union ∪ 
+
+"ab \Gd δ
+"ab \Ge ε
+"ab \Gt θ
+"ab \Gz ω
+"ab \Gp π
+"ab \GS Σ
+"ab \Gunion ∪ 
