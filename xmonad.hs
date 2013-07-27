@@ -15,7 +15,7 @@ import XMonad.Layout.Grid
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 
-myTerminal      = "sakura"
+myTerminal      = "urxvt"
 myFocusFollowsMouse = True
 myNumlockMask   = mod2Mask
 myBorderWidth   = 3
@@ -31,7 +31,6 @@ myFocusedBorderColor = "#ff0000"
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
 --
-myKeys ::  XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- launch a terminal
@@ -58,6 +57,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Resize viewed windows to the correct size
     , ((modm,               xK_n     ), refresh)
+
+    -- Resize viewed windows to the correct size
+    , ((modm,               xK_grave     ), spawn "urxvt -e \"vifm\"")
 
     -- Move focus to the next window
     , ((modm,               xK_Tab   ), windows W.focusDown)
@@ -179,6 +181,7 @@ myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , className =? "feh"            --> doFloat
     , className =? "inkscape"       --> doFloat
+    , className =? "xournal"        --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     ]
 

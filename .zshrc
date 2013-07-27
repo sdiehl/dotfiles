@@ -41,15 +41,12 @@ alias ghci='ghci -v0'
 alias pst="ps -Leo pid,tid,comm"
 alias siteget="wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows"
 
-# TODO: deprecate this in favor of Anaconda
-alias s="work && workon science"
-
 # J programming language
 alias j="jfe --console"
 
 # General System Aliases
 
-alias vol="alsamixer"
+alias vol="alsamixer --card 0"
 alias ls="ls --color -h"
 alias screen="screen -q"
 alias myip="/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'"
@@ -64,7 +61,6 @@ alias gc='git commit -v'
 alias gca='git commit -v -a'
 alias gb='git branch'
 alias gba='git branch -a'
-alias gr="git reset --hard HEAD"
 alias grn="git log --format=oneline  --abbrev-commit --no-merges"
 alias gfa="git fetch --all"
 alias gci="git commit --interactive"
@@ -128,6 +124,7 @@ ex () {
 # Use Anaconda by Default
 VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2
 export PATH=/home/stephen/continuum/anaconda/bin:$PATH
+alias python3=/home/stephen/continuum/anaconda/envs/py33/bin/python3.3
 
 # Haskell Environment
 # -------------------

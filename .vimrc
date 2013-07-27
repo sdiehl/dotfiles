@@ -9,7 +9,7 @@ filetype plugin indent on     " enable loading indent file for filetype
 
 set wildmenu                  " Menu completion in command mode on <Tab>
 set wildmode=full             " <Tab> cycles between all matching choices.
-set wildignore+=*.o,*.obj,.git,*.pyc,*png,*.h5,*.swo
+set wildignore+=*.o,*.obj,.git,*.pyc,*png,*.h5,*.swo,*.hi
 set pumheight=12             " Keep a small completion window
 set completeopt=menuone,menu,longest
 set conceallevel=0
@@ -52,7 +52,7 @@ autocmd BufWritePre *.c :%s/\s\+$//e
 autocmd Bufenter *.hs compiler ghc
 "autocmd Bufenter *.hs compiler hlint
 autocmd BufEnter *.hs set formatprg=pointfree
-vmap gw :!djinn<CR>
+"vmap gw :!djinn<CR>
 
 " ----------------------------------------------
 " Python
@@ -200,10 +200,7 @@ if has("gui_running")
     " For gvim
     "colorscheme molokai
     colorscheme jellybeans
-    set guifont=Monaco\ 10
-    "set guifont=Envy\ Code\ R\ 9
-
-    "hi Normal guifg=White
+    set guifont=Tamsyn\ 10
 else
     " For terminal
     "colorscheme molokai

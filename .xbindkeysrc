@@ -10,11 +10,11 @@ XF86AudioPrev
 "ncmpcpp next"
 XF86AudioNext
 
-"amixer sset Master 2-"
+"amixer --card 0 sset Master 2-"
 XF86AudioLowerVolume
 
-"amixer sset Master 2+"
+"amixer --card 0 sset Master 2+"
 XF86AudioRaiseVolume
 
-"amixer sset Master toggle"
+"amixer --card 0 sset Master toggle"
 XF86AudioMute
