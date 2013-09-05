@@ -7,6 +7,7 @@ syntax on                     " syntax highlighing
 filetype on                   " try to detect filetypes
 filetype plugin indent on     " enable loading indent file for filetype
 
+set number
 set wildmenu                  " Menu completion in command mode on <Tab>
 set wildmode=full             " <Tab> cycles between all matching choices.
 set wildignore+=*.o,*.obj,.git,*.pyc,*png,*.h5,*.swo,*.hi
@@ -15,7 +16,7 @@ set completeopt=menuone,menu,longest
 set conceallevel=0
 
 " ----------------------------------------------
-" Autcompletion
+" Python Autcompletion
 " ----------------------------------------------
 au FileType python set omnifunc=pythoncomplete#Complete
 let g:SuperTabDefaultCompletionType = "context"
@@ -28,16 +29,25 @@ set smartindent
 set autoindent
 
 " ----------------------------------------------
-" Less Uesd Languages
+" Other Languages
 " ----------------------------------------------
 autocmd BufNewFile,BufRead *.agda set filetype=agda
+autocmd BufNewFile,BufRead *.idr set filetype=idris
 autocmd BufNewFile,BufRead *.ocaml set filetype=ocaml
 autocmd BufNewFile,BufRead *.go set filetype=go
-autocmd BufNewFile,BufRead *.pure set filetype=pure.purestd
+autocmd BufNewFile,BufRead *.pure set filetype=pure
 autocmd BufNewFile,BufRead *.js set filetype=javascript
 autocmd BufNewFile,BufRead *.coffee set filetype=coffee
 autocmd BufNewFile,BufRead *.md set filetype=markdown
+
 " ----------------------------------------------
+" Racket / Scheme Lisp
+" ----------------------------------------------
+
+if has("autocmd")
+    au BufReadPost *.rkt,*.rktl set filetype=racket
+    au filetype racket set lisp
+endif
 
 " ----------------------------------------------
 " C
@@ -241,6 +251,13 @@ fun! RopeLuckyAssistInsertMode()
 endfunction
 
 " ----------------------------------------------
+" Slime
+" ----------------------------------------------
+
+let g:slime_target = "tmux"
+let g:slime_paste_file = tempname()
+
+" ----------------------------------------------
 " Git Version Traversal
 " ----------------------------------------------
 map gd :Gdiff<CR>
@@ -291,7 +308,6 @@ map ` g;
 map gl <C-^> 
 " ----------------------------------------------
 
-
 " ----------------------------------------------
 " Searching
 " ----------------------------------------------
@@ -299,8 +315,13 @@ set incsearch
 map ff /\c
 " Inelegant grepping
 nmap <c-f> :vimgrep  **/*.py<left><left><left><left><left><left><left><left>
-" ----------------------------------------------
 
+if &t_Co > 2 || has("gui_running")
+    set hlsearch                "Highlight all search matches if color is
+endif                           "possible (:noh to toggle off)
+nnoremap <silent> <return> :noh<return>
+
+" ----------------------------------------------
 
 " ----------------------------------------------
 " EasyMotion
@@ -705,3 +726,5 @@ function s:AgdaKeys()
     imap <buffer> \eth ð
     imap <buffer> \mho ℧
 endfunction
+
+

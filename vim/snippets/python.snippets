@@ -103,16 +103,10 @@ snippet green
 		gevent.spawn(${1}),
 	])
 snippet utest
-	from unittest2 import TestCase
-	from logbook.compat import LoggingHandler
+	import unittest
 
-	class ${1}(TestCase):
-		def setUp(self):
-			self.log_handler = LoggingHandler()
-			self.log_handler.push_application()
-
-		def tearDown(self):
-			self.log_handler.pop_application()
+	class ${1}(unittest.TestCase):
+		def test_
 snippet bar
 	#------------------------------------------------------------------------
 	# ${1}
@@ -153,3 +147,11 @@ snippet doc
     Notes
     -----
 	"""
+snippet log
+	import logging
+	logging.basicConfig(level=logging.DEBUG)
+	log = logging.getLogger(__name__)
+snippet cen
+	'${1}'.center(80, '=')
+snippet super
+	super(child, self).__init__()

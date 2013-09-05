@@ -11,44 +11,28 @@ snippet m
 	${1} = do
 		${2}
 
-snippet arr
-	${1:f} ${2:x} = proc ${3:$2} do
-		${4} <- ${5} -< ${6:$2}
-		returnA ${7}
+snippet cls
+	class ${1:Name} where
+			$0
 
-snippet pragma GADTs
-	{-# Language GADTs #-}
+snippet in
+	instance ${1:Class} ${2:Type} where
+			$0
 
-snippet pragma NoMonomorphismRestriction
-	{-# Language NoMonomorphismRestriction #-}
-
-snippet pragma DeriveFunctor
-	{-# Language DeriveFunctor #-}
-
-snippet pragma MultiParamTypeClasses
-	{-# Language MultiParamTypeClasses #-}
-
-snippet pragma FlexibleContexts
-	{-# Language FlexibleContexts #-}
-
-snippet pragma RankNTypes
-	{-# Language RankNTypes #-}
-
-snippet pragma ExistentialQuantification
-	{-# Language ExistentialQuantification #-}
-
-snippet ->
-	${1:m a} -> ${2:a}
-snippet tup
-	(${1:a}, ${2:b})
-snippet tup2
-	(${1:a}, ${2:b}, ${3:c})
-snippet tup3
-	(${1:a}, ${2:b}, ${3:c}, ${4:d})
 snippet rec
-	${1:Record} { ${2:recFieldA} = ${3:undefined}
-				, ${4:recFieldB} = ${5:undefined}
-				}
+	data ${1:Type} = $1
+			{ ${3:field} :: ${4:Type}
+			} deriving (${5:Classes})
+
+snippet pragma 
+	{-# LANGUAGE ${1} #-}
+
+snippet gadt 
+	{-# LANGUAGE GADTs #-}
+
+snippet rank2 
+	{-# LANGUAGE Rank2Types #-}
+
 snippet case
 	case ${1:something} of
 		${2} -> ${3}
@@ -66,26 +50,42 @@ snippet if
 snippet \
 	\ ${1:pattern} -> ${2:expression}
 
-snippet [|]
-	[${3:foo }$1 | ${1:x} <- ${2:xs} ]
+snippet bar
+	-------------------------------------------------------------------------------
+	-- ${1}
+	-------------------------------------------------------------------------------
 
-snippet 2=
-	${1:name} ${2:pattern} = ${3:undefined}
-	$1 ${4:pattern} = ${5:undefined}
+snippet cat
+	instance Category ${1} where
+		id = ${2}
+		(.) = ${3}
 
-snippet ::
-	${1:name} :: ${2:Type} -> ${3:Type}
+snippet fun
+	instance Functor ${1} where
+		fmap = ${2}
 
-snippet =>
-	(${1:Class} ${2:Type var}) => ${3:$2}
+snippet monad
+	instance Monad ${1} where
+		${2} >>= f = ${3}
+		return = ${4}
 
-snippet =
-	${1:name} ${2:pattern} = ${3:undefined}
+snippet usual
+	import Data.Maybe
+	import Data.Functor
+	import Data.Foldable
+	import Data.Traversable
+	import Control.Monad
+	import Control.Applicative
 
-snippet def
-	${1:name} :: ${2:Type} -> ${3:Type}
+snippet containers
+	import qualified Data.HashMap.Lazy as HashMap
+	import qualified Data.HashSet      as HashSet
+	import qualified Data.IntMap       as IntMap
+	import qualified Data.IntSet       as IntSet
+	import qualified Data.IxSet        as IxSet
+	import qualified Data.Map          as Map
+	import qualified Data.Sequence     as Seq
+	import qualified Data.Set          as Set
 
-snippet def[]
-	${1:name} :: [${2:Type}] -> ${3:Type}
-	$1 [] = ${4:undefined}
-	$1 ${5:(x:xs)} = ${6:undefined}
+snippet flexible
+	{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, TypeFamilies #-}

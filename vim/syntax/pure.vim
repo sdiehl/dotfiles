@@ -31,7 +31,6 @@ syn region   pureCComment	start=+/\*+ end=+\*/+
 syn match    pureComment	+//.*+
 syn region   pureString	        start=+L\="+ skip=+\\\\\|\\"+ end=+"+ 
 
-
 " keywords
 syn keyword pureKeyword	infix infixl infixr outfix prefix postfix
 syn keyword pureKeyword namespace nonfix private public
