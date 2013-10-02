@@ -117,9 +117,6 @@ set laststatus=2
 let g:tex_flavor='latex'
 let python_highlight_all=1
 
-" The Line of Power
-let g:Powerline_symbols = 'fancy'
-
 map <silent> <Leader>m :!make > /dev/null &<CR>
 map <Leader>n :NERDTreeToggle<CR>
 map <Leader>u :source $MYVIMRC<CR>
@@ -155,6 +152,10 @@ if has("gui_running")
 else
   map tlo :emenu ]LANGUAGES_GHC.
 endif
+
+au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
+au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
+
 " ----------------------------------------------
 " Javascript, ick
 " ----------------------------------------------
@@ -209,13 +210,15 @@ endfunc
 if has("gui_running")
     " For gvim
     "colorscheme molokai
-    colorscheme jellybeans
-    set guifont=Tamsyn\ 10
+    "colorscheme jellybeans
+    colorscheme fruity
+    "set guifont=Tamsyn\ 10
+    set guifont=Monaco\ 10
 else
     " For terminal
     "colorscheme molokai
     colorscheme xoria256
-    set guifont=ProggyCleanTT\ 12
+    "set guifont=ProggyCleanTT\ 12
     autocmd FocusGained * call s:CommandTFlush()
 endif
 
@@ -267,8 +270,8 @@ vmap do :diffget<CR>
 map gd :Gdiff<CR>
 " ----------------------------------------------
 
-map fb :set guifont=Monaco\ 10<CR>:set lines=999 columns=999<CR>
-map fs :set guifont=Monaco\ 8<CR>:set lines=999 columns=999<CR>
+"map fb :set guifont=Monaco\ 10<CR>:set lines=999 columns=999<CR>
+"map fs :set guifont=Monaco\ 8<CR>:set lines=999 columns=999<CR>
 
 if (&tildeop)
   nmap gcw guw~l
