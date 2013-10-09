@@ -93,6 +93,7 @@ pacman -S pari
 pacman -S atlas-lapack
 pacman -S openblas
 pacman -S cblas
+pacman -S yacas
 #pacman -S gap-math
 
 # Haskell
@@ -109,8 +110,9 @@ cabal install xmonad
 xmonad --recompile
 
 # Essential Haskell
-cabal install cabal-dev
+cabal install parsec
 cabal install containers
+cabal install monad-loops
 cabal install directory
 cabal install filepath
 cabal install mtl
@@ -133,9 +135,10 @@ cabal install quickcheck
 cabal install smallcheck
 #cabal install smartcheck
 cabal install hashtable
-cabal install parsec
+cabal install warp
 cabal install happy
 cabal install pretty
+cabal install pretty-show
 cabal install cloud
 cabal install hmatrix
 cabal install vect
@@ -145,9 +148,10 @@ cabal install pipes
 cabal install uniplate
 cabal install pointfree
 cabal install pointful
-cabal install djinn
 cabal install pandoc
 cabal install hakyll
+cabal install hlint
+cabal install hdevtools
 
 # Python
 pacman -S python2
