@@ -1,27 +1,52 @@
 " Stephen Diehl .vimrc
-" Most aimed at Haskell / Python / C / LaTeX 
+" Most aimed at Haskell / Agda / Python / C / LaTeX 
 "
-" This is about 5 years of love. Feel free to copy any of it!
+" This is about 5 years of work. Feel free to copy any of it!
 
 syntax on                     " syntax highlighing
-filetype on                   " try to detect filetypes
+set nocompatible
+
+set background=dark
+
 filetype plugin indent on     " enable loading indent file for filetype
 
 set number
-set wildmenu                  " Menu completion in command mode on <Tab>
-set wildmode=full             " <Tab> cycles between all matching choices.
-set wildignore+=*.o,*.obj,.git,*.pyc,*png,*.h5,*.swo,*.hi
+set nowrap
+set noshowmode
+
+set tw=110
+set formatprg=par
+
+"set wildmenu                  " Menu completion in command mode on <Tab>
+"set wildmode=full             " <Tab> cycles between all matching choices.
+"set wildignore+=*.o,*.obj,.git,*.pyc,*png,*.h5,*.swo,*.hi
 set pumheight=12             " Keep a small completion window
 set completeopt=menuone,menu,longest
 set conceallevel=0
 
+let g:syntastic_auto_loc_list=1
+
+" ----------------------------------------------
+" GUI Options
+" ----------------------------------------------
+
+" Prevent buggy resizing with xmonad
+set guiheadroom=0
+
+set mouse=a
+set mousemodel=popup
+
+set guioptions-=m
+set guioptions-=r
+set guioptions-=T
+set guioptions-=L
+
+set wildmenu
+set wildmode=longest:list
+
 " ----------------------------------------------
 " Python Autcompletion
 " ----------------------------------------------
-au FileType python set omnifunc=pythoncomplete#Complete
-let g:SuperTabDefaultCompletionType = "context"
-let g:ropevim_vim_completion=1
-let g:ropevim_extended_complete=1
 
 set smartcase
 set smarttab
@@ -59,88 +84,34 @@ autocmd BufWritePre *.c :%s/\s\+$//e
 " ----------------------------------------------
 " Haskell
 " ----------------------------------------------
+
+set wildignore+=*.o
+set wildignore+=*.hi
+set wildignore+=*.chi
+
+au FileType cabal setl et ts=2 sw=2 sts=2
+au Bufread,BufNewFile *.hsc set filetype=haskell
+
 autocmd Bufenter *.hs compiler ghc
-"autocmd Bufenter *.hs compiler hlint
+autocmd Bufenter *.hs compiler hlint
 autocmd BufEnter *.hs set formatprg=pointfree
-"vmap gw :!djinn<CR>
 
-" ----------------------------------------------
-" Python
-" ----------------------------------------------
-autocmd BufNewFile,BufRead *.py set formatprg=par
+let g:hdevtools_options = '-g -isrc -g -Wall -g -hide-package -g transformers'
+let g:ghcmod_ghc_options = []
 
-" ----------------------------------------------
-" Autofix Python Whitespace
-" ----------------------------------------------
-" Autofix all whitespace on save
-autocmd BufWritePre *.py :%s/\s\+$//e
-" Delete all trailing empty lines on files
-autocmd BufWritePre *.py :%s/\(\s*\n\)\+\%$//e
-" ----------------------------------------------
-
-set tw=110
-"set statusline=%f\ %m%r\ [%Y]%=%(\ %l,%v\ @\ %p%%\ of\ %L\ %)
-set formatprg=par
-
-"X Clipboard
-set clipboard=unnamedplus,autoselect
-
-noremap <F11> :set invpaste paste?<CR>
-set pastetoggle=<F11>
-set showmode
-
-set shellslash
-set nocompatible
-set showmatch
-
-"Indentation Stuff"
-set autoindent
-set smartindent
-set tabstop=4
-set shiftwidth=4
-set expandtab
-
-"set t_Co=256
-set mouse=a
-set guioptions-=m
-set guioptions-=r
-set guioptions-=T
-set guioptions-=L
-
-set wrapmargin=15
-set textwidth=65
-set grepprg=grep\ -nH\ $*
-set wrap nowrap
-set laststatus=2
-
-" Latex Stuff
-let g:tex_flavor='latex'
-let python_highlight_all=1
-
-map <silent> <Leader>m :!make > /dev/null &<CR>
-map <Leader>n :NERDTreeToggle<CR>
-map <Leader>u :source $MYVIMRC<CR>
-map <Leader>ig :IndentGuidesToggle<CR>
-
-" ----------------------------------------------
-" CTRL+P
-" ----------------------------------------------
-map <silent> <Leader>t :CtrlP()<CR>
-
-" ----------------------------------------------
-" Haskell
-" ----------------------------------------------
-" Type Refresh
+" Load File
 map <silent> tu :call GHC_BrowseAll()<CR>
 " Type Lookup
 map tt :call GHC_ShowType(0)<CR>
 " Type Infer
-map tw :call GHC_ShowType(1)<CR>
-" Type Infer
-map ti :call GHC_ShowInfo()<CR>
+map <silent> tw :call GHC_ShowType(1)<CR>
+
+"map ti :call GHC_ShowInfo()<CR>
 map trai :call GHC_MkImportsExplicit()<CR>
 
+map <silent> <Leader>e :Errors<CR>
 map <Leader>s :SyntasticToggleMode<CR>
+
 if has("gui_running")
   map tghc :popup ]OPTIONS_GHC<cr>
 else
@@ -155,6 +126,67 @@ endif
 
 au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
 au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
+au FileType haskell nnoremap <buffer> <silent> <F3> :HdevtoolsInfo<CR>
+
+
+" ----------------------------------------------
+" Python
+" ----------------------------------------------
+autocmd BufNewFile,BufRead *.py set formatprg=par
+
+
+" ----------------------------------------------
+" Autofix Python Whitespace
+" ----------------------------------------------
+" Autofix all whitespace on save
+autocmd BufWritePre *.py :%s/\s\+$//e
+" Delete all trailing empty lines on files
+autocmd BufWritePre *.py :%s/\(\s*\n\)\+\%$//e
+" ----------------------------------------------
+
+" ----------------------------------------------
+" Clipboard
+" ----------------------------------------------
+
+"X Clipboard
+set clipboard=unnamedplus,autoselect
+
+noremap <F11> :set invpaste paste?<CR>
+set pastetoggle=<F11>
+set showmode
+
+set shellslash
+set showmatch
+
+"Indentation Stuff"
+set autoindent
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+"set t_Co=256
+set wrapmargin=15
+set textwidth=65
+set grepprg=grep\ -nH\ $*
+set wrap nowrap
+set laststatus=2
+
+" Latex Stuff
+let g:tex_flavor='latex'
+let python_highlight_all=1
+
+
+map <silent> <Leader>m :!make > /dev/null &<CR>
+map <Leader>n :NERDTreeToggle<CR>
+
+map <Leader>u :source $MYVIMRC<CR>
+map <Leader>ig :IndentGuidesToggle<CR>
+
+" ----------------------------------------------
+" CTRL+P
+" ----------------------------------------------
+map <silent> <Leader>t :CtrlP()<CR>
 
 " ----------------------------------------------
 " Javascript, ick
@@ -210,10 +242,10 @@ endfunc
 if has("gui_running")
     " For gvim
     "colorscheme molokai
-    "colorscheme jellybeans
-    colorscheme fruity
-    "set guifont=Tamsyn\ 10
-    set guifont=Monaco\ 10
+    colorscheme jellybeans
+    "colorscheme fruity
+    set guifont=Tamsyn\ 10
+    "set guifont=Monaco\ 10
 else
     " For terminal
     "colorscheme molokai
@@ -265,6 +297,7 @@ let g:slime_paste_file = tempname()
 " ----------------------------------------------
 map gd :Gdiff<CR>
 map gb :Gblame<CR>
+
 " Git checkout at block level
 vmap do :diffget<CR>
 map gd :Gdiff<CR>
@@ -317,7 +350,7 @@ map gl <C-^>
 set incsearch
 map ff /\c
 " Inelegant grepping
-nmap <c-f> :vimgrep  **/*.py<left><left><left><left><left><left><left><left>
+nmap <c-f> :vimgrep  **/*.hs<left><left><left><left><left><left><left><left>
 
 if &t_Co > 2 || has("gui_running")
     set hlsearch                "Highlight all search matches if color is
@@ -348,7 +381,6 @@ let ropevim_extended_complete=1
 " Quick Fix Window for Pyflakes
 map cn :call CycleErrors()<CR>
 map co :QFix<CR><CR>
-imap <C-space> <Esc>a<Space><Esc>:call RopeLuckyAssistInsertMode()<CR>i
 
 let g:pyflakes_use_quickfix = 1
 
@@ -385,14 +417,15 @@ function! CycleErrors()
   catch /^Vim\%((\a\+)\)\=:E42/
   endtry
 endfunction
-" ----------------------------------------------
-
 
 " ----------------------------------------------
 " Tagbar
 " ----------------------------------------------
 nmap <leader>= :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
+
+" ----------------------------------------------
+" Autocorect
 " ----------------------------------------------
 
 ab teh the
