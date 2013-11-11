@@ -2,9 +2,16 @@
 (load-file (let ((coding-system-for-read 'utf-8))
                 (shell-command-to-string "agda-mode locate")))
 
+(setq agda2-include-dirs
+      (list "." (expand-file-name "~/agda-base")))
+
 ; Viper mode emulates basic vi keys, part of emacs.
-(setq viper-mode t)
-(require 'viper)
+;(setq viper-mode t)
+
+(require 'agda2)
+
+
+;(require 'viper)
 
 ; Vimpulse emulates some more advanced vim keys, needs to be downloaded
 ; and put into emacs load-path.
@@ -27,8 +34,8 @@
 (global-unset-key (kbd "M-h"))
 (global-unset-key (kbd "M-l"))
 (global-unset-key (kbd "M-o"))
-(global-unset-key (kbd "C-x C-l"))
-(global-unset-key (kbd "C-x C-d"))
+;(global-unset-key (kbd "C-x C-l"))
+;(global-unset-key (kbd "C-x C-d"))
 (global-unset-key (kbd "M-:"))
 (global-unset-key (kbd "M-u"))
 

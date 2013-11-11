@@ -8,6 +8,8 @@ set nocompatible
 
 set background=dark
 
+set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git
+
 filetype plugin indent on     " enable loading indent file for filetype
 
 set number
@@ -24,7 +26,21 @@ set pumheight=12             " Keep a small completion window
 set completeopt=menuone,menu,longest
 set conceallevel=0
 
-let g:syntastic_auto_loc_list=1
+let g:syntastic_auto_loc_list=0
+
+let g:airline_symbols = {}
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
 
 " ----------------------------------------------
 " GUI Options
@@ -85,6 +101,11 @@ autocmd BufWritePre *.c :%s/\s\+$//e
 " Haskell
 " ----------------------------------------------
 
+" -- Don't flicker when executing macros/functions
+"set lazyredraw
+
+let g:ctrlp_custom_ignore = '\v[\/]static$'
+
 set wildignore+=*.o
 set wildignore+=*.hi
 set wildignore+=*.chi
@@ -93,13 +114,12 @@ au FileType cabal setl et ts=2 sw=2 sts=2
 au Bufread,BufNewFile *.hsc set filetype=haskell
 
 autocmd Bufenter *.hs compiler ghc
-autocmd Bufenter *.hs compiler hlint
 autocmd BufEnter *.hs set formatprg=pointfree
 
 let g:hdevtools_options = '-g -isrc -g -Wall -g -hide-package -g transformers'
 let g:ghcmod_ghc_options = []
 
-" Load File
+" Reload
 map <silent> tu :call GHC_BrowseAll()<CR>
 " Type Lookup
 map tt :call GHC_ShowType(0)<CR>
@@ -128,20 +148,20 @@ au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
 au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
 au FileType haskell nnoremap <buffer> <silent> <F3> :HdevtoolsInfo<CR>
 
-
-" ----------------------------------------------
-" Python
-" ----------------------------------------------
-autocmd BufNewFile,BufRead *.py set formatprg=par
-
+" Autofix all whitespace on save
+autocmd BufWritePre *.hs :%s/\s\+$//e
+" Delete all trailing empty lines on files
+autocmd BufWritePre *.hs :%s/\(\s*\n\)\+\%$//e
 
 " ----------------------------------------------
 " Autofix Python Whitespace
 " ----------------------------------------------
+
 " Autofix all whitespace on save
 autocmd BufWritePre *.py :%s/\s\+$//e
 " Delete all trailing empty lines on files
 autocmd BufWritePre *.py :%s/\(\s*\n\)\+\%$//e
+
 " ----------------------------------------------
 
 " ----------------------------------------------
@@ -242,10 +262,11 @@ endfunc
 if has("gui_running")
     " For gvim
     "colorscheme molokai
-    colorscheme jellybeans
+    colorscheme vanzan
     "colorscheme fruity
-    set guifont=Tamsyn\ 10
+    "set guifont=Tamsyn\ 10
     "set guifont=Monaco\ 10
+    set guifont=Monaco\ 8
 else
     " For terminal
     "colorscheme molokai
@@ -254,8 +275,7 @@ else
     autocmd FocusGained * call s:CommandTFlush()
 endif
 
-"nnoremap <C-j> <C-W>w<C-W>_
-nnoremap <C-j> <C-W>w
+nnoremap <C-j> <C-W>w<C-W>_
 
 " tab navigation like firefox
 map tn :tabnext<CR>
@@ -342,7 +362,6 @@ map <S-Space> {{
 " Go to last edited line one keystroke 
 map ` g;
 map gl <C-^> 
-" ----------------------------------------------
 
 " ----------------------------------------------
 " Searching
@@ -358,8 +377,6 @@ endif                           "possible (:noh to toggle off)
 nnoremap <silent> <return> :noh<return>
 
 " ----------------------------------------------
-
-" ----------------------------------------------
 " EasyMotion
 " ----------------------------------------------
 map ;; \\w
@@ -368,6 +385,8 @@ map ;; \\w
 " ----------------------------------------------
 " Ropevim + Python
 " ----------------------------------------------
+
+autocmd BufNewFile,BufRead *.py set formatprg=par
 
 let ropevim_codeassist_maxfixes=10
 let ropevim_guess_project=1
