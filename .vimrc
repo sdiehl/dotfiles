@@ -4,43 +4,25 @@
 " This is about 5 years of work. Feel free to copy any of it!
 
 syntax on                     " syntax highlighing
-set nocompatible
-
-set background=dark
-
-set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git
-
 filetype plugin indent on     " enable loading indent file for filetype
 
+set nocompatible
+set background=dark
+set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox
 set number
 set nowrap
 set noshowmode
-
 set tw=110
 set formatprg=par
-
-"set wildmenu                  " Menu completion in command mode on <Tab>
-"set wildmode=full             " <Tab> cycles between all matching choices.
-"set wildignore+=*.o,*.obj,.git,*.pyc,*png,*.h5,*.swo,*.hi
 set pumheight=12             " Keep a small completion window
 set completeopt=menuone,menu,longest
 set conceallevel=0
+set smartcase
+set smarttab
+set smartindent
+set autoindent
 
-let g:syntastic_auto_loc_list=0
-
-let g:airline_symbols = {}
-let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
-let g:airline_symbols.linenr = '␊'
-let g:airline_symbols.linenr = '␤'
-let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.branch = '⎇'
-let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.paste = 'Þ'
-let g:airline_symbols.paste = '∥'
-let g:airline_symbols.whitespace = 'Ξ'
+set t_Co=256
 
 " ----------------------------------------------
 " GUI Options
@@ -61,13 +43,24 @@ set wildmenu
 set wildmode=longest:list
 
 " ----------------------------------------------
-" Python Autcompletion
+" Airline
 " ----------------------------------------------
 
-set smartcase
-set smarttab
-set smartindent
-set autoindent
+let g:syntastic_auto_loc_list=0
+
+let g:airline_symbols = {}
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
 
 " ----------------------------------------------
 " Other Languages
@@ -148,13 +141,14 @@ au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
 au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
 au FileType haskell nnoremap <buffer> <silent> <F3> :HdevtoolsInfo<CR>
 
-" Autofix all whitespace on save
-autocmd BufWritePre *.hs :%s/\s\+$//e
-" Delete all trailing empty lines on files
-autocmd BufWritePre *.hs :%s/\(\s*\n\)\+\%$//e
+" ----------------------------------------------
+" Python
+" ----------------------------------------------
+
+autocmd BufNewFile,BufRead *.py set formatprg=par
 
 " ----------------------------------------------
-" Autofix Python Whitespace
+" Fix trailing Whitespace
 " ----------------------------------------------
 
 " Autofix all whitespace on save
@@ -162,7 +156,10 @@ autocmd BufWritePre *.py :%s/\s\+$//e
 " Delete all trailing empty lines on files
 autocmd BufWritePre *.py :%s/\(\s*\n\)\+\%$//e
 
-" ----------------------------------------------
+" Autofix all whitespace on save
+autocmd BufWritePre *.hs :%s/\s\+$//e
+" Delete all trailing empty lines on files
+autocmd BufWritePre *.hs :%s/\(\s*\n\)\+\%$//e
 
 " ----------------------------------------------
 " Clipboard
@@ -178,19 +175,6 @@ set showmode
 set shellslash
 set showmatch
 
-"Indentation Stuff"
-set autoindent
-set smartindent
-set tabstop=4
-set shiftwidth=4
-set expandtab
-
-"set t_Co=256
-set wrapmargin=15
-set textwidth=65
-set grepprg=grep\ -nH\ $*
-set wrap nowrap
-set laststatus=2
 
 " Latex Stuff
 let g:tex_flavor='latex'
@@ -285,25 +269,11 @@ map <C-t> :tabnew<CR>
 "map <C-w> :tabclose<CR>
 
 vmap a= :Tabularize /=<CR>
-vmap a; :Tabularize /:<CR>
+vmap a; :Tabularize /::<CR>
 vmap a, :Tabularize /,<CR>
 
 highlight SpellBad term=underline gui=underline guisp=Blue
 highlight Error term=underline gui=underline guibg=#00ff00
-
-" Rope
-map gt :RopeGotoDefinition<CR>
-map gt :RopeGotoDefinition<CR>
-
-map rr :RopeRename<CR>
-map rai :RopeAutoImport<CR>
-map roi :RopeOrganizeImports<CR>
-map rvt :VimroomToggle<CR>
-
-fun! RopeLuckyAssistInsertMode()
-    call RopeLuckyAssist()
-    return ""
-endfunction
 
 " ----------------------------------------------
 " Slime
@@ -321,43 +291,13 @@ map gb :Gblame<CR>
 " Git checkout at block level
 vmap do :diffget<CR>
 map gd :Gdiff<CR>
-" ----------------------------------------------
-
-"map fb :set guifont=Monaco\ 10<CR>:set lines=999 columns=999<CR>
-"map fs :set guifont=Monaco\ 8<CR>:set lines=999 columns=999<CR>
-
-if (&tildeop)
-  nmap gcw guw~l
-  nmap gcW guW~l
-  nmap gciw guiw~l
-  nmap gciW guiW~l
-  nmap gcis guis~l
-  nmap gc$ gu$~l
-  nmap gcgc guu~l
-  nmap gcc guu~l
-  vmap gc gu~l
-else
-  nmap gcw guw~h
-  nmap gcW guW~h
-  nmap gciw guiw~h
-  nmap gciW guiW~h
-  nmap gcis guis~h
-  nmap gc$ gu$~h
-  nmap gcgc guu~h
-  nmap gcc guu~h
-  vmap gc gu~h
-endif
-
-let ropevim_vim_completion = 1
-let ropevim_extended_complete = 1
-let g:ropevim_autoimport_modules = []
 
 " ----------------------------------------------
 " Fast Navigation
 " ----------------------------------------------
 " Use space to jump between paragraphs
-map <Space> }}
-map <S-Space> {{
+"map <Space> }}
+"map <S-Space> {{
 
 " Go to last edited line one keystroke 
 map ` g;
@@ -366,10 +306,9 @@ map gl <C-^>
 " ----------------------------------------------
 " Searching
 " ----------------------------------------------
+
 set incsearch
 map ff /\c
-" Inelegant grepping
-nmap <c-f> :vimgrep  **/*.hs<left><left><left><left><left><left><left><left>
 
 if &t_Co > 2 || has("gui_running")
     set hlsearch                "Highlight all search matches if color is
@@ -380,66 +319,11 @@ nnoremap <silent> <return> :noh<return>
 " EasyMotion
 " ----------------------------------------------
 map ;; \\w
-" ----------------------------------------------
-
-" ----------------------------------------------
-" Ropevim + Python
-" ----------------------------------------------
-
-autocmd BufNewFile,BufRead *.py set formatprg=par
-
-let ropevim_codeassist_maxfixes=10
-let ropevim_guess_project=1
-let ropevim_vim_completion=1
-let ropevim_enable_autoimport=1
-let ropevim_extended_complete=1
-
-" ----------------------------------------------
-" PyFlakes
-" ----------------------------------------------
-" Quick Fix Window for Pyflakes
-map cn :call CycleErrors()<CR>
-map co :QFix<CR><CR>
-
-let g:pyflakes_use_quickfix = 1
-
-function! TogglePyflakesQuickfix()
-    if g:pyflakes_use_quickfix == 1
-        echo "Disabled Pyflakes Quickfix"
-        let g:pyflakes_use_quickfix = 0
-        if &filetype == "Python"
-            silent PyflakesUpdate
-        endif
-        call QFixToggle(0)
-        call setqflist([])
-    else
-        echo "Enabled Pyflakes Quickfix"
-        let g:pyflakes_use_quickfix = 1
-        if &filetype == "Python"
-            silent PyflakesUpdate
-        endif
-        call QFixToggle(1)
-    endif
-endfunction
-
-noremap <f4> :call TogglePyflakesQuickfix()<cr>
-
-function! CycleErrors()
-  try
-    cn
-  catch /^Vim\%((\a\+)\)\=:E553/
-    "try
-      "next
-    "catch /^Vim\%((\a\+)\)\=:E16[35]/
-    cc 1
-    "endtry
-  catch /^Vim\%((\a\+)\)\=:E42/
-  endtry
-endfunction
 
 " ----------------------------------------------
 " Tagbar
 " ----------------------------------------------
+
 nmap <leader>= :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
 
@@ -781,5 +665,3 @@ function s:AgdaKeys()
     imap <buffer> \eth ð
     imap <buffer> \mho ℧
 endfunction
-
-
