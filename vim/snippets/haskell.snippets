@@ -1,23 +1,25 @@
-snippet dat
-	data ${1} = ${2}
-
 snippet new
-	newtype ${1} = ${2}
+	newtype ${1:name} = $1 { un$1 :: ${2} }
+
+snippet if
+	if ${1}
+	then ${2}
+	else ${3}
 
 snippet :
 	${1:f} :: ${2} -> ${3}
 
 snippet m
-	${1} = do
-		${2}
+	${1} = do ${2}
+	         ${3}
 
-snippet cls
+snippet cl
 	class ${1:Name} where
-			$0
+	  ${2}
 
 snippet in
 	instance ${1:Class} ${2:Type} where
-			$0
+	  ${3}
 
 snippet rec
 	data ${1:Type} = $1
@@ -35,8 +37,10 @@ snippet rank2
 	{-# LANGUAGE Rank2Types #-}
 
 snippet case
-	case ${1:something} of
-		${2} -> ${3}
+	case ${1} of
+	     ${2} -> ${3}
+	     ${4} -> ${5}
+
 snippet let
 	let ${1} = ${2}
 	in ${3}
@@ -94,6 +98,9 @@ snippet flexible
 snippet mparam
 	{-# LANGUAGE MultiParamTypeClasses #-}
 
+snippet gnew
+	{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
 snippet nowarn
 	{-# OPTIONS_GHC -fno-warn-name-shadowing  #-}
 	{-# OPTIONS_GHC -fno-warn-type-defaults   #-}
@@ -108,3 +115,6 @@ snippet box
 	-- Portability: non-portable
 	--
 	--------------------------------------------------------------------
+
+snippet dd
+	deriving (Eq, Ord, Read, Show, Typeable, Data)
