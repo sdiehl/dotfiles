@@ -7,22 +7,31 @@ syntax on                     " syntax highlighing
 filetype plugin indent on     " enable loading indent file for filetype
 
 set nocompatible
-set background=dark
-set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox
 set number
 set nowrap
 set noshowmode
 set tw=110
 set formatprg=par
 set pumheight=12             " Keep a small completion window
-set completeopt=menuone,menu,longest
 set conceallevel=0
 set smartcase
+
 set smarttab
 set smartindent
 set autoindent
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+
+set completeopt=menuone,menu,longest
+
+set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox
+set wildmode=longest,list,full
+set wildmenu
 
 set t_Co=256
+
+let g:SuperTabDefaultCompletionType = "context"
 
 " ----------------------------------------------
 " GUI Options
@@ -38,9 +47,23 @@ set guioptions-=m
 set guioptions-=r
 set guioptions-=T
 set guioptions-=L
+set background=dark
 
 set wildmenu
 set wildmode=longest:list
+
+set dictionary="/usr/dict/words"
+
+function! Tab_Or_Complete()
+  return 'foo'
+  if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
+    return "\<C-N>"
+  else
+    return "\<Tab>"
+  endif
+endfunction
+
+inoremap <tab> <c-r>=Tab_Or_Complete()<CR>
 
 " ----------------------------------------------
 " Airline
@@ -65,6 +88,7 @@ let g:airline_symbols.whitespace = 'Ξ'
 " ----------------------------------------------
 " Other Languages
 " ----------------------------------------------
+
 autocmd BufNewFile,BufRead *.agda set filetype=agda
 autocmd BufNewFile,BufRead *.idr set filetype=idris
 autocmd BufNewFile,BufRead *.ocaml set filetype=ocaml
@@ -253,13 +277,12 @@ if has("gui_running")
     set guifont=Monaco\ 8
 else
     " For terminal
-    "colorscheme molokai
-    colorscheme xoria256
+    colorscheme jellybeans
     "set guifont=ProggyCleanTT\ 12
     autocmd FocusGained * call s:CommandTFlush()
 endif
 
-nnoremap <C-j> <C-W>w<C-W>_
+nnoremap <C-j> <C-W>w
 
 " tab navigation like firefox
 map tn :tabnext<CR>
@@ -316,11 +339,6 @@ endif                           "possible (:noh to toggle off)
 nnoremap <silent> <return> :noh<return>
 
 " ----------------------------------------------
-" EasyMotion
-" ----------------------------------------------
-map ;; \\w
-
-" ----------------------------------------------
 " Tagbar
 " ----------------------------------------------
 
@@ -340,7 +358,15 @@ ab sefl self
 
 autocmd BufReadPost *.agda cal s:AgdaKeys()
 
+nmap <C-c> <C-l> :Reload<CR>
+nmap <C-c> <C-r> :Refine("False")<CR>
+nmap <C-c> <C-space> :call Give()<CR>
+
 function s:AgdaKeys()
+    imap <buffer> \bn ℕ
+    imap <buffer> \to →
+    imap <buffer> \all →
+
     imap <buffer> \alpha α
     imap <buffer> \beta β
     imap <buffer> \gamma γ

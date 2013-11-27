@@ -2,6 +2,9 @@ xset b off # get rid of f#&*ing beep
 bindkey -v
 export EDITOR=vim
 
+alias google-chrome="google-chrome --ignore-gpu-blacklist"
+alias ass="astyle --style=1tbs --lineend=linux --convert-tabs --preserve-date --fill-empty-lines --pad-header --indent-switches --align-pointer=name --align-reference=name --pad-oper"
+
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;32'
 
@@ -187,4 +190,5 @@ waits () {
         fi
     done
 }
+
 

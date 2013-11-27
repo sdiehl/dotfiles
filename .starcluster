@@ -1,0 +1,27 @@
+[global]
+DEFAULT_TEMPLATE=smallcluster
+WEB_BROWSER=google-chrome
+
+[aws info]
+AWS_ACCESS_KEY_ID = 
+AWS_SECRET_ACCESS_KEY = 
+AWS_USER_ID= 
+
+[key id_rsa]
+KEY_LOCATION=~/.ssh/id_rsa.rsa
+
+[cluster smallcluster]
+KEYNAME = id_rsa
+CLUSTER_SIZE = 4
+CLUSTER_USER = stephen
+CLUSTER_SHELL = bash
+NODE_IMAGE_ID = ami-899d49e0
+NODE_INSTANCE_TYPE = m1.small
+
+[cluster medcluster]
+KEYNAME = id_rsa
+CLUSTER_SIZE = 8
+CLUSTER_USER = stephen
+CLUSTER_SHELL = bash
+NODE_IMAGE_ID = ami-899d49e0
+NODE_INSTANCE_TYPE = m1.small
