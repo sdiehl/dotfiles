@@ -97,6 +97,7 @@ autocmd BufNewFile,BufRead *.pure set filetype=pure
 autocmd BufNewFile,BufRead *.js set filetype=javascript
 autocmd BufNewFile,BufRead *.coffee set filetype=coffee
 autocmd BufNewFile,BufRead *.md set filetype=markdown
+autocmd BufNewFile,BufRead *.ll set filetype=llvm
 
 " ----------------------------------------------
 " Racket / Scheme Lisp
@@ -270,7 +271,7 @@ endfunc
 if has("gui_running")
     " For gvim
     "colorscheme molokai
-    colorscheme vanzan
+    colorscheme jellybeans
     "colorscheme fruity
     "set guifont=Tamsyn\ 10
     "set guifont=Monaco\ 10

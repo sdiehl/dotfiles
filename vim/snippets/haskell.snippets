@@ -6,8 +6,8 @@ snippet if
 	then ${2}
 	else ${3}
 
-snippet :
-	${1:f} :: ${2} -> ${3}
+snippet importq
+	import qualified ${1:Data.Text} as ${2:T}
 
 snippet m
 	${1} = do ${2}
@@ -33,8 +33,8 @@ snippet pragma
 snippet gadt 
 	{-# LANGUAGE GADTs #-}
 
-snippet rank2 
-	{-# LANGUAGE Rank2Types #-}
+snippet rankn
+	{-# LANGUAGE RankNTypes #-}
 
 snippet case
 	case ${1} of
@@ -92,8 +92,12 @@ snippet containers
 	import qualified Data.Sequence     as Seq
 	import qualified Data.Set          as Set
 
-snippet flexible
-	{-# LANGUAGE FlexibleInstances, FlexibleConstants, MultiParamTypeClasses, TypeFamilies #-}
+snippet ffi
+	{-# LANGUAGE ForeignFunctionInterface #-}
+
+snippet flex
+	{-# LANGUAGE FlexibleInstances #-}
+	{-# LANGUAGE FlexibleConstants #-}
 
 snippet mparam
 	{-# LANGUAGE MultiParamTypeClasses #-}
@@ -108,6 +112,7 @@ snippet nowarn
 snippet box
 	--------------------------------------------------------------------
 	-- |
+	-- Module    :   
 	-- Copyright :  (c) Stephen Diehl 2013
 	-- License   :  MIT
 	-- Maintainer:  stephen.m.diehl@gmail.com
