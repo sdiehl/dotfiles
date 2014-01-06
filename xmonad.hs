@@ -11,6 +11,7 @@ import XMonad.Hooks.DynamicLog
 
 import XMonad.Layout.Accordion
 import XMonad.Layout.Grid
+import XMonad.Layout.Spacing
 
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
@@ -26,7 +27,7 @@ numPadKeys = [ xK_KP_End,  xK_KP_Down,  xK_KP_Page_Down -- 1, 2, 3
              , xK_KP_Insert] -- 0
 myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 myNormalBorderColor  = "#dddddd"
-myFocusedBorderColor = "#ff0000"
+myFocusedBorderColor = "#ffff00"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -160,13 +161,14 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
     ]
 
-myLayout = 
+myLayout =
   mkToggle (NOBORDERS ?? FULL ?? EOT)
   {-$ tiled ||| Mirror tiled ||| Full ||| Accordion ||| Grid-}
-  $ tiled ||| Mirror tiled ||| Accordion ||| Grid
+  $ tiled ||| mtiled ||| Accordion ||| Grid
   where
      -- default tiling algorithm partitions the screen into two panes
-     tiled   = Tall nmaster delta ratio
+     tiled   = smartSpacing 10 $ Tall nmaster delta ratio
+     mtiled = smartSpacing 10 $ Mirror tiled
 
      -- The default number of windows in the master pane
      nmaster = 1

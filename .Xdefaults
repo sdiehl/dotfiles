@@ -1,50 +1,54 @@
-Xft.dpi: 102
-Xft.lcdfilter: lcddefault
+! Colors
+*foreground: #a0a0a0
+*background: #1B1D1E
+*color0: #1B1D1E
+*color8: #505354
+*color1: #F92672
+*color9: #FF669D
+*color2: #A6E22E
+*color10: #BEED5F
+*color3: #FD971F
+*color11: #E6DB74
+*color4: #66D9EF
+*color12: #66D9EF
+*color5: #9E6FFE
+*color13: #9E6FFE
+*color6: #5E7175
+*color14: #A3BABF
+*color7: #CCCCC6
+*color15: #F8F8F2
+
+! Fonts
+! *font: xft:DejaVu Sans Mono:pixelsize=10
+Xft.dpi: 96
 Xft.antialias: true
-Xft.hinting:true
-Xft.hintstyle: hintfull
-Xft.rgba: rgb
-URxvt*buffered: false
-URxvt*termName:screen-256color
-URxvt.perl-ext:
-URxvt.perl-ext-common:
+Xft.lcdfilter: lcddefault
+Xft.autohint: false
+Xft.hinting: true
+Xft.hintstyle: hintslight
 
-*customization: -color
+! Cursor
+Xcursor*theme: Vanilla-DMZ-AA
+Xcursor*size: 24
 
-*background: #222222
-*foreground: #eeeeee
+! URxvt
+URxvt*termName: rxvt-256color
+URxvt*mapAlert: true
+URxvt*geometry: 95x25
+URxvt*saveLines: 5000
+URxvt*scrollBar: false
+URxvt*cursorBlink: true
+! URxvt*cursorUnderline: true
+URxvt*secondaryScroll: true
+URxvt*perl-ext-common: default,matcher
+URxvt*url-launcher: google-chrome
+URxvt*matcher.button: 1
+URxvt*matcher.pattern.1: \\bwww\\.[\\w-]\\.[\\w./?&@#-]*[\\w/-]
+URxvt*matcher.rend.0: Uline Bold
 
-*cursorColor: #ff0000
- 
-!! black dark/light
-*color0: #222222
-*color8: #444444
-
-!! red dark/light
-*color1: #B10000
-*color9: #CC0000
-
-!! green dark/light
-*color2: #6CB100
-*color10: #7CCC00
-
-!! yellow dark/light
-*color3: #B15C00
-*color11: #CC6A00
-
-!! blue dark/light
-*color4: #005577
-*color12: #0075A3
-
-!! magenta dark/light
-*color5: #5600B1
-*color13: #6300CC
-
-!! cyan dark/light
-*color6: #007177
-*color14: #009199
-
-!! white dark/light
-!*color7: #bbbbbb
-!*color15: #eeeeee  
-!
+Xautolock.time: 10
+Xautolock.locker: slock
+Xautolock.killtime: 10
+Xautolock.killer: systemctl suspend
+Xautolock.corners: 000+
+Xautolock.cornerdelay: 3
