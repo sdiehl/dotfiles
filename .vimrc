@@ -12,7 +12,7 @@ set nowrap
 set noshowmode
 set tw=110
 set formatprg=par
-set pumheight=12             " Keep a small completion window
+set pumheight=12
 set conceallevel=0
 set smartcase
 
@@ -64,26 +64,6 @@ function! Tab_Or_Complete()
 endfunction
 
 inoremap <tab> <c-r>=Tab_Or_Complete()<CR>
-
-" ----------------------------------------------
-" Airline
-" ----------------------------------------------
-
-let g:syntastic_auto_loc_list=0
-
-let g:airline_symbols = {}
-let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
-let g:airline_symbols.linenr = '␊'
-let g:airline_symbols.linenr = '␤'
-let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.branch = '⎇'
-let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.paste = 'Þ'
-let g:airline_symbols.paste = '∥'
-let g:airline_symbols.whitespace = 'Ξ'
 
 " ----------------------------------------------
 " Other Languages
@@ -276,7 +256,9 @@ if has("gui_running")
     "
     "set guifont=Tamsyn\ 10
     "set guifont=Monaco\ 10
-    set guifont=DejaVu\ LGC\ Sans\ Mono\ 8
+    "set guifont=DejaVu\ LGC\ Sans\ Mono\ 8
+    set anti enc=utf-8
+    set guifont=Source\ Code\ Pro\ 11
 else
     " For terminal
     colorscheme jellybeans
@@ -376,13 +358,6 @@ function! Wipeout()
     execute 'tabnext' l:currentTab
   endtry
 endfunction
-
-" ----------------------------------------------
-" Tagbar
-" ----------------------------------------------
-
-nmap <leader>= :TagbarToggle<CR>
-let g:tagbar_autofocus = 1
 
 " ----------------------------------------------
 " Autocorect
