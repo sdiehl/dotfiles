@@ -1,5 +1,11 @@
 snippet new
-	newtype ${1:name} = $1 { un$1 :: ${2} }
+	newtype ${1:name} a  $1 { un$1 :: ${2} a }
+	  deriving (${3:Monad}, $4)
+
+snippet mod
+	module ${1} (
+	  ${2}
+	) where
 
 snippet if
 	if ${1}
@@ -29,12 +35,6 @@ snippet rec
 
 snippet pragma 
 	{-# LANGUAGE ${1} #-}
-
-snippet gadt 
-	{-# LANGUAGE GADTs #-}
-
-snippet rankn
-	{-# LANGUAGE RankNTypes #-}
 
 snippet case
 	case ${1} of
@@ -92,18 +92,69 @@ snippet containers
 	import qualified Data.Sequence     as Seq
 	import qualified Data.Set          as Set
 
+snippet gadt 
+	{-# LANGUAGE GADTs #-}
+
+snippet rank
+	{-# LANGUAGE RankNTypes #-}
+
+snippet scope
+	{-# LANGUAGE ScopedTypeVariables #-}
+
 snippet ffi
 	{-# LANGUAGE ForeignFunctionInterface #-}
 
 snippet flex
 	{-# LANGUAGE FlexibleInstances #-}
-	{-# LANGUAGE FlexibleConstants #-}
+	{-# LANGUAGE FlexibleContexts #-}
+	{-# LANGUAGE TypeSynonymInstances #-}
 
 snippet mparam
 	{-# LANGUAGE MultiParamTypeClasses #-}
 
+snippet bang
+	{-# LANGUAGE BangPatterns #-}
+
 snippet gnew
 	{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
+snippet mono
+	{-# LANGUAGE NoMonomorphismRestriction #-}
+
+snippet stand
+	{-# LANGUAGE StandaloneDeriving #-}
+
+snippet derive
+	{-# LANGUAGE DeriveDataTypeable #-}
+	{-# LANGUAGE DeriveGeneric #-}
+	{-# LANGUAGE DeriveFunctor #-}
+	{-# LANGUAGE DeriveTraversable #-}
+	{-# LANGUAGE DeriveFoldable #-}
+
+snippet type
+	{-# LANGUAGE TypeFamilies #-}
+	{-# LANGUAGE DataKinds #-}
+	{-# LANGUAGE GADTs #-}
+	{-# LANGUAGE FlexibleInstances #-}
+	{-# LANGUAGE FlexibleContexts #-}
+	{-# LANGUAGE KindSignatures #-}
+
+snippet crazy
+	{-# LANGUAGE GADTs #-}
+	{-# LANGUAGE DataKinds #-}
+	{-# LANGUAGE RankNTypes #-}
+	{-# LANGUAGE TypeFamilies #-}
+	{-# LANGUAGE TypeOperators #-}
+	{-# LANGUAGE KindSignatures #-}
+	{-# LANGUAGE FlexibleInstances #-}
+	{-# LANGUAGE FlexibleContexts #-}
+	{-# LANGUAGE MultiParamTypeClasses #-}
+	{-# LANGUAGE UndecidableInstances #-}
+	{-# LANGUAGE ImpredicativeTypes #-}
+	{-# LANGUAGE ExistentialQuantification #-}
+
+snippet main
+	main = return ()
 
 snippet nowarn
 	{-# OPTIONS_GHC -fno-warn-name-shadowing  #-}
@@ -122,4 +173,13 @@ snippet box
 	--------------------------------------------------------------------
 
 snippet dd
-	deriving (Eq, Ord, Read, Show, Typeable, Data)
+	deriving (Eq, Ord, Show, Typeable, Data, Generic)
+
+snippet in
+	{-# INLINE ${1} #-}
+
+snippet inl
+	{-# INLINEABLE ${1} #-}
+
+snippet un
+	undefined
