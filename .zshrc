@@ -47,6 +47,8 @@ alias ghci-sandbox="ghci -no-user-package-db -package-db .cabal-sandbox/*-packag
 alias ghc-sandbox="ghc -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
 alias ghci-core="ghci -ddump-simpl -dsuppress-idinfo -dsuppress-coercions -dsuppress-type-applications -dsuppress-uniques -dsuppress-module-prefixes"
 alias runhaskell-sandbox="runhaskell -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
+alias ghc-7.8="/home/stephen/Git/ghc/bin/ghc-7.8.1"
+alias ghci-7.8="/home/stephen/Git/ghc/bin/ghci-7.8.1"
 
 # J programming language
 alias j="jfe --console"

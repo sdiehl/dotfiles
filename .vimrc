@@ -31,8 +31,6 @@ set wildmenu
 
 set t_Co=256
 
-let g:SuperTabDefaultCompletionType = "context"
-
 " ----------------------------------------------
 " GUI Options
 " ----------------------------------------------
@@ -258,7 +256,7 @@ if has("gui_running")
     "set guifont=Monaco\ 10
     "set guifont=DejaVu\ LGC\ Sans\ Mono\ 8
     set anti enc=utf-8
-    set guifont=Source\ Code\ Pro\ 11
+    set guifont=Source\ Code\ Pro\ 8
 else
     " For terminal
     colorscheme jellybeans

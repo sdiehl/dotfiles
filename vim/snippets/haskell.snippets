@@ -12,7 +12,7 @@ snippet if
 	then ${2}
 	else ${3}
 
-snippet importq
+snippet iq
 	import qualified ${1:Data.Text} as ${2:T}
 
 snippet m
@@ -33,6 +33,10 @@ snippet rec
 			, ${5}
 			} deriving (${6:Classes})
 
+snippet ff
+	foreign import ccall safe "${1}" ${2}
+	    :: ${3}
+
 snippet pragma 
 	{-# LANGUAGE ${1} #-}
 
@@ -42,11 +46,13 @@ snippet case
 	     ${4} -> ${5}
 
 snippet let
-	let ${1} = ${2}
-	in ${3}
+	let ${1} = ${2} in
+	${3}
+
 snippet where
 	where
-		${1:fn} = ${2:undefined}
+	  ${1:fn} = ${2:undefined}
+
 snippet if
 	if ${1:condition}
 	   then ${2:expression}
@@ -107,6 +113,9 @@ snippet ffi
 snippet flex
 	{-# LANGUAGE FlexibleInstances #-}
 	{-# LANGUAGE FlexibleContexts #-}
+	{-# LANGUAGE TypeSynonymInstances #-}
+
+snippet syn
 	{-# LANGUAGE TypeSynonymInstances #-}
 
 snippet mparam
@@ -180,6 +189,9 @@ snippet in
 
 snippet inl
 	{-# INLINEABLE ${1} #-}
+
+snippet ub
+	{-# UNBOX #-}
 
 snippet un
 	undefined
