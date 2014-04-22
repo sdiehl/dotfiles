@@ -88,6 +88,10 @@ snippet usual
 	import Control.Monad
 	import Control.Applicative
 
+snippet bs
+	import qualified Data.ByteString as S
+	import qualified Data.ByteString.Char8 as S8
+
 snippet containers
 	import qualified Data.HashMap.Lazy as HashMap
 	import qualified Data.HashSet      as HashSet
@@ -173,7 +177,7 @@ snippet box
 	--------------------------------------------------------------------
 	-- |
 	-- Module    :   
-	-- Copyright :  (c) Stephen Diehl 2013
+	-- Copyright :  (c) Stephen Diehl 2014
 	-- License   :  MIT
 	-- Maintainer:  stephen.m.diehl@gmail.com
 	-- Stability :  experimental
@@ -184,14 +188,26 @@ snippet box
 snippet dd
 	deriving (Eq, Ord, Show, Typeable, Data, Generic)
 
-snippet in
+snippet inl
 	{-# INLINE ${1} #-}
 
-snippet inl
-	{-# INLINEABLE ${1} #-}
-
-snippet ub
-	{-# UNBOX #-}
+snippet up
+	{-# UNPACK #-}
 
 snippet un
 	undefined
+
+snippet er
+	error "${1}"
+
+snippet pre
+	import qualified Prelude as P
+
+	import  Data.List hiding ( 
+	    all , and , any , concat , concatMap , elem , filter ,
+	    find , foldl , foldl' , foldl1 , foldr , foldr1 ,
+	    mapAccumL , mapAccumR , maximum , maximumBy , minimum , 
+	    minimumBy , notElem , or , product , sum )
+
+	import Control.Monad hiding ( 
+	    forM , forM_ , mapM , mapM_ , msum , sequence , sequence_ )
