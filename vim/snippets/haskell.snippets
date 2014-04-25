@@ -88,6 +88,10 @@ snippet usual
 	import Control.Monad
 	import Control.Applicative
 
+snippet fold
+	import Data.Foldable
+	import Data.Traversable
+
 snippet bs
 	import qualified Data.ByteString as S
 	import qualified Data.ByteString.Char8 as S8
@@ -137,6 +141,9 @@ snippet mono
 snippet stand
 	{-# LANGUAGE StandaloneDeriving #-}
 
+snippet temp
+	{-# LANGUAGE TemplateHaskell #-}
+
 snippet derive
 	{-# LANGUAGE DeriveDataTypeable #-}
 	{-# LANGUAGE DeriveGeneric #-}
@@ -145,12 +152,23 @@ snippet derive
 	{-# LANGUAGE DeriveFoldable #-}
 
 snippet type
-	{-# LANGUAGE TypeFamilies #-}
-	{-# LANGUAGE DataKinds #-}
 	{-# LANGUAGE GADTs #-}
+	{-# LANGUAGE TypeFamilies #-}
+	{-# LANGUAGE TypeOperators #-}
+	{-# LANGUAGE DataKinds #-}
+	{-# LANGUAGE PolyKinds #-}
+	{-# LANGUAGE KindSignatures #-}
 	{-# LANGUAGE FlexibleInstances #-}
 	{-# LANGUAGE FlexibleContexts #-}
-	{-# LANGUAGE KindSignatures #-}
+	{-# LANGUAGE UndecidableInstances #-}
+
+	import GHC.TypeLits
+	import Data.Proxy
+	import Data.Type.Equality
+	import Data.Reflection
+	import Data.Constraint
+	import GHC.Exts (Constraint)
+	import GHC.Prim (Any, AnyK)
 
 snippet crazy
 	{-# LANGUAGE GADTs #-}
@@ -211,3 +229,7 @@ snippet pre
 
 	import Control.Monad hiding ( 
 	    forM , forM_ , mapM , mapM_ , msum , sequence , sequence_ )
+
+snippet lens
+	{-# LANGUAGE TemplateHaskell #-}
+	import Control.Lens ((&), (^.), (^?), (.~), makeLenses)
