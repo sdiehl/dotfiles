@@ -40,7 +40,7 @@ alias work='source /home/stephen/.zshrc_python'
 
 # Networking
 alias warp='wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf'
-alias ghci='ghci -v0'
+alias ghci="ghci -v0"
 alias pst="ps -Leo pid,tid,comm"
 alias siteget="wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows"
 alias ghci-sandbox="ghci -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
@@ -49,6 +49,8 @@ alias ghci-core="ghci -ddump-simpl -dsuppress-idinfo -dsuppress-coercions -dsupp
 alias runhaskell-sandbox="runhaskell -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
 alias ghc-7.8="/home/stephen/Git/ghc/bin/ghc-7.8.1"
 alias ghci-7.8="/home/stephen/Git/ghc/bin/ghci-7.8.1"
+alias ghcii="ghci -v0 -ghci-script ~/.ghc/ghci_alt.conf"
+alias cryptol="/home/stephen/Git/cryptol/.cabal-sandbox/bin/cryptol"
 
 # J programming language
 alias j="jfe --console"

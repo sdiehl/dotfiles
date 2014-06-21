@@ -376,6 +376,7 @@ nmap <C-c> <C-space> :call Give()<CR>
 
 function s:AgdaKeys()
     imap <buffer> \bn ℕ
+    imap <buffer> \nat ℕ
     imap <buffer> \to →
     imap <buffer> \all →
 
