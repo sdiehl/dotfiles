@@ -126,6 +126,8 @@ map <silent> tw :call GHC_ShowType(1)<CR>
 map trai :call GHC_MkImportsExplicit()<CR>
 
 map <silent> <Leader>e :Errors<CR>
+map <silent> <Leader>l :lopen<CR>
+"map <silent> ln :lnext<CR>
 map <Leader>s :SyntasticToggleMode<CR>
 
 if has("gui_running")
@@ -253,10 +255,10 @@ if has("gui_running")
     "colorscheme fruity
     "
     "set guifont=Tamsyn\ 10
-    "set guifont=Monaco\ 10
+    set guifont=Monaco\ 10
     "set guifont=DejaVu\ LGC\ Sans\ Mono\ 8
     set anti enc=utf-8
-    set guifont=Source\ Code\ Pro\ 8
+    "set guifont=Source\ Code\ Pro\ 8
 else
     " For terminal
     colorscheme jellybeans

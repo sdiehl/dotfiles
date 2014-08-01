@@ -35,9 +35,6 @@ setopt PROMPT_SUBST           # sub values in prompt
 setopt RM_STAR_WAIT           # pause before confirming rm *
 setopt SHARE_HISTORY          # share history between open shells
 
-# Work ZSH config is a extension of this file
-alias work='source /home/stephen/.zshrc_python'
-
 # Networking
 alias warp='wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf'
 alias ghci="ghci -v0"
@@ -51,6 +48,8 @@ alias ghc-7.8="/home/stephen/Git/ghc/bin/ghc-7.8.1"
 alias ghci-7.8="/home/stephen/Git/ghc/bin/ghci-7.8.1"
 alias ghcii="ghci -v0 -ghci-script ~/.ghc/ghci_alt.conf"
 alias cryptol="/home/stephen/Git/cryptol/.cabal-sandbox/bin/cryptol"
+alias cabal-bounds="/home/stephen/Git/cabal-bounds-0.6/dist/build/cabal-bounds/cabal-bounds"
+alias nix-haskell="nix-env -qaP \* | grep haskellPackages | less"
 
 # J programming language
 alias j="jfe --console"
@@ -128,6 +127,12 @@ ex () {
         echo "'$1' is not a valid file"
     fi
 }
+
+# NixOS path
+alias nix='source /home/stephen/.nix-profile/etc/profile.d/nix.sh'
+
+# Work ZSH config is a extension of this file
+alias work='source /home/stephen/.zshrc_python'
 
 # Python Environment
 # ------------------
