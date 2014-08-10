@@ -51,6 +51,11 @@ alias cryptol="/home/stephen/Git/cryptol/.cabal-sandbox/bin/cryptol"
 alias cabal-bounds="/home/stephen/Git/cabal-bounds-0.6/dist/build/cabal-bounds/cabal-bounds"
 alias nix-haskell="nix-env -qaP \* | grep haskellPackages | less"
 
+# C Profiling
+function massif() {
+  valgrind --tool=massif --massif-out-file=massif.prof $1 && ms_print massif.prof | less
+}
+
 # J programming language
 alias j="jfe --console"
 
