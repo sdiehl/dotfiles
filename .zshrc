@@ -3,7 +3,6 @@ bindkey -v
 export EDITOR=vim
 
 alias google-chrome="google-chrome --ignore-gpu-blacklist"
-alias ass="astyle --style=1tbs --lineend=linux --convert-tabs --preserve-date --fill-empty-lines --pad-header --indent-switches --align-pointer=name --align-reference=name --pad-oper"
 
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='1;32'
@@ -51,10 +50,11 @@ alias cryptol="/home/stephen/Git/cryptol/.cabal-sandbox/bin/cryptol"
 alias cabal-bounds="/home/stephen/Git/cabal-bounds-0.6/dist/build/cabal-bounds/cabal-bounds"
 alias nix-haskell="nix-env -qaP \* | grep haskellPackages | less"
 
-# C Profiling
+# C Programming
 function massif() {
   valgrind --tool=massif --massif-out-file=massif.prof $1 && ms_print massif.prof | less
 }
+alias ass="astyle --style=1tbs --lineend=linux --convert-tabs --preserve-date --fill-empty-lines --pad-header --indent-switches --align-pointer=name --align-reference=name --pad-oper"
 
 # J programming language
 alias j="jfe --console"
@@ -131,6 +131,16 @@ ex () {
     else
         echo "'$1' is not a valid file"
     fi
+}
+
+lhs2hs() { 
+  sed '
+    s/^>//
+    t
+    s/^ *$//
+    t
+    s/^/-- /
+   ' $1 > $2
 }
 
 # NixOS path
