@@ -1,5 +1,6 @@
 xset b off # get rid of f#&*ing beep
 bindkey -v
+export KEYTIMEOUT=1
 export EDITOR=vim
 
 alias google-chrome="google-chrome --ignore-gpu-blacklist"
@@ -230,5 +231,11 @@ function cabal_sandbox_info() {
     fi
 }
  
-RPROMPT="\$(cabal_sandbox_info) $RPROMPT"
+#RPROMPT="\$(cabal_sandbox_info) $RPROMPT"
+
+function zle-line-init zle-keymap-select {
+    VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]% %{$reset_color%}"
+    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/} $(cabal_sandbox_info) $EPS1"
+    zle reset-prompt
+}
 
