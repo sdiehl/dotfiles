@@ -10,7 +10,7 @@ set nocompatible
 set number
 set nowrap
 set noshowmode
-set tw=110
+set tw=80
 set formatprg=par
 set pumheight=12
 set conceallevel=0
@@ -30,6 +30,8 @@ set wildmode=longest,list,full
 set wildmenu
 
 set t_Co=256
+
+set cmdheight=1
 
 " ----------------------------------------------
 " GUI Options
@@ -53,7 +55,6 @@ set wildmode=longest:list
 set dictionary="/usr/dict/words"
 
 function! Tab_Or_Complete()
-  return 'foo'
   if col('.')>1 && strpart( getline('.'), col('.')-2, 3 ) =~ '^\w'
     return "\<C-N>"
   else
@@ -62,6 +63,22 @@ function! Tab_Or_Complete()
 endfunction
 
 inoremap <tab> <c-r>=Tab_Or_Complete()<CR>
+
+"------------------------------------------------------------
+" Window split
+"------------------------------------------------------------
+
+" Resize split vertically
+nnoremap <silent> + :exe "resize " . (winheight(0) + 2)<CR>
+nnoremap <silent> - :exe "resize " . (winheight(0) - 2)<CR>
+
+" Resize split horizontally
+nnoremap <silent> > :exe "vertical resize " . (winwidth(0) + 2)<CR>
+nnoremap <silent> < :exe "vertical resize " . (winwidth(0) - 2)<CR>
+
+" Make splits equal size
+noremap <silent> <F12> :wincmd =<CR>
+autocmd VimResized * wincmd =
 
 " ----------------------------------------------
 " Other Languages
@@ -99,8 +116,10 @@ autocmd BufWritePre *.c :%s/\s\+$//e
 
 " -- Don't flicker when executing macros/functions
 "set lazyredraw
+"
+let g:ctrlp_custom_ignore = '\v[\/]dist$'
 
-let g:ctrlp_custom_ignore = '\v[\/]static$'
+let g:syntastic_always_populate_loc_list = 1
 
 set wildignore+=*.o
 set wildignore+=*.hi
@@ -117,9 +136,11 @@ let g:ghcmod_ghc_options = []
 
 " Reload
 map <silent> tu :call GHC_BrowseAll()<CR>
+
 " Type Lookup
 map tt :call GHC_ShowType(0)<CR>
-" Type Infer
+
+" Type Insertion
 map <silent> tw :call GHC_ShowType(1)<CR>
 
 "map ti :call GHC_ShowInfo()<CR>
@@ -127,7 +148,7 @@ map trai :call GHC_MkImportsExplicit()<CR>
 
 map <silent> <Leader>e :Errors<CR>
 map <silent> <Leader>l :lopen<CR>
-"map <silent> ln :lnext<CR>
+map <silent> ln :lnext<CR>
 map <Leader>s :SyntasticToggleMode<CR>
 
 if has("gui_running")
@@ -145,6 +166,7 @@ endif
 au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
 au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
 au FileType haskell nnoremap <buffer> <silent> <F3> :HdevtoolsInfo<CR>
+au FileType haskell nnoremap <buffer> <silent> <F4> :vertical botright lopen<CR>
 
 " ----------------------------------------------
 " Python
@@ -180,22 +202,66 @@ set showmode
 set shellslash
 set showmatch
 
+" ----------------------------------------------
+"  Quickfix
+" ----------------------------------------------
 
-" Latex Stuff
+autocmd FileType qf setlocal wrap
+
+" ----------------------------------------------
+"  Latex
+" ----------------------------------------------
 let g:tex_flavor='latex'
 let python_highlight_all=1
 
+" ----------------------------------------------
+"  NerdTree
+" ----------------------------------------------
 
-map <silent> <Leader>m :!make > /dev/null &<CR>
 map <Leader>n :NERDTreeToggle<CR>
 
-map <Leader>u :source $MYVIMRC<CR>
+" ----------------------------------------------
+"  Indentation
+" ----------------------------------------------
+
 map <Leader>ig :IndentGuidesToggle<CR>
+
+" ----------------------------------------------
+" Identifier Completion
+" ----------------------------------------------
+
+""inoremap {      {}<Left>
+""inoremap {<CR>  {<CR>}<Esc>O
+""inoremap {{     {
+""inoremap {}     {}
+""
+""inoremap (      ()<Left>
+""inoremap (<CR>  (<CR>)<Esc>O
+""inoremap ((    (
+""inoremap ()     ()
+""
+""inoremap [      []<Left>
+""inoremap [<CR>  [<CR>]<Esc>O
+""inoremap [[    [
+""inoremap []     []
+""
+""inoremap "      ""<Left>
+""inoremap "<CR>  "<CR>"<Esc>O
+""inoremap ""    "
+""inoremap ""     ""
+""
+""inoremap '      ''<Left>
+""inoremap '<CR>  '<CR>'<Esc>O
+""inoremap ''    '
+""inoremap ''     ''
 
 " ----------------------------------------------
 " CTRL+P
 " ----------------------------------------------
 map <silent> <Leader>t :CtrlP()<CR>
+
+" fuzzy find buffers
+noremap <leader>b<space> :CtrlPBuffer<cr>
 
 " ----------------------------------------------
 " Javascript, ick
@@ -365,6 +431,7 @@ endfunction
 
 ab teh the
 ab sefl self
+ab equivelant equivalent
 
 " ----------------------------------------------
 " Unicode Entry
@@ -706,3 +773,6 @@ function s:AgdaKeys()
     imap <buffer> \eth ð
     imap <buffer> \mho ℧
 endfunction
+
+autocmd BufNewFile,BufRead *.rst,*.txt,*.tex,*.latex,*.md setlocal spell
+autocmd BufNewFile,BufRead *.rst,*.txt,*.tex,*.latex,*.md setlocal nonumber
