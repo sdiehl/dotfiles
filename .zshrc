@@ -1,3 +1,5 @@
+fpath=(/home/stephen/zsh-completions/src $fpath)
+
 xset b off # get rid of f#&*ing beep
 bindkey -v
 export KEYTIMEOUT=1
@@ -11,8 +13,10 @@ export GREP_COLOR='1;32'
 export PATH="/usr/lib/colorgcc/bin:$PATH"
 set -o vi
 
-zstyle :compinstall filename '$HOME/.zshrc'
 autoload -Uz compinit && compinit
+zstyle :compinstall filename '$HOME/.zshrc'
+# autoload -U compinit ; compinit -u
+#
 autoload -U colors && colors
 
 setopt AUTO_CD                # cd if no matching command
@@ -37,19 +41,35 @@ setopt SHARE_HISTORY          # share history between open shells
 
 # Networking
 alias warp='wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf'
-alias ghci="ghci -v0"
 alias pst="ps -Leo pid,tid,comm"
 alias siteget="wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows"
+
+# Haskell
+alias ghci="ghci -v0"
+
 alias ghci-sandbox="ghci -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
 alias ghc-sandbox="ghc -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
-alias ghci-core="ghci -ddump-simpl -dsuppress-idinfo -dsuppress-coercions -dsuppress-type-applications -dsuppress-uniques -dsuppress-module-prefixes"
 alias runhaskell-sandbox="runhaskell -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
+
 alias ghc-7.8="/home/stephen/Git/ghc/bin/ghc-7.8.1"
 alias ghci-7.8="/home/stephen/Git/ghc/bin/ghci-7.8.1"
 alias ghcii="ghci -v0 -ghci-script ~/.ghc/ghci_alt.conf"
 alias cryptol="/home/stephen/Git/cryptol/.cabal-sandbox/bin/cryptol"
 alias cabal-bounds="/home/stephen/Git/cabal-bounds-0.6/dist/build/cabal-bounds/cabal-bounds"
 alias nix-haskell="nix-env -qaP \* | grep haskellPackages | less"
+alias ghci-core="ghci -fforce-recomp -ddump-simpl -dsuppress-idinfo -dsuppress-coercions -dsuppress-type-applications -dsuppress-uniques -dsuppress-module-prefixes"
+alias ghci-stg="ghc -fforce-recomp -ddump-stg -dsuppress-idinfo -dsuppress-coercions -dsuppress-uniques -dsuppress-module-prefixes"
+alias ghc-cmm="ghc -fforce-recomp -ddump-stg -ddump-cmm -dsuppress-idinfo -dsuppress-coercions -dsuppress-uniques -dsuppress-module-prefixes"
+
+lhs2hs() { 
+  sed '
+    s/^>//
+    t
+    s/^ *$//
+    t
+    s/^/-- /
+   ' $1 > $2
+}
 
 # C Programming
 function massif() {
@@ -83,7 +103,6 @@ alias gci="git commit --interactive"
 alias gco='git checkout'
 compdef gco=git
 
-
 ###
 # get the name of the branch we are on
 ###
@@ -116,32 +135,22 @@ unset SWITCH
 ex () {
     if [ -f $1 ] ; then
         case $1 in
-            *.tar.bz2)   tar xjf $1        ;;
-            *.tar.gz)    tar xzf $1     ;;
-            *.bz2)       bunzip2 $1       ;;
-            *.rar)       rar x $1     ;;
+            *.tar.bz2)   tar xjf $1    ;;
+            *.tar.gz)    tar xzf $1    ;;
+            *.bz2)       bunzip2 $1    ;;
+            *.rar)       rar x $1      ;;
             *.gz)        gunzip $1     ;;
-            *.tar)       tar xf $1        ;;
-            *.tbz2)      tar xjf $1      ;;
-            *.tgz)       tar xzf $1       ;;
-            *.zip)       unzip $1     ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1    ;;
+            *.tar)       tar xf $1     ;;
+            *.tbz2)      tar xjf $1    ;;
+            *.tgz)       tar xzf $1    ;;
+            *.zip)       unzip $1      ;;
+            *.Z)         uncompress $1 ;;
+            *.7z)        7z x $1       ;;
             *)           echo "'$1' cannot be extracted via extract()" ;;
         esac
     else
         echo "'$1' is not a valid file"
     fi
-}
-
-lhs2hs() { 
-  sed '
-    s/^>//
-    t
-    s/^ *$//
-    t
-    s/^/-- /
-   ' $1 > $2
 }
 
 # NixOS path
@@ -238,4 +247,3 @@ function zle-line-init zle-keymap-select {
     RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/} $(cabal_sandbox_info) $EPS1"
     zle reset-prompt
 }
-

@@ -68,14 +68,6 @@ inoremap <tab> <c-r>=Tab_Or_Complete()<CR>
 " Window split
 "------------------------------------------------------------
 
-" Resize split vertically
-nnoremap <silent> + :exe "resize " . (winheight(0) + 2)<CR>
-nnoremap <silent> - :exe "resize " . (winheight(0) - 2)<CR>
-
-" Resize split horizontally
-nnoremap <silent> > :exe "vertical resize " . (winwidth(0) + 2)<CR>
-nnoremap <silent> < :exe "vertical resize " . (winwidth(0) - 2)<CR>
-
 " Make splits equal size
 noremap <silent> <F12> :wincmd =<CR>
 autocmd VimResized * wincmd =
@@ -148,7 +140,7 @@ map trai :call GHC_MkImportsExplicit()<CR>
 
 map <silent> <Leader>e :Errors<CR>
 map <silent> <Leader>l :lopen<CR>
-map <silent> ln :lnext<CR>
+"map <silent> ln :lnext<CR>
 map <Leader>s :SyntasticToggleMode<CR>
 
 if has("gui_running")
