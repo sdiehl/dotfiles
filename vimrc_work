@@ -1,0 +1,338 @@
+" Stephen Diehl .vimrc
+" Most aimed at Haskell / Agda / Python / C / LaTeX 
+"
+" This is about 5 years of work. Feel free to copy any of it!
+
+syntax on                     " syntax highlighing
+filetype plugin indent on     " enable loading indent file for filetype
+
+
+set nocompatible
+set number
+set nowrap
+set noshowmode
+set tw=80
+set formatprg=par
+set pumheight=12
+set conceallevel=0
+set smartcase
+
+set smarttab
+set smartindent
+set autoindent
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+
+set completeopt=menuone,menu,longest
+
+set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox
+set wildmode=longest,list,full
+set wildmenu
+
+set t_Co=256
+
+set cmdheight=1
+
+" ----------------------------------------------
+" Pathogen Manager
+" ----------------------------------------------
+
+execute pathogen#infect()
+
+" ----------------------------------------------
+" Tab Completion
+" ----------------------------------------------
+
+set completeopt+=longest
+
+" Use buffer words as default tab completion
+let g:SuperTabDefaultCompletionType = '<c-x><c-p>'
+
+" But provide (neco-ghc) omnicompletion
+if has("gui_running")
+  imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
+else " no gui
+  if has("unix")
+    inoremap <Nul> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
+  endif
+endif
+
+" ----------------------------------------------
+" CTRL+P
+" ----------------------------------------------
+
+map <silent> <Leader>t :CtrlP()<CR>
+noremap <leader>b<space> :CtrlPBuffer<cr>
+let g:ctrlp_custom_ignore = '\v[\/]dist$'
+
+" ----------------------------------------------
+"  NerdTree
+" ----------------------------------------------
+
+map <Leader>n :NERDTreeToggle<CR>
+
+" ----------------------------------------------
+"  Indentation
+" ----------------------------------------------
+
+map <Leader>ig :IndentGuidesToggle<CR>
+
+" ----------------------------------------------
+" Fix trailing Whitespace
+" ----------------------------------------------
+
+" Autofix all whitespace on save
+"autocmd BufWritePre *.py :%s/\s\+$//e
+" Delete all trailing empty lines on files
+"autocmd BufWritePre *.py :%s/\(\s*\n\)\+\%$//e
+
+" Autofix all whitespace on save
+autocmd BufWritePre *.hs :%s/\s\+$//e
+" Delete all trailing empty lines on files
+autocmd BufWritePre *.hs :%s/\(\s*\n\)\+\%$//e
+
+" ----------------------------------------------
+" GUI Options
+" ----------------------------------------------
+
+" Prevent buggy resizing with xmonad
+set guiheadroom=0
+
+set mouse=a
+set mousemodel=popup
+
+set guioptions-=m
+set guioptions-=r
+set guioptions-=T
+set guioptions-=L
+set background=dark
+
+set wildmenu
+set wildmode=longest:list
+
+set dictionary="/usr/dict/words"
+
+" ----------------------------------------------
+" Color Schemes
+" ----------------------------------------------
+
+if has("gui_running")
+    " For gvim
+    colorscheme jellybeans
+    set guifont=Source\ Code\ Pro\ Medium\ 9
+    set anti enc=utf-8
+else
+    " For terminal
+    colorscheme jellybeans
+    "set guifont=ProggyCleanTT\ 12
+    autocmd FocusGained * call s:CommandTFlush()
+endif
+
+" ----------------------------------------------
+" Flush
+" ----------------------------------------------
+
+" Flush swap files recursively in this directory, usefull if Vim
+" crashes.
+command! Flush :call Flush()
+func! Flush()
+    exec "!find . -name \".*.swp\" | xargs rm -f"
+endfunc
+
+" ----------------------------------------------
+" Haskell
+" ----------------------------------------------
+
+let $PATH = $PATH . ':' . expand('~/.cabal/bin')
+
+" Reload
+map <silent> tu :call GHC_BrowseAll()<CR>
+
+" Type Lookup
+map tt :call GHC_ShowType(0)<CR>
+
+" Type Insertion
+map <silent> tw :GhcModTypeInsert<CR>
+
+au FileType haskell nnoremap <buffer> <F1> :GhcModType<CR>
+au FileType haskell nnoremap <buffer> <F2> :GhcModTypeClear<CR>
+
+noremap <silent> <C-S> :update<CR>
+
+function! Pointfree()
+  call setline('.', split(system('pointfree '.shellescape(join(getline(a:firstline, a:lastline), "\n"))), "\n"))
+endfunction
+vnoremap <silent> <leader>h. :call Pointfree()<CR>
+
+nmap <silent> <leader>hl :SyntasticCheck hlint<CR>
+
+" ----------------------------------------------
+" Syntastic
+" ----------------------------------------------
+
+map <Leader>s :SyntasticToggleMode<CR>
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+
+"let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['haskell'] }
+
+" ----------------------------------------------
+" Python
+" ----------------------------------------------
+
+autocmd bufnewfile,bufread *.py set formatprg=par
+
+" ----------------------------------------------
+" Other Languages
+" ----------------------------------------------
+
+autocmd BufNewFile,BufRead *.agda set filetype=agda
+autocmd BufNewFile,BufRead *.idr set filetype=idris
+autocmd BufNewFile,BufRead *.ocaml set filetype=ocaml
+autocmd BufNewFile,BufRead *.go set filetype=go
+autocmd BufNewFile,BufRead *.pure set filetype=pure
+autocmd BufNewFile,BufRead *.js set filetype=javascript
+autocmd BufNewFile,BufRead *.coffee set filetype=coffee
+autocmd BufNewFile,BufRead *.md set filetype=markdown
+autocmd BufNewFile,BufRead *.ll set filetype=llvm
+autocmd BufNewFile,BufRead *.scala set filetype=scala
+autocmd BufNewFile,BufRead *.c set filetype=c
+
+" ----------------------------------------------
+" Pane Switching
+" ----------------------------------------------
+
+nnoremap <C-j> <C-W>w
+
+nnoremap <C-j> <C-W>w
+
+" tab navigation like firefox
+map tn :tabnext<CR>
+map tp :tabprevious<CR>
+
+map <C-t> :tabnew<CR>
+
+highlight SpellBad term=underline gui=underline guisp=Blue
+highlight Error term=underline gui=underline guibg=#00ff00
+
+"------------------------------------------------------------
+" Window split
+"------------------------------------------------------------
+
+" Make splits equal size
+noremap <silent> <F12> :wincmd =<CR>
+autocmd VimResized * wincmd =
+
+" ----------------------------------------------
+" Autocorect
+" ----------------------------------------------
+
+ab teh the
+ab sefl self
+ab equivelant equivalent
+
+" ----------------------------------------------
+" Tabularize
+" ----------------------------------------------
+
+let g:haskell_tabular = 1
+
+vmap a= :Tabularize /=<CR>
+vmap a; :Tabularize /::<CR>
+vmap a, :Tabularize /,<CR>
+
+" ----------------------------------------------
+" Git Version Traversal
+" ----------------------------------------------
+map gd :Gdiff<CR>
+map gb :Gblame<CR>
+
+" Git checkout at block level
+vmap do :diffget<CR>
+map gd :Gdiff<CR>
+
+" ----------------------------------------------
+" Fast Navigation
+" ----------------------------------------------
+
+" Go to last edited line one keystroke 
+map ` g;
+map gl <C-^> 
+
+" ----------------------------------------------
+" Searching
+" ----------------------------------------------
+
+set incsearch
+map ff /\c
+
+if &t_Co > 2 || has("gui_running")
+    set hlsearch                "Highlight all search matches if color is
+endif                           "possible (:noh to toggle off)
+nnoremap <silent> <return> :noh<return>
+
+" ----------------------------------------------
+" Inactive Buffers
+" ----------------------------------------------
+
+function! Wipeout()
+  " list of *all* buffer numbers
+  let l:buffers = range(1, bufnr('$'))
+
+  " what tab page are we in?
+  let l:currentTab = tabpagenr()
+  try
+    " go through all tab pages
+    let l:tab = 0
+    while l:tab < tabpagenr('$')
+      let l:tab += 1
+
+      " go through all windows
+      let l:win = 0
+      while l:win < winnr('$')
+        let l:win += 1
+        " whatever buffer is in this window in this tab, remove it from
+        " l:buffers list
+        let l:thisbuf = winbufnr(l:win)
+        call remove(l:buffers, index(l:buffers, l:thisbuf))
+      endwhile
+    endwhile
+
+    " if there are any buffers left, delete them
+    if len(l:buffers)
+      execute 'bwipeout' join(l:buffers)
+    endif
+  finally
+    " go back to our original tab page
+    execute 'tabnext' l:currentTab
+  endtry
+endfunction
+
+" ----------------------------------------------
+" Writing Mode
+" ----------------------------------------------
+
+autocmd BufNewFile,BufRead *.rst,*.txt,*.tex,*.latex,*.md setlocal spell
+autocmd BufNewFile,BufRead *.rst,*.txt,*.tex,*.latex,*.md setlocal nonumber
+
+" ----------------------------------------------
+" Clipboard
+" ----------------------------------------------
+
+"X Clipboard
+set clipboard=unnamedplus,autoselect
+
+noremap <F11> :set invpaste paste?<CR>
+set pastetoggle=<F11>
+set showmode
+
+set shellslash
+set showmatch
