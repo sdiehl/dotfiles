@@ -6,9 +6,20 @@ Stephen Diehl's Dotfiles
 * .vimrc
 * vim_work
 
-**ZSH**
+**Zsh**
 
 * .zshrc
+
+**X11**
+
+* .Xdefaults
+* .xbindkeysrc
+* .xsession
+* monitor.sh
+* single.sh
+* mouse_off.sh
+* fash.sh
+* toggle_caps
 
 **Arch Linux**
 
@@ -18,12 +29,36 @@ Stephen Diehl's Dotfiles
 
 **XMonad**
 
-xmonad.hs
+* xmonad.hs
+* .xmobarrc
+
+**Git**
+
+* gitconfig
+* .gitignore
+* .tigrc
 
 **Haskell**
 
 * ghc/
 
+**C**
+
+* .valgrindrc
+
+**Python**
+
+* postactivate
+
+**Supercomputing**
+
+* .starcluster
+
+**Nix**
+
+.nix-channels
+
 **Music**
 
+* .asoundrc
 * config
