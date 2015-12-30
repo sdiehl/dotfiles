@@ -1,23 +1,13 @@
-fpath=(/home/stephen/zsh-completions/src $fpath)
-
 xset b off # get rid of f#&*ing beep
 bindkey -v
 export KEYTIMEOUT=1
 export EDITOR=vim
 
-alias google-chrome="google-chrome --ignore-gpu-blacklist"
-
-export GREP_OPTIONS='--color=auto'
-export GREP_COLOR='1;32'
-
-export PATH="/usr/lib/colorgcc/bin:$PATH"
-set -o vi
-
-autoload -Uz compinit && compinit
 zstyle :compinstall filename '$HOME/.zshrc'
-# autoload -U compinit ; compinit -u
-#
+autoload -Uz compinit && compinit
 autoload -U colors && colors
+
+alias vim='nocorrect vim' 
 
 setopt AUTO_CD                # cd if no matching command
 setopt AUTO_PARAM_SLASH       # adds slash at end of tabbed dirs
@@ -39,28 +29,24 @@ setopt PROMPT_SUBST           # sub values in prompt
 setopt RM_STAR_WAIT           # pause before confirming rm *
 setopt SHARE_HISTORY          # share history between open shells
 
+# Shell Environments
+# ------------------
+
+# Work ZSH config is a extension of this file
+alias work='source /home/stephen/.zshrc_python'
+
 # Networking
-alias warp='wpa_supplicant -Dwext -iwlan0 -c/etc/wpa_supplicant.conf'
-alias pst="ps -Leo pid,tid,comm"
+# --------------
 alias siteget="wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows"
 
 # Haskell
+# --------------
 alias ghci="ghci -v0"
-
-alias ghci-sandbox="ghci -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
-alias ghc-sandbox="ghc -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
-alias runhaskell-sandbox="runhaskell -no-user-package-db -package-db .cabal-sandbox/*-packages.conf.d"
-
-alias ghc-7.8="/home/stephen/Git/ghc/bin/ghc-7.8.1"
-alias ghci-7.8="/home/stephen/Git/ghc/bin/ghci-7.8.1"
-alias ghcii="ghci -v0 -ghci-script ~/.ghc/ghci_alt.conf"
-alias cryptol="/home/stephen/Git/cryptol/.cabal-sandbox/bin/cryptol"
-alias cabal-bounds="/home/stephen/Git/cabal-bounds-0.6/dist/build/cabal-bounds/cabal-bounds"
-alias nix-haskell="nix-env -qaP \* | grep haskellPackages | less"
 alias ghci-core="ghci -fforce-recomp -ddump-simpl -dsuppress-idinfo -dsuppress-coercions -dsuppress-type-applications -dsuppress-uniques -dsuppress-module-prefixes"
 alias ghci-stg="ghc -fforce-recomp -ddump-stg -dsuppress-idinfo -dsuppress-coercions -dsuppress-uniques -dsuppress-module-prefixes"
 alias ghc-cmm="ghc -fforce-recomp -ddump-stg -ddump-cmm -dsuppress-idinfo -dsuppress-coercions -dsuppress-uniques -dsuppress-module-prefixes"
 
+# Convert Literate Haskell
 lhs2hs() { 
   sed '
     s/^>//
@@ -71,23 +57,41 @@ lhs2hs() {
    ' $1 > $2
 }
 
+function cabal_sandbox_info() {
+    cabal_files=(*.cabal(N))
+    if [ $#cabal_files -gt 0 ]; then
+        if [ -f cabal.sandbox.config ]; then
+            echo "%{$fg[green]%}sandboxed%{$reset_color%}"
+        else
+            echo "%{$fg[red]%}not sandboxed%{$reset_color%}"
+        fi
+    fi
+}
+ 
+
+autoload -U +X compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+eval "$(stack --bash-completion-script stack)"
+
 # C Programming
+# --------------
 function massif() {
   valgrind --tool=massif --massif-out-file=massif.prof $1 && ms_print massif.prof | less
 }
 alias ass="astyle --style=1tbs --lineend=linux --convert-tabs --preserve-date --fill-empty-lines --pad-header --indent-switches --align-pointer=name --align-reference=name --pad-oper"
 
 # J programming language
+# --------------
 alias j="jfe --console"
 
 # General System Aliases
-
-alias vol="alsamixer --card 0"
+alias vol="alsamixer -D pulse"
 alias ls="ls --color -h"
 alias screen="screen -q"
 alias myip="/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'"
 
-# Git stuff
+# Git
+# --------------
 alias gst='git status'
 alias gl='git pull origin $(parse_git_branch)'
 alias glr='git pull --rebase origin $(parse_git_branch)'
@@ -103,9 +107,6 @@ alias gci="git commit --interactive"
 alias gco='git checkout'
 compdef gco=git
 
-###
-# get the name of the branch we are on
-###
 parse_git_branch() {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 }
@@ -132,6 +133,7 @@ zstyle ':completion:*:processes' command \
 unset SWITCH
 
 # Extract Archives
+# --------------
 ex () {
     if [ -f $1 ] ; then
         case $1 in
@@ -153,12 +155,6 @@ ex () {
     fi
 }
 
-# NixOS path
-alias nix='source /home/stephen/.nix-profile/etc/profile.d/nix.sh'
-
-# Work ZSH config is a extension of this file
-alias work='source /home/stephen/.zshrc_python'
-
 # Python Environment
 # ------------------
 
@@ -170,7 +166,12 @@ alias python3=/home/stephen/continuum/anaconda/envs/py33/bin/python3.3
 # Haskell Environment
 # -------------------
 
-# Add GHC & Haskell Platform to PATH if present
+# Add Stack to PATH if present
+if [ -d "$HOME/.local/bin" ]; then
+    export PATH=$PATH:$HOME/.local/bin
+fi
+
+# Add GHC to PATH if present
 if [ -d "$HOME/.haskell/bin" ]; then
     export PATH=$PATH:$HOME/.haskell/bin
 fi
@@ -180,7 +181,7 @@ if [ -d "$HOME/.cabal/bin" ]; then
     export PATH=$PATH:$HOME/.cabal/bin
 fi
 
-# ... and any installed Cabal packages
+# ... and Agda
 if [ -d "$HOME/AgdaStdLib/src" ]; then
     export PATH=$PATH:$HOME/AgdaStdLib/src
 fi
@@ -189,7 +190,6 @@ fi
 if [ -d "/opt/cuda/bin" ]; then
     export PATH=$PATH:/opt/cuda/bin
 fi
-
 
 function zle-line-init zle-keymap-select {
   zle reset-prompt
@@ -229,17 +229,6 @@ waits () {
     done
 }
 
-function cabal_sandbox_info() {
-    cabal_files=(*.cabal(N))
-    if [ $#cabal_files -gt 0 ]; then
-        if [ -f cabal.sandbox.config ]; then
-            echo "%{$fg[green]%}sandboxed%{$reset_color%}"
-        else
-            echo "%{$fg[red]%}not sandboxed%{$reset_color%}"
-        fi
-    fi
-}
- 
 #RPROMPT="\$(cabal_sandbox_info) $RPROMPT"
 
 function zle-line-init zle-keymap-select {
@@ -247,3 +236,5 @@ function zle-line-init zle-keymap-select {
     RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/} $(cabal_sandbox_info) $EPS1"
     zle reset-prompt
 }
+
+source .bashrc_work
