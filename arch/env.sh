@@ -13,14 +13,16 @@ pacman -S bash
 pacman -S ca-certificates
 pacman -S dbus-core
 pacman -S hwdetect
+pacman -S valgrind
+pacman -S glibc
+pacman -S glib2
+
+# Compilers
 pacman -S gcc
 pacman -S gcc-fortran
 pacman -S gcc-libs
 pacman -S clang
-pacman -S valgrind
 pacman -S llvm
-pacman -S glibc
-pacman -S glib2
 
 # Network
 pacman -S dhcpcd
@@ -109,49 +111,10 @@ pacman -S dzen2
 cabal install xmonad
 xmonad --recompile
 
-# Essential Haskell
-cabal install parsec
-cabal install containers
-cabal install monad-loops
-cabal install directory
-cabal install filepath
-cabal install mtl
-cabal install transformers
-cabal install text
-cabal install stm
-cabal install pandoc
-cabal install lens
-cabal install categories
-cabal install diagrams
-cabal install network
-cabal install HTTP
-cabal install unix
-cabal install aeson
-cabal install hashable
-cabal install cereal
-cabal install criterion
-cabal install process
-cabal install quickcheck
-cabal install smallcheck
-#cabal install smartcheck
-cabal install hashtable
-cabal install warp
-cabal install happy
-cabal install pretty
-cabal install pretty-show
-cabal install cloud
-cabal install hmatrix
-cabal install vect
-cabal install repa
-cabal install accelerate
-cabal install pipes
-cabal install uniplate
-cabal install pointfree
-cabal install pointful
-cabal install pandoc
-cabal install hakyll
 cabal install hlint
-cabal install hdevtools
+cabal install happy
+cabal install alex
+cabal install ghc-mod
 
 # Python
 pacman -S python2
@@ -160,13 +123,6 @@ pacman -S python2-virtualenv
 
 #pip install virtualenv
 pip install virtualenvwrapper
-
-# Numeric libs in site-packages
-pacman -S python2-numpy
-pacman -S python2-scipy
-pacman -S python2-matplotlib
-
-pacman -S pypy
 
 # Xorg
 pacman -S xorg-server

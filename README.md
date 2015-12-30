@@ -10,6 +10,10 @@ Stephen Diehl's Dotfiles
 
 * .zshrc
 
+**Emacs**
+
+* .emacs
+
 **X11**
 
 * .Xdefaults
@@ -31,6 +35,7 @@ Stephen Diehl's Dotfiles
 
 * xmonad.hs
 * .xmobarrc
+* .tmux
 
 **Git**
 
@@ -44,7 +49,9 @@ Stephen Diehl's Dotfiles
 
 **C**
 
+* .gdbinit	
 * .valgrindrc
+* .colorgccrc
 
 **Python**
 
