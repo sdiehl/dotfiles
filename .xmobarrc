@@ -1,7 +1,7 @@
 
 Config { font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
      , bgColor      = "#000000"
-     , fgColor      = "#0000FF"
+     , fgColor      = "#00FF00"
      , position =  Top
      , lowerOnStart = False
      , commands     = [ Run Network "wlan0" ["-L","0","-H","32","-l", "green", "--normal","orange","--high","red"] 40

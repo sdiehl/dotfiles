@@ -47,7 +47,10 @@ execute pathogen#infect()
 set completeopt+=longest
 
 " Use buffer words as default tab completion
-let g:SuperTabDefaultCompletionType = '<c-x><c-p>'
+let g:SuperTabDefaultCompletionType = '<C-x><C-o>'
+
+inoremap <C-Space> <C-x><C-o>
+inoremap <C-@> <C-Space>
 
 " But provide (neco-ghc) omnicompletion
 if has("gui_running")
@@ -88,9 +91,9 @@ map <Leader>ig :IndentGuidesToggle<CR>
 "autocmd BufWritePre *.py :%s/\(\s*\n\)\+\%$//e
 
 " Autofix all whitespace on save
-autocmd BufWritePre *.hs :%s/\s\+$//e
+" autocmd BufWritePre *.hs :%s/\s\+$//e
 " Delete all trailing empty lines on files
-autocmd BufWritePre *.hs :%s/\(\s*\n\)\+\%$//e
+" autocmd BufWritePre *.hs :%s/\(\s*\n\)\+\%$//e
 
 " ----------------------------------------------
 " GUI Options
@@ -169,6 +172,10 @@ endfunction
 vnoremap <silent> <leader>h. :call Pointfree()<CR>
 
 nmap <silent> <leader>hl :SyntasticCheck hlint<CR>
+
+" Disable haskell-vim omnifunc
+let g:haskellmode_completion_ghc = 1
+autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
 " ----------------------------------------------
 " Syntastic
@@ -252,6 +259,7 @@ let g:haskell_tabular = 1
 vmap a= :Tabularize /=<CR>
 vmap a; :Tabularize /::<CR>
 vmap a, :Tabularize /,<CR>
+vmap a- :Tabularize /-><CR>
 
 " ----------------------------------------------
 " Git Version Traversal

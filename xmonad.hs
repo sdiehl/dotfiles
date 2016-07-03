@@ -8,6 +8,8 @@ import qualified Data.Map        as M
 import XMonad.Actions.CycleWS
 
 import XMonad.Hooks.DynamicLog
+{-import XMonad.Hooks.EwhmDesktops-}
+import XMonad.Hooks.EwmhDesktops
 
 import XMonad.Layout.Accordion
 import XMonad.Layout.Grid
@@ -16,7 +18,7 @@ import XMonad.Layout.Spacing
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 
-myTerminal      = "urxvt"
+myTerminal      = "terminator"
 myFocusFollowsMouse = True
 myNumlockMask   = mod2Mask
 myBorderWidth   = 3
@@ -27,7 +29,7 @@ numPadKeys = [ xK_KP_End,  xK_KP_Down,  xK_KP_Page_Down -- 1, 2, 3
              , xK_KP_Insert] -- 0
 myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 myNormalBorderColor  = "#dddddd"
-myFocusedBorderColor = "#ffff00"
+myFocusedBorderColor = "#00ff00"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -40,7 +42,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch dmenu
     , ((modm,               xK_p     ), spawn "dmenu_run")
 
-    , ((modm .|. shiftMask, xK_l     ), spawn "xlock -mode matrix")
+    , ((modm .|. shiftMask, xK_l     ), spawn "xscreensaver-command -lock")
 
     -- launch gmrun
     , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
@@ -167,8 +169,8 @@ myLayout =
   $ tiled ||| mtiled ||| Accordion ||| Grid
   where
      -- default tiling algorithm partitions the screen into two panes
-     tiled   = smartSpacing 10 $ Tall nmaster delta ratio
-     mtiled = smartSpacing 10 $ Mirror tiled
+     tiled  = smartSpacing 0 $ Tall nmaster delta ratio
+     mtiled = smartSpacing 0 $ Mirror tiled
 
      -- The default number of windows in the master pane
      nmaster = 1
@@ -215,6 +217,9 @@ defaults = defaultConfig {
         startupHook        = myStartupHook
     }
 
+{-main = do-}
+    {-xmonad config-}
+
 main = do
-    config <- (statusBar myBar myPP toggleStrutsKey defaults)
-    xmonad config
+  config <- (statusBar myBar myPP toggleStrutsKey defaults)
+  xmonad $ ewmh config { handleEventHook = handleEventHook defaultConfig <+> fullscreenEventHook }

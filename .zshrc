@@ -238,3 +238,6 @@ function zle-line-init zle-keymap-select {
 }
 
 source .bashrc_work
+
+# OPAM configuration
+. /home/sdiehl/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
