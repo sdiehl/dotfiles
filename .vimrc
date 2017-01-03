@@ -47,19 +47,10 @@ execute pathogen#infect()
 set completeopt+=longest
 
 " Use buffer words as default tab completion
-let g:SuperTabDefaultCompletionType = '<C-x><C-o>'
+"let g:SuperTabDefaultCompletionType = '<C-x><C-o>'
 
 inoremap <C-Space> <C-x><C-o>
 inoremap <C-@> <C-Space>
-
-" But provide (neco-ghc) omnicompletion
-if has("gui_running")
-  imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
-else " no gui
-  if has("unix")
-    inoremap <Nul> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
-  endif
-endif
 
 " ----------------------------------------------
 " CTRL+P
@@ -68,12 +59,14 @@ endif
 map <silent> <Leader>t :CtrlP()<CR>
 noremap <leader>b<space> :CtrlPBuffer<cr>
 let g:ctrlp_custom_ignore = '\v[\/]dist$'
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
 " ----------------------------------------------
 "  NerdTree
 " ----------------------------------------------
 
 map <Leader>n :NERDTreeToggle<CR>
+let NERDTreeIgnore = ['\.pyc$']
 
 " ----------------------------------------------
 "  Indentation
@@ -142,6 +135,12 @@ command! Flush :call Flush()
 func! Flush()
     exec "!find . -name \".*.swp\" | xargs rm -f"
 endfunc
+
+" ----------------------------------------------
+" HTML
+" ----------------------------------------------
+
+let g:mta_use_matchparen_group = 1
 
 " ----------------------------------------------
 " Haskell
@@ -216,6 +215,7 @@ autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.ll set filetype=llvm
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.c set filetype=c
+autocmd BufNewFile,BufRead *.sol set filetype=solidity
 
 " ----------------------------------------------
 " Pane Switching

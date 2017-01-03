@@ -1,0 +1,1 @@
+synclient Clickpad=1

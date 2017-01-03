@@ -163,6 +163,12 @@ VIRTUALENVWRAPPER_PYTHON=/usr/bin/python2
 export PATH=/home/stephen/continuum/anaconda/bin:$PATH
 alias python3=/home/stephen/continuum/anaconda/envs/py33/bin/python3.3
 
+# Javascript
+# ------------------
+
+alias node=nodejs
+export PATH="$(npm bin):$PATH"
+
 # Haskell Environment
 # -------------------
 
