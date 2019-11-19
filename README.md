@@ -10,9 +10,15 @@ Stephen Diehl's Dotfiles
 
 * .zshrc
 
-**Emacs**
+**XMonad**
 
-* .emacs
+* xmonad.hs
+* .xmobarrc
+* .tmux
+
+**Terminal**
+
+* alacritty.yml
 
 **X11**
 
@@ -24,18 +30,8 @@ Stephen Diehl's Dotfiles
 * mouse_off.sh
 * fash.sh
 * toggle_caps
-
-**Arch Linux**
-
-* pacman.conf
-* rc.conf
-* touchegg.conf
-
-**XMonad**
-
-* xmonad.hs
-* .xmobarrc
-* .tmux
+* us_layout
+* fix_backtick
 
 **Git**
 
@@ -43,9 +39,9 @@ Stephen Diehl's Dotfiles
 * .gitignore
 * .tigrc
 
-**Haskell**
+**Stack**
 
-* ghc/
+* .stack/config.yaml
 
 **C**
 
@@ -53,19 +49,20 @@ Stephen Diehl's Dotfiles
 * .valgrindrc
 * .colorgccrc
 
-**Python**
-
-* postactivate
-
 **Supercomputing**
 
 * .starcluster
 
 **Nix**
 
-.nix-channels
+* .nix-channels
 
-**Music**
+**Audio**
 
 * .asoundrc
 * config
+
+**Emacs**
+
+* .emacs
+
