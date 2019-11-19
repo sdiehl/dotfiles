@@ -23,8 +23,6 @@ set expandtab
 set vb
 set nofoldenable
 
-set completeopt=menuone,menu,longest
-
 set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox,.stack-work
 set wildmode=longest,list,full
 set wildmenu
@@ -32,10 +30,10 @@ set wildmenu
 set cmdheight=1
 
 " ----------------------------------------------
-" Whitespace
+" Colors
 " ----------------------------------------------
 
-autocmd BufWritePre * %s/\s\+$//e
+colorscheme NeoSolarized
 
 " ----------------------------------------------
 " Colors
@@ -54,13 +52,22 @@ execute pathogen#infect()
 " Tab Completion
 " ----------------------------------------------
 
+set completeopt=menuone,menu,longest
 set completeopt+=longest
-
-" Use buffer words as default tab completion
-"let g:SuperTabDefaultCompletionType = '<C-x><C-o>'
 
 inoremap <C-Space> <C-x><C-o>
 inoremap <C-@> <C-Space>
+
+function! InsertTabWrapper()
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<tab>"
+    else
+        return "\<c-p>"
+    endif
+endfunction
+inoremap <expr> <tab> InsertTabWrapper()
+inoremap <s-tab> <c-n>
 
 " ----------------------------------------------
 " CTRL+P
@@ -76,7 +83,7 @@ let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standar
 " ----------------------------------------------
 
 map <Leader>n :NERDTreeToggle<CR>
-let NERDTreeIgnore = ['\.pyc$','.stack-work']
+let NERDTreeIgnore = ['\.pyc$','.stack-work','*.swp']
 
 " ----------------------------------------------
 "  Indentation
@@ -89,14 +96,24 @@ map <Leader>ig :IndentGuidesToggle<CR>
 " ----------------------------------------------
 
 " Autofix all whitespace on save
-"autocmd BufWritePre *.py :%s/\s\+$//e
+autocmd BufWritePre *.py :%s/\s\+$//e
 " Delete all trailing empty lines on files
-"autocmd BufWritePre *.py :%s/\(\s*\n\)\+\%$//e
+autocmd BufWritePre *.py :%s/\(\s*\n\)\+\%$//e
 
 " Autofix all whitespace on save
-" autocmd BufWritePre *.hs :%s/\s\+$//e
+autocmd BufWritePre *.hs :%s/\s\+$//e
 " Delete all trailing empty lines on files
-" autocmd BufWritePre *.hs :%s/\(\s*\n\)\+\%$//e
+autocmd BufWritePre *.hs :%s/\(\s*\n\)\+\%$//e
+"
+" ----------------------------------------------
+" Nightmode
+" ----------------------------------------------
+
+if strftime("%H") < 12
+  set background=light
+else
+  set background=dark
+endif
 
 " ----------------------------------------------
 " GUI Options
@@ -109,18 +126,11 @@ set guioptions-=m
 set guioptions-=r
 set guioptions-=T
 set guioptions-=L
-set background=dark
 
 set wildmenu
 set wildmode=longest:list
 
 set dictionary="/usr/dict/words"
-
-" ----------------------------------------------
-" Color Schemes
-" ----------------------------------------------
-
-colorscheme NeoSolarized
 
 " ----------------------------------------------
 " Flush
@@ -143,10 +153,7 @@ let g:mta_use_matchparen_group = 1
 " Haskell
 " ----------------------------------------------
 
-let $PATH = $PATH . ':' . expand('~/.cabal/bin')
-
-" Reload
-map <silent> tu :call GHC_BrowseAll()<CR>
+let $PATH = $PATH . ':' . expand('~/.stack/bin')
 
 " Type Lookup
 map tt :call GHC_ShowType(0)<CR>
@@ -160,18 +167,12 @@ map <silent> te :GhcModTypeClear<CR>
 au FileType haskell nnoremap <buffer> <F1> :GhcModType<CR>
 au FileType haskell nnoremap <buffer> <F2> :GhcModTypeClear<CR>
 
-noremap <silent> <C-S> :update<CR>
-
 function! Pointfree()
   call setline('.', split(system('pointfree '.shellescape(join(getline(a:firstline, a:lastline), "\n"))), "\n"))
 endfunction
 vnoremap <silent> <leader>h. :call Pointfree()<CR>
 
 nmap <silent> <leader>hl :SyntasticCheck hlint<CR>
-
-" Disable haskell-vim omnifunc
-let g:haskellmode_completion_ghc = 1
-autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
 " ----------------------------------------------
 " Syntastic
@@ -200,19 +201,17 @@ autocmd bufnewfile,bufread *.py set formatprg=par
 " Other Languages
 " ----------------------------------------------
 
+autocmd BufNewFile,BufRead *.y set filetype=happy
+autocmd BufNewFile,BufRead *.x set filetype=alex
 autocmd BufNewFile,BufRead *.agda set filetype=agda
 autocmd BufNewFile,BufRead *.idr set filetype=idris
 autocmd BufNewFile,BufRead *.ocaml set filetype=ocaml
-autocmd BufNewFile,BufRead *.go set filetype=go
-autocmd BufNewFile,BufRead *.pure set filetype=pure
-autocmd BufRead,BufNewFile *.ws set filetype=wist
 autocmd BufNewFile,BufRead *.js set filetype=javascript
-autocmd BufNewFile,BufRead *.coffee set filetype=coffee
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.ll set filetype=llvm
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.c set filetype=c
-autocmd BufNewFile,BufRead *.sol set filetype=solidity
+autocmd BufNewFile,BufRead *.ws set filetype=wist
 
 " ----------------------------------------------
 " Pane Switching
@@ -261,6 +260,7 @@ vmap a- :Tabularize /-><CR>
 " ----------------------------------------------
 " Git Version Traversal
 " ----------------------------------------------
+
 map gd :Gdiff<CR>
 map gb :Gblame<CR>
 
@@ -272,9 +272,9 @@ map gd :Gdiff<CR>
 " Fast Navigation
 " ----------------------------------------------
 
-" Go to last edited line one keystroke 
+" Go to last edited line one keystroke
 map ` g;
-map gl <C-^> 
+map gl <C-^>
 
 " ----------------------------------------------
 " Searching
