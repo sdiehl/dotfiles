@@ -84,6 +84,7 @@ let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standar
 
 map <Leader>n :NERDTreeToggle<CR>
 let NERDTreeIgnore = ['\.pyc$','.stack-work','*.swp']
+let g:NERDTreeChDirMode = 2
 
 " ----------------------------------------------
 "  Indentation
@@ -109,7 +110,7 @@ autocmd BufWritePre *.hs :%s/\(\s*\n\)\+\%$//e
 " Nightmode
 " ----------------------------------------------
 
-if strftime("%H") < 12
+if strftime("%H") < 20
   set background=light
 else
   set background=dark
@@ -152,6 +153,11 @@ let g:mta_use_matchparen_group = 1
 " ----------------------------------------------
 " Haskell
 " ----------------------------------------------
+
+let g:ormolu_options=["--unsafe"]
+"let b:ormolu_disable=1
+nnoremap tf :call RunOrmolu()<CR>
+nnoremap to :call ToggleOrmolu()<CR>
 
 let $PATH = $PATH . ':' . expand('~/.stack/bin')
 
