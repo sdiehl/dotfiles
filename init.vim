@@ -30,10 +30,23 @@ set wildmenu
 set cmdheight=1
 
 " ----------------------------------------------
+" Snippets
+" ----------------------------------------------
+
+:imap <C-J> <Plug>snipMateNextOrTrigger
+:smap <C-J> <Plug>snipMateNextOrTrigger
+
+" ----------------------------------------------
 " Colors
 " ----------------------------------------------
 
 colorscheme NeoSolarized
+
+" ----------------------------------------------
+" Terminal
+" ----------------------------------------------
+
+tnoremap <Esc> <C-\><C-n>
 
 " ----------------------------------------------
 " Colors
@@ -158,6 +171,7 @@ let g:ormolu_options=["--unsafe"]
 "let b:ormolu_disable=1
 nnoremap tf :call RunOrmolu()<CR>
 nnoremap to :call ToggleOrmolu()<CR>
+xnoremap tb :<c-u>call OrmoluBlock()<CR>
 
 let $PATH = $PATH . ':' . expand('~/.stack/bin')
 
