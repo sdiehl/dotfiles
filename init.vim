@@ -29,6 +29,53 @@ set wildmenu
 
 set cmdheight=1
 
+call plug#begin('~/.vim/plugged')
+
+" Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
+Plug 'ctrlpvim/ctrlp.vim'
+
+" Terminal
+Plug 'kassio/neoterm'
+
+" Lean & mean status/tabline for vim that's light as air
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+" A tree explorer plugin for vim.
+Plug 'scrooloose/nerdtree'
+
+" Comments
+Plug 'scrooloose/nerdcommenter'
+
+" Nerd Tree Git status
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" JSON
+Plug 'tpope/vim-jdaddy'
+
+" Repeat
+Plug 'tpope/vim-repeat'
+
+" Tabular
+Plug 'godlygeek/tabular'
+
+" Git
+Plug 'tpope/vim-fugitive'
+
+" Surround
+Plug 'tpope/vim-surround'
+
+" Snipmate
+Plug 'garbas/vim-snipmate'
+
+" Haskell formatting
+Plug 'sdiehl/vim-ormolu'
+
+" Utilities
+Plug 'tomtom/tlib_vim'
+
+call plug#end()
+
 " ----------------------------------------------
 " Snippets
 " ----------------------------------------------
@@ -41,6 +88,11 @@ set cmdheight=1
 " ----------------------------------------------
 
 colorscheme NeoSolarized
+if strftime("%H") < 20
+  set background=light
+else
+  set background=dark
+endif
 
 " ----------------------------------------------
 " Terminal
@@ -123,12 +175,6 @@ autocmd BufWritePre *.hs :%s/\(\s*\n\)\+\%$//e
 " Nightmode
 " ----------------------------------------------
 
-if strftime("%H") < 20
-  set background=light
-else
-  set background=dark
-endif
-
 " ----------------------------------------------
 " GUI Options
 " ----------------------------------------------
@@ -167,8 +213,8 @@ let g:mta_use_matchparen_group = 1
 " Haskell
 " ----------------------------------------------
 
-let g:ormolu_options=["--unsafe"]
-"let b:ormolu_disable=1
+let g:ormolu_options=["--unsafe", "-o -XTypeApplications"]
+"let g:ormolu_disable=1
 nnoremap tf :call RunOrmolu()<CR>
 nnoremap to :call ToggleOrmolu()<CR>
 xnoremap tb :<c-u>call OrmoluBlock()<CR>
