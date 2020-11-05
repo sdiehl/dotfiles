@@ -29,22 +29,24 @@ bindsym Mod4+p exec --no-startup-id dmenu_run
 # bindsym Mod1+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-bindsym Mod4+$left focus left
-bindsym Mod4+$down focus down
-bindsym Mod4+$up focus up
-bindsym Mod4+$right focus right
+#bindsym Mod4+$left focus left
+bindsym Mod4+$up focus left
+bindsym Mod4+$down focus right
+#bindsym Mod4+$right focus right
 
 # move focused window
 bindsym Mod4+Shift+$left move left
 bindsym Mod4+Shift+$down move down
 bindsym Mod4+Shift+$up move up
-bindsym Mod4+Shift+$right move right
+#bindsym Mod4+Shift+$right move right
 
 # split in horizontal orientation
 bindsym Mod1+h split h
 
 # split in vertical orientation
 bindsym Mod1+v split v
+
+bindsym Mod4+Shift+l exec "swaylock -i /home/sdiehl/Pictures/130979.jpg"
 
 # enter fullscreen mode for the focused container
 bindsym Mod4+f fullscreen toggle
@@ -116,6 +118,23 @@ bindsym Mod1+Shift+c reload
 bindsym Mod1+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym Mod1+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+input "1739:52552:SYNA1D31:00_06CB:CD48_Touchpad"
+{
+    dwt enabled
+    tap enabled
+    natural_scroll enabled
+    middle_emulation enabled
+}
+
+input "1:1:AT_Translated_Set_2_keyboard"
+{
+    repeat_rate 120
+    repeat_delay 120
+}
+
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+output * bg /home/sdiehl/Pictures/130979.jpg fill
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
