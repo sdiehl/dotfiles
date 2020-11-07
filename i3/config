@@ -123,14 +123,17 @@ input "1739:52552:SYNA1D31:00_06CB:CD48_Touchpad"
 {
     dwt enabled
     tap enabled
-    natural_scroll enabled
+    #natural_scroll enabled
     middle_emulation enabled
+    pointer_accel 0.5
+    scroll_factor 2
 }
 
 input "1:1:AT_Translated_Set_2_keyboard"
 {
-    repeat_rate 120
-    repeat_delay 120
+    #repeat_rate 60
+    #repeat_delay 120
+    xkb_options "caps:escape"
 }
 
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
@@ -172,3 +175,4 @@ bar {
 }
 
 exec i3-config-wizard
+exec redshift -m wayland  
