@@ -27,9 +27,19 @@ set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox,.stack-work
 set wildmode=longest,list,full
 set wildmenu
 
-set cmdheight=1
+set inccommand=split
+
+" Rebind escape to jj
+:imap jj <Esc>
+
+" Disable recording
+map q <Nop>
+
 
 call plug#begin('~/.vim/plugged')
+
+" Themes
+Plug 'kaicataldo/material.vim', { 'branch': 'main' }
 
 " Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
 Plug 'ctrlpvim/ctrlp.vim'
@@ -37,19 +47,18 @@ Plug 'ctrlpvim/ctrlp.vim'
 " Terminal
 Plug 'kassio/neoterm'
 
-" Lean & mean status/tabline for vim that's light as air
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" Formatting
+Plug 'sbdchd/neoformat'
 
-" A tree explorer plugin for vim.
-Plug 'scrooloose/nerdtree'
+" Whitespace
+Plug 'bronson/vim-trailing-whitespace'
+
+" Status Line
+Plug 'itchyny/lightline.vim'
 
 " Comments
 Plug 'scrooloose/nerdcommenter'
-
-" Nerd Tree Git status
-Plug 'Xuyuanp/nerdtree-git-plugin'
-
+"
 " JSON
 Plug 'tpope/vim-jdaddy'
 
@@ -70,11 +79,105 @@ Plug 'garbas/vim-snipmate'
 
 " Haskell formatting
 Plug 'sdiehl/vim-ormolu'
+"Plug 'sdiehl/vim-cabalfmt'
+
+" Haskell
+"Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'antoinemadec/coc-fzf'
+
+Plug 'neovimhaskell/haskell-vim'
+Plug 'josa42/vim-lightline-coc'
+
+" OCaml
+Plug 'ocaml/vim-ocaml'
+
+" Zig
+Plug 'ziglang/zig.vim'
+
+" Lean Theorem prover
+Plug 'leanprover/lean.vim'
 
 " Utilities
 Plug 'tomtom/tlib_vim'
 
 call plug#end()
+
+let g:coc_disable_startup_warning = 1
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+nmap <silent> F  <Plug>(coc-fix-current)
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
+highlight link CoCFloating Visual
+
+nmap <silent> <Leader>e <Plug>(coc-diagnostic-next)
+nmap <silent> <Leader>ed <Plug>(coc-definition)
+nmap <silent> <Leader>et <Plug>(coc-type-definition)
+nmap <silent> <Leader>ei <Plug>(coc-implementation)
+nmap <silent> <Leader>er <Plug>(coc-references)
+
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+set cmdheight=2
+
+let g:airline#extensions#default#section_truncate_width = {
+    \ 'b': 79,
+    \ 'x': 60,
+    \ 'y': 88,
+    \ 'z': 45,
+    \ 'warning': 10000,
+    \ 'error': 10000,
+    \ }
+
+" ----------------------------------------------
+" Stauts Line
+" ----------------------------------------------
+
+let g:lightline = {
+  \   'active': {
+  \   'left': [[ 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]]
+  \   }
+  \ }
+
+" register compoments:
+call lightline#coc#register()
+
+" ----------------------------------------------
+" Pathogen Manager
+" ----------------------------------------------
+
+execute pathogen#infect()
+
+" ----------------------------------------------
+" Language Server
+" ----------------------------------------------
+
+let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
+let g:LanguageClient_serverCommands = {
+    \ 'haskell': ['ghcide', '--lsp'],
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ }
+set signcolumn=yes
+"set updatetime=300
+
+"nnoremap le :call LanguageClient#exit()<CR>
+"nnoremap ls :call LanguageClient#startServer()<CR>
+"
+let g:LanguageClient_autoStart = v:true
+let g:LanguageClient_hoverPreview = 'auto'
+let g:LanguageClient_diagnosticsEnable = v:false
+let g:LanguageClient_selectionUI = 'quickfix'
 
 " ----------------------------------------------
 " Snippets
@@ -84,15 +187,44 @@ call plug#end()
 :smap <C-J> <Plug>snipMateNextOrTrigger
 
 " ----------------------------------------------
+" Fonts
+" ----------------------------------------------
+
+if exists('g:GtkGuiLoaded')
+  call rpcnotify(1, 'Gui', 'Font', 'Fira Code 12')
+endif
+
+function! BigFont()
+  call rpcnotify(1, 'Gui', 'Font', 'Fira Code 18')
+endfunction
+
+function! SmallFont()
+  call rpcnotify(1, 'Gui', 'Font', 'Fira Code 12')
+endfunction
+
+map <Leader>bb :call BigFont()<CR>
+map <Leader>ss :call SmallFont()<CR>
+
+" ----------------------------------------------
 " Colors
 " ----------------------------------------------
 
-colorscheme NeoSolarized
-if strftime("%H") < 20
-  set background=light
-else
-  set background=dark
-endif
+"colorscheme NeoSolarized
+"colorscheme onedark
+colorscheme jellybeans
+"colorscheme material
+let g:material_terminal_italics = 1
+let g:material_theme_style = 'darker'
+
+" ----------------------------------------------
+" Nightmode
+" ----------------------------------------------
+
+"if strftime("%H") < 20
+"  set background=light
+"else
+"  set background=dark
+"endif
 
 " ----------------------------------------------
 " Terminal
@@ -100,18 +232,14 @@ endif
 
 tnoremap <Esc> <C-\><C-n>
 
+autocmd TermOpen * setlocal nonumber norelativenumber
+
 " ----------------------------------------------
 " Colors
 " ----------------------------------------------
 
 set termguicolors
 set t_Co=256
-
-" ----------------------------------------------
-" Pathogen Manager
-" ----------------------------------------------
-
-execute pathogen#infect()
 
 " ----------------------------------------------
 " Tab Completion
@@ -131,6 +259,7 @@ function! InsertTabWrapper()
         return "\<c-p>"
     endif
 endfunction
+
 inoremap <expr> <tab> InsertTabWrapper()
 inoremap <s-tab> <c-n>
 
@@ -141,15 +270,7 @@ inoremap <s-tab> <c-n>
 map <silent> <Leader>t :CtrlP()<CR>
 noremap <leader>b<space> :CtrlPBuffer<cr>
 let g:ctrlp_custom_ignore = '\v[\/]dist$'
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-
-" ----------------------------------------------
-"  NerdTree
-" ----------------------------------------------
-
-map <Leader>n :NERDTreeToggle<CR>
-let NERDTreeIgnore = ['\.pyc$','.stack-work','*.swp']
-let g:NERDTreeChDirMode = 2
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard', '.stack-work', 'dist-newstyle']
 
 " ----------------------------------------------
 "  Indentation
@@ -170,10 +291,6 @@ autocmd BufWritePre *.py :%s/\(\s*\n\)\+\%$//e
 autocmd BufWritePre *.hs :%s/\s\+$//e
 " Delete all trailing empty lines on files
 autocmd BufWritePre *.hs :%s/\(\s*\n\)\+\%$//e
-"
-" ----------------------------------------------
-" Nightmode
-" ----------------------------------------------
 
 " ----------------------------------------------
 " GUI Options
@@ -191,6 +308,8 @@ set wildmenu
 set wildmode=longest:list
 
 set dictionary="/usr/dict/words"
+
+nnoremap <leader>tl :vimgrep TODO % \| copen<CR>
 
 " ----------------------------------------------
 " Flush
@@ -221,23 +340,6 @@ xnoremap tb :<c-u>call OrmoluBlock()<CR>
 
 let $PATH = $PATH . ':' . expand('~/.stack/bin')
 
-" Type Lookup
-map tt :call GHC_ShowType(0)<CR>
-
-" Type Insertion
-map <silent> tw :GhcModTypeInsert<CR>
-map <silent> ts :GhcModSplitFunCase<CR>
-map <silent> tq :GhcModType<CR>
-map <silent> te :GhcModTypeClear<CR>
-
-au FileType haskell nnoremap <buffer> <F1> :GhcModType<CR>
-au FileType haskell nnoremap <buffer> <F2> :GhcModTypeClear<CR>
-
-function! Pointfree()
-  call setline('.', split(system('pointfree '.shellescape(join(getline(a:firstline, a:lastline), "\n"))), "\n"))
-endfunction
-vnoremap <silent> <leader>h. :call Pointfree()<CR>
-
 nmap <silent> <leader>hl :SyntasticCheck hlint<CR>
 
 " ----------------------------------------------
@@ -263,6 +365,25 @@ let g:syntastic_check_on_wq = 0
 
 autocmd bufnewfile,bufread *.py set formatprg=par
 
+let g:neoformat_python_black = {
+    \ 'exe': 'black',
+    \ 'stdin': 1,
+    \ 'args': ['-q', '-'],
+    \ }
+let g:neoformat_enabled_python = ['black']
+
+" ----------------------------------------------
+" C
+" ----------------------------------------------
+
+autocmd BufNewFile,BufRead *.c set formatprg=astyle
+autocmd BufNewFile,BufRead *.h set formatprg=astyle
+autocmd BufNewFile,BufRead *.cpp set formatprg=astyle
+
+autocmd BufWritePre *.c try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E790/ | finally | silent Neoformat | endtry
+autocmd BufWritePre *.h try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E790/ | finally | silent Neoformat | endtry
+autocmd BufWritePre *.py try | undojoin | Neoformat | catch /^Vim\%((\a\+)\)\=:E790/ | finally | silent Neoformat | endtry
+
 " ----------------------------------------------
 " Other Languages
 " ----------------------------------------------
@@ -271,13 +392,13 @@ autocmd BufNewFile,BufRead *.y set filetype=happy
 autocmd BufNewFile,BufRead *.x set filetype=alex
 autocmd BufNewFile,BufRead *.agda set filetype=agda
 autocmd BufNewFile,BufRead *.idr set filetype=idris
-autocmd BufNewFile,BufRead *.ocaml set filetype=ocaml
+autocmd BufNewFile,BufRead *.ml set filetype=ocaml
 autocmd BufNewFile,BufRead *.js set filetype=javascript
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufNewFile,BufRead *.ll set filetype=llvm
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.c set filetype=c
-autocmd BufNewFile,BufRead *.ws set filetype=wist
+autocmd BufNewFile,BufRead *.fp set filetype=haskell
 
 " ----------------------------------------------
 " Pane Switching
@@ -397,6 +518,8 @@ endfunction
 
 autocmd BufNewFile,BufRead *.rst,*.txt,*.tex,*.latex,*.md setlocal spell
 autocmd BufNewFile,BufRead *.rst,*.txt,*.tex,*.latex,*.md setlocal nonumber
+
+autocmd BufWritePre *.css,*.html,*.js undojoin | Neoformat
 
 " ----------------------------------------------
 " Clipboard
