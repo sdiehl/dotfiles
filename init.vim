@@ -38,6 +38,8 @@ map q <Nop>
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'marcweber/vim-addon-mw-utils'
+
 " Themes
 Plug 'kaicataldo/material.vim', { 'branch': 'main' }
 
@@ -74,17 +76,15 @@ Plug 'tpope/vim-fugitive'
 " Surround
 Plug 'tpope/vim-surround'
 
+" Terraform
+Plug 'hashivim/vim-terraform'
+
 " Snipmate
 Plug 'garbas/vim-snipmate'
 
 " Haskell formatting
 Plug 'sdiehl/vim-ormolu'
 "Plug 'sdiehl/vim-cabalfmt'
-
-" Haskell
-"Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'antoinemadec/coc-fzf'
 
 Plug 'neovimhaskell/haskell-vim'
 Plug 'josa42/vim-lightline-coc'
@@ -98,36 +98,36 @@ Plug 'ziglang/zig.vim'
 " Lean Theorem prover
 Plug 'leanprover/lean.vim'
 
+" Souffle
+Plug 'souffle-lang/souffle.vim'
+
+" Copilot
+Plug 'github/copilot.vim'
+
 " Utilities
 Plug 'tomtom/tlib_vim'
 
 call plug#end()
+
+let g:copilot_node_command = "~/.nvm/versions/node/v18.10.0/bin/node"
+
+let g:copilot_filetypes = {
+    \ 'gitcommit': v:true,
+    \ 'markdown': v:true,
+    \ 'yaml': v:true
+    \ }
+
+ autocmd BufReadPre *
+     \ let f=getfsize(expand("<afile>"))
+     \ | if f > 100000 || f == -2
+     \ | let b:copilot_enabled = v:false
+     \ | endif
 
 let g:coc_disable_startup_warning = 1
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 nmap <silent> F  <Plug>(coc-fix-current)
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-
-highlight link CoCFloating Visual
-
-nmap <silent> <Leader>e <Plug>(coc-diagnostic-next)
-nmap <silent> <Leader>ed <Plug>(coc-definition)
-nmap <silent> <Leader>et <Plug>(coc-type-definition)
-nmap <silent> <Leader>ei <Plug>(coc-implementation)
-nmap <silent> <Leader>er <Plug>(coc-references)
-
-autocmd CursorHold * silent call CocActionAsync('highlight')
 
 set cmdheight=2
 
@@ -186,6 +186,9 @@ let g:LanguageClient_selectionUI = 'quickfix'
 :imap <C-J> <Plug>snipMateNextOrTrigger
 :smap <C-J> <Plug>snipMateNextOrTrigger
 
+let g:snipMate = { 'snippet_version' : 1 }
+
+
 " ----------------------------------------------
 " Fonts
 " ----------------------------------------------
@@ -233,6 +236,12 @@ let g:material_theme_style = 'darker'
 tnoremap <Esc> <C-\><C-n>
 
 autocmd TermOpen * setlocal nonumber norelativenumber
+
+set belloff=all
+
+if &t_Co > 2 || has("gui_running")
+    autocmd GUIEnter * set vb t_vb=
+endif
 
 " ----------------------------------------------
 " Colors
@@ -399,6 +408,7 @@ autocmd BufNewFile,BufRead *.ll set filetype=llvm
 autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.c set filetype=c
 autocmd BufNewFile,BufRead *.fp set filetype=haskell
+autocmd BufNewFile,BufRead *.dl set filetype=souffle
 
 " ----------------------------------------------
 " Pane Switching
