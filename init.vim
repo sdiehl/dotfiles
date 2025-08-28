@@ -107,9 +107,12 @@ Plug 'github/copilot.vim'
 " Utilities
 Plug 'tomtom/tlib_vim'
 
+" NerdTree
+Plug 'preservim/nerdtree'
+
 call plug#end()
 
-let g:copilot_node_command = "~/.nvm/versions/node/v18.10.0/bin/node"
+let g:copilot_node_command = "~/.nvm/versions/node/v24.6.0/bin/node"
 
 let g:copilot_filetypes = {
     \ 'gitcommit': v:true,
@@ -152,12 +155,6 @@ let g:lightline = {
 
 " register compoments:
 call lightline#coc#register()
-
-" ----------------------------------------------
-" Pathogen Manager
-" ----------------------------------------------
-
-execute pathogen#infect()
 
 " ----------------------------------------------
 " Language Server
@@ -539,3 +536,5 @@ set clipboard+=unnamedplus
 set showmode
 set shellslash
 set showmatch
+
+set guifont=Source\ Code\ Pro:h12
