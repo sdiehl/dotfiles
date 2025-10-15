@@ -6,8 +6,9 @@ alias ls='ls --color'
 alias pcr='pre-commit run --all-files'
 alias pcp='pre-commit run --hook-stage pre-push --all-files'
 
+alias codexs='codex resume --ask-for-approval never'
+alias geminis='gemini --yolo'
 alias claudes='claude --dangerously-skip-permissions'
-alias zed="open -a /Applications/Zed.app -n"
 
 zstyle ':omz:update' mode reminder
 
@@ -36,13 +37,15 @@ export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
 
 unsetopt beep
 
-export RUSTFLAGS='-L opt/mock_exegy'
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
+# OCX
+export RUSTFLAGS='-L opt/mock_exegy'
 source /Users/sdiehl/.zshrc_work
+
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 export PATH="/opt/homebrew/opt/llvm@20/bin:$PATH"
 export LIBRARY_PATH="/opt/homebrew/opt/zstd/lib:$LIBRARY_PATH"
