@@ -1,5 +1,30 @@
-ZSH_THEME="robbyrussell"
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="robbyrussell"
+
+plugins=(git extract git-extras ubuntu rust 1password)
+
+source $ZSH/oh-my-zsh.sh
+
+eval "$(zoxide init zsh)"
+alias j='z'
+
+export LD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
+export PATH=/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH
+export PATH=/opt/homebrew/opt/grep/libexec/gnubin:$PATH
+export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
+
+unsetopt beep
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# OCX
+export RUSTFLAGS='-L opt/mock_exegy'
+
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+export PATH="/opt/homebrew/opt/llvm@20/bin:$PATH"
 
 alias vim="nvim"
 alias ls='ls --color'
@@ -12,7 +37,6 @@ alias claudes='claude --dangerously-skip-permissions'
 
 zstyle ':omz:update' mode reminder
 
-plugins=(git extract git-extras ubuntu rust 1password)
 
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
@@ -25,27 +49,8 @@ else
   export EDITOR='nvim'
 fi
 
-[[ ! -r '/Users/sdiehl/.opam/opam-init/init.zsh' ]] || source '/Users/sdiehl/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
+[[ ! -r '/Users/sdiehl/.opam/opam-init/init.zsh' ]] || source '/Users/sdiehl/.opam/opam-init/init.zsh' > /dev/null 2> /deport LIBRARY_PATH="/opt/homebrew/opt/zstd/lib:$LIBRARY_PATH"
 
-eval "$(zoxide init zsh)"
-alias j='z'
-
-export LD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
-export PATH=/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH
-export PATH=/opt/homebrew/opt/grep/libexec/gnubin:$PATH
-export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
-
-unsetopt beep
-
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-# OCX
-export RUSTFLAGS='-L opt/mock_exegy'
+export PATH="$HOME/.cargo/bin:$PATH"
+source $HOME/.elan/env
 source /Users/sdiehl/.zshrc_work
-
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-export PATH="/opt/homebrew/opt/llvm@20/bin:$PATH"
-export LIBRARY_PATH="/opt/homebrew/opt/zstd/lib:$LIBRARY_PATH"

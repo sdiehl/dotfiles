@@ -35,83 +35,6 @@ set inccommand=split
 " Disable recording
 map q <Nop>
 
-
-call plug#begin('~/.vim/plugged')
-
-Plug 'marcweber/vim-addon-mw-utils'
-
-" Themes
-Plug 'kaicataldo/material.vim', { 'branch': 'main' }
-
-" Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
-Plug 'ctrlpvim/ctrlp.vim'
-
-" Terminal
-Plug 'kassio/neoterm'
-
-" Formatting
-Plug 'sbdchd/neoformat'
-
-" Whitespace
-Plug 'bronson/vim-trailing-whitespace'
-
-" Status Line
-Plug 'itchyny/lightline.vim'
-
-" Comments
-Plug 'scrooloose/nerdcommenter'
-"
-" JSON
-Plug 'tpope/vim-jdaddy'
-
-" Repeat
-Plug 'tpope/vim-repeat'
-
-" Tabular
-Plug 'godlygeek/tabular'
-
-" Git
-Plug 'tpope/vim-fugitive'
-
-" Surround
-Plug 'tpope/vim-surround'
-
-" Terraform
-Plug 'hashivim/vim-terraform'
-
-" Snipmate
-Plug 'garbas/vim-snipmate'
-
-" Haskell formatting
-Plug 'sdiehl/vim-ormolu'
-"Plug 'sdiehl/vim-cabalfmt'
-
-Plug 'neovimhaskell/haskell-vim'
-Plug 'josa42/vim-lightline-coc'
-
-" OCaml
-Plug 'ocaml/vim-ocaml'
-
-" Zig
-Plug 'ziglang/zig.vim'
-
-" Lean Theorem prover
-Plug 'leanprover/lean.vim'
-
-" Souffle
-Plug 'souffle-lang/souffle.vim'
-
-" Copilot
-Plug 'github/copilot.vim'
-
-" Utilities
-Plug 'tomtom/tlib_vim'
-
-" NerdTree
-Plug 'preservim/nerdtree'
-
-call plug#end()
-
 let g:copilot_node_command = "~/.nvm/versions/node/v24.6.0/bin/node"
 
 let g:copilot_filetypes = {
@@ -147,14 +70,14 @@ let g:airline#extensions#default#section_truncate_width = {
 " Stauts Line
 " ----------------------------------------------
 
-let g:lightline = {
-  \   'active': {
-  \   'left': [[ 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]]
-  \   }
-  \ }
+" let g:lightline = {
+"   \   'active': {
+"   \   'left': [[ 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]]
+"   \   }
+"   \ }
 
 " register compoments:
-call lightline#coc#register()
+" call lightline#coc#register()
 
 " ----------------------------------------------
 " Language Server
@@ -211,7 +134,7 @@ map <Leader>ss :call SmallFont()<CR>
 
 "colorscheme NeoSolarized
 "colorscheme onedark
-colorscheme jellybeans
+"colorscheme jellybeans
 "colorscheme material
 let g:material_terminal_italics = 1
 let g:material_theme_style = 'darker'
@@ -346,24 +269,7 @@ xnoremap tb :<c-u>call OrmoluBlock()<CR>
 
 let $PATH = $PATH . ':' . expand('~/.stack/bin')
 
-nmap <silent> <leader>hl :SyntasticCheck hlint<CR>
-
-" ----------------------------------------------
-" Syntastic
-" ----------------------------------------------
-
-map <Leader>s :SyntasticToggleMode<CR>
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-
-"let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['haskell'] }
+"nmap <silent> <leader>hl :SyntasticCheck hlint<CR>
 
 " ----------------------------------------------
 " Python
