@@ -29,18 +29,30 @@ set wildmenu
 
 set inccommand=split
 
-" Rebind escape to jj
-:imap jj <Esc>
+call plug#begin()
+
+Plug 'github/copilot.vim'
+Plug 'godlygeek/tabular'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'MunifTanjim/nui.nvim'
+Plug 'nvim-neo-tree/neo-tree.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'vim-airline/vim-airline'
+Plug 'tpope/vim-fugitive'
+
+call plug#end()
 
 " Disable recording
 map q <Nop>
 
 let g:copilot_node_command = "~/.nvm/versions/node/v24.6.0/bin/node"
-
 let g:copilot_filetypes = {
     \ 'gitcommit': v:true,
     \ 'markdown': v:true,
-    \ 'yaml': v:true
+    \ 'yaml': v:true,
+    \ 'toml': v:true
     \ }
 
  autocmd BufReadPre *
@@ -48,8 +60,6 @@ let g:copilot_filetypes = {
      \ | if f > 100000 || f == -2
      \ | let b:copilot_enabled = v:false
      \ | endif
-
-let g:coc_disable_startup_warning = 1
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -67,39 +77,6 @@ let g:airline#extensions#default#section_truncate_width = {
     \ }
 
 " ----------------------------------------------
-" Stauts Line
-" ----------------------------------------------
-
-" let g:lightline = {
-"   \   'active': {
-"   \   'left': [[ 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]]
-"   \   }
-"   \ }
-
-" register compoments:
-" call lightline#coc#register()
-
-" ----------------------------------------------
-" Language Server
-" ----------------------------------------------
-
-let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
-let g:LanguageClient_serverCommands = {
-    \ 'haskell': ['ghcide', '--lsp'],
-    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ }
-set signcolumn=yes
-"set updatetime=300
-
-"nnoremap le :call LanguageClient#exit()<CR>
-"nnoremap ls :call LanguageClient#startServer()<CR>
-"
-let g:LanguageClient_autoStart = v:true
-let g:LanguageClient_hoverPreview = 'auto'
-let g:LanguageClient_diagnosticsEnable = v:false
-let g:LanguageClient_selectionUI = 'quickfix'
-
-" ----------------------------------------------
 " Snippets
 " ----------------------------------------------
 
@@ -108,21 +85,20 @@ let g:LanguageClient_selectionUI = 'quickfix'
 
 let g:snipMate = { 'snippet_version' : 1 }
 
-
 " ----------------------------------------------
 " Fonts
 " ----------------------------------------------
 
 if exists('g:GtkGuiLoaded')
-  call rpcnotify(1, 'Gui', 'Font', 'Fira Code 12')
+  call rpcnotify(1, 'Gui', 'Font', 'Source Code Pro 12')
 endif
 
 function! BigFont()
-  call rpcnotify(1, 'Gui', 'Font', 'Fira Code 18')
+  call rpcnotify(1, 'Gui', 'Font', 'Source Code Pro 18')
 endfunction
 
 function! SmallFont()
-  call rpcnotify(1, 'Gui', 'Font', 'Fira Code 12')
+  call rpcnotify(1, 'Gui', 'Font', 'Source Code Pro 12')
 endfunction
 
 map <Leader>bb :call BigFont()<CR>
@@ -134,20 +110,10 @@ map <Leader>ss :call SmallFont()<CR>
 
 "colorscheme NeoSolarized
 "colorscheme onedark
-"colorscheme jellybeans
+colorscheme jellybeans
 "colorscheme material
 let g:material_terminal_italics = 1
 let g:material_theme_style = 'darker'
-
-" ----------------------------------------------
-" Nightmode
-" ----------------------------------------------
-
-"if strftime("%H") < 20
-"  set background=light
-"else
-"  set background=dark
-"endif
 
 " ----------------------------------------------
 " Terminal
@@ -171,35 +137,10 @@ set termguicolors
 set t_Co=256
 
 " ----------------------------------------------
-" Tab Completion
+" Telescope
 " ----------------------------------------------
 
-set completeopt=menuone,menu,longest
-set completeopt+=longest
-
-inoremap <C-Space> <C-x><C-o>
-inoremap <C-@> <C-Space>
-
-function! InsertTabWrapper()
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    else
-        return "\<c-p>"
-    endif
-endfunction
-
-inoremap <expr> <tab> InsertTabWrapper()
-inoremap <s-tab> <c-n>
-
-" ----------------------------------------------
-" CTRL+P
-" ----------------------------------------------
-
-map <silent> <Leader>t :CtrlP()<CR>
-noremap <leader>b<space> :CtrlPBuffer<cr>
-let g:ctrlp_custom_ignore = '\v[\/]dist$'
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard', '.stack-work', 'dist-newstyle']
+nnoremap <C-p> <cmd>Telescope find_files<cr>
 
 " ----------------------------------------------
 "  Indentation
@@ -312,6 +253,7 @@ autocmd BufNewFile,BufRead *.scala set filetype=scala
 autocmd BufNewFile,BufRead *.c set filetype=c
 autocmd BufNewFile,BufRead *.fp set filetype=haskell
 autocmd BufNewFile,BufRead *.dl set filetype=souffle
+autocmd BufNewFile,BufRead *.lean set filetype=lean
 
 " ----------------------------------------------
 " Pane Switching
@@ -349,8 +291,6 @@ ab equivelant equivalent
 " ----------------------------------------------
 " Tabularize
 " ----------------------------------------------
-
-let g:haskell_tabular = 1
 
 vmap a= :Tabularize /=<CR>
 vmap a; :Tabularize /::<CR>
