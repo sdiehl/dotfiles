@@ -36,8 +36,6 @@ alias geminis='gemini --yolo'
 alias claudes='claude --dangerously-skip-permissions'
 
 zstyle ':omz:update' mode reminder
-
-
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 alias ls='ls --color'
