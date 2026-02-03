@@ -1,7 +1,9 @@
 Stephen Diehl's Dotfiles
 ------------------------
 
+```shell
+make nvim
 ```
-cp -R nvim ~/.config/nvim
-cp .zshrc ~/
-```
+
+After setup, run nvim and execute :Copilot setup to authenticate GitHub Copilot.
+
