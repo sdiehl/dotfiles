@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Homebrew packages
+        run: make brew
+
+      - name: Setup configs
+        run: make configs
+
+      - name: Install Neovim plugins
+        run: make nvim-plugins
+        continue-on-error: true  # Copilot needs auth
+
+      - name: Verify Neovim loads
+        run: nvim --headless -c 'quit'
+
+      - name: Verify zshrc syntax
+        run: zsh -n ~/.zshrc
+
+      - name: Verify gitconfig syntax
+        run: git config --file=~/.gitconfig --list > /dev/null
+
+      - name: Test sync.sh
+        run: ./sync.sh
