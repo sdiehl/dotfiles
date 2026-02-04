@@ -35,7 +35,6 @@ brew "ccache"           # Compiler cache
 brew "pre-commit"       # Git hooks framework
 
 # AI/LLM Tools
-brew "gemini-cli"       # Google Gemini CLI
 brew "opencode"         # AI coding assistant
 
 # Document & Text Processing
@@ -45,7 +44,6 @@ brew "imagemagick"      # Image manipulation
 brew "tesseract"        # OCR engine
 
 # Other Utilities
-brew "skhd"             # Hotkey daemon for macOS
 brew "taplo"            # TOML toolkit
 brew "dprint"           # Code formatter
 brew "yq"               # YAML processor
@@ -54,6 +52,7 @@ brew "jinja2-cli"       # Jinja2 CLI
 # Shell enhancements
 brew "coreutils"        # GNU core utilities
 brew "grep"             # GNU grep
+brew "mas"              # Mac App Store CLI
 
 # =============================================================================
 # GUI Applications (Casks)
@@ -62,10 +61,8 @@ brew "grep"             # GNU grep
 # Terminals & Editors
 cask "ghostty"          # GPU-accelerated terminal
 cask "zed"              # Modern code editor
-cask "neovide"          # Neovim GUI
 
 # AI Applications
-cask "chatgpt"          # OpenAI ChatGPT
 cask "claude-code"      # Anthropic Claude Code
 cask "codex"            # OpenAI Codex CLI
 cask "lm-studio"        # Local LLM runner
@@ -73,12 +70,15 @@ cask "lm-studio"        # Local LLM runner
 # Productivity
 cask "obsidian"         # Knowledge base / notes
 cask "1password-cli"    # Password manager CLI
-cask "hammerspoon"      # macOS automation
 cask "amethyst"         # Tiling window manager
 cask "caffeine"         # Prevent sleep
+cask "raycast"          # Launcher and productivity
+
+# Writing
+cask "scrivener"        # Writing app
 
 # Media
-cask "vlc"              # Media player
+cask "spotify"          # Music streaming
 
 # Cloud
 cask "gcloud-cli"       # Google Cloud SDK
@@ -91,3 +91,9 @@ cask "font-fira-code"           # Monospace with ligatures
 cask "font-fira-sans"           # Sans-serif
 cask "font-source-code-pro"     # Adobe monospace
 cask "font-computer-modern"     # LaTeX default font
+
+# =============================================================================
+# Mac App Store
+# =============================================================================
+
+mas "Perplexity: Ask Anything", id: 6714467650
