@@ -1,99 +1,70 @@
-# Brewfile for macOS development setup
-# Usage: brew bundle install
+# CLI
+brew "neovim"
+brew "ripgrep"
+brew "the_silver_searcher"
+brew "tree"
+brew "btop"
+brew "htop"
+brew "git-lfs"
+brew "gh"
+brew "just"
+brew "zoxide"
+brew "coreutils"
+brew "grep"
+brew "mas"
 
-# Taps
-tap "homebrew/bundle"
-tap "homebrew/cask-fonts"
+# Languages
+brew "node"
+brew "rustup"
+brew "python@3.14"
+brew "uv"
+brew "openjdk"
 
-# =============================================================================
-# CLI Tools
-# =============================================================================
+# Build
+brew "cmake"
+brew "bazelisk"
+brew "ccache"
+brew "pre-commit"
 
-# Core Development Tools
-brew "neovim"           # Modern vim
-brew "ripgrep"          # Fast grep alternative
-brew "the_silver_searcher" # ag search
-brew "tree"             # Directory tree view
-brew "btop"             # Resource monitor
-brew "htop"             # Process viewer
-brew "git-lfs"          # Git large file storage
-brew "gh"               # GitHub CLI
-brew "just"             # Command runner (modern make)
-brew "zoxide"           # Smarter cd command
+# AI
+brew "gemini-cli"
+brew "opencode"
 
-# Languages & Runtimes
-brew "node"             # Node.js
-brew "rustup"           # Rust toolchain manager
-brew "python@3.14"      # Python
-brew "uv"               # Fast Python package manager
-brew "openjdk"          # Java JDK
+# Documents
+brew "texlive"
+brew "typst"
+brew "imagemagick"
+brew "tesseract"
 
-# Build Tools
-brew "cmake"            # Build system
-brew "bazelisk"         # Bazel version manager
-brew "ccache"           # Compiler cache
-brew "pre-commit"       # Git hooks framework
+# Utils
+brew "taplo"
+brew "dprint"
+brew "yq"
+brew "jinja2-cli"
 
-# AI/LLM Tools
-brew "opencode"         # AI coding assistant
+# Apps
+cask "ghostty"
+cask "zed"
+cask "neovide"
+cask "chatgpt"
+cask "claude-code"
+cask "codex"
+cask "lm-studio"
+cask "obsidian"
+cask "1password-cli"
+cask "amethyst"
+cask "caffeine"
+cask "raycast"
+cask "scrivener"
+cask "spotify"
+cask "vlc"
+cask "gcloud-cli"
 
-# Document & Text Processing
-brew "texlive"          # LaTeX distribution
-brew "typst"            # Modern typesetting
-brew "imagemagick"      # Image manipulation
-brew "tesseract"        # OCR engine
-
-# Other Utilities
-brew "taplo"            # TOML toolkit
-brew "dprint"           # Code formatter
-brew "yq"               # YAML processor
-brew "jinja2-cli"       # Jinja2 CLI
-
-# Shell enhancements
-brew "coreutils"        # GNU core utilities
-brew "grep"             # GNU grep
-brew "mas"              # Mac App Store CLI
-
-# =============================================================================
-# GUI Applications (Casks)
-# =============================================================================
-
-# Terminals & Editors
-cask "ghostty"          # GPU-accelerated terminal
-cask "zed"              # Modern code editor
-
-# AI Applications
-cask "claude-code"      # Anthropic Claude Code
-cask "codex"            # OpenAI Codex CLI
-cask "lm-studio"        # Local LLM runner
-
-# Productivity
-cask "obsidian"         # Knowledge base / notes
-cask "1password-cli"    # Password manager CLI
-cask "amethyst"         # Tiling window manager
-cask "caffeine"         # Prevent sleep
-cask "raycast"          # Launcher and productivity
-
-# Writing
-cask "scrivener"        # Writing app
-
-# Media
-cask "spotify"          # Music streaming
-
-# Cloud
-cask "gcloud-cli"       # Google Cloud SDK
-
-# =============================================================================
 # Fonts
-# =============================================================================
+cask "font-fira-code"
+cask "font-fira-sans"
+cask "font-source-code-pro"
+cask "font-computer-modern"
 
-cask "font-fira-code"           # Monospace with ligatures
-cask "font-fira-sans"           # Sans-serif
-cask "font-source-code-pro"     # Adobe monospace
-cask "font-computer-modern"     # LaTeX default font
-
-# =============================================================================
-# Mac App Store
-# =============================================================================
-
+# App Store
 mas "Perplexity: Ask Anything", id: 6714467650

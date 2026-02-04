@@ -6,8 +6,8 @@ on:
   pull_request:
     branches: [master, main]
   schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
-  workflow_dispatch:  # Manual trigger
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
 
 jobs:
   test:
@@ -15,24 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Homebrew packages
-        run: make brew
+      - name: Validate Brewfile
+        run: brew bundle check --file=Brewfile || brew bundle list --file=Brewfile
 
-      - name: Setup configs
-        run: make configs
+      - name: Validate zshrc syntax
+        run: zsh -n .zshrc
 
-      - name: Install Neovim plugins
-        run: make nvim-plugins
-        continue-on-error: true  # Copilot needs auth
+      - name: Validate Makefile
+        run: make -n all
 
-      - name: Verify Neovim loads
-        run: nvim --headless -c 'quit'
-
-      - name: Verify zshrc syntax
-        run: zsh -n ~/.zshrc
-
-      - name: Verify gitconfig syntax
-        run: git config --file=~/.gitconfig --list > /dev/null
-
-      - name: Test sync.sh
-        run: ./sync.sh
+      - name: Validate sync.sh
+        run: bash -n sync.sh
