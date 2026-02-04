@@ -96,7 +96,7 @@ autocmd TermOpen * setlocal nonumber norelativenumber
 " ==============================================
 
 " Copilot
-let g:copilot_node_command = "~/.nvm/versions/node/v24.6.0/bin/node"
+let g:copilot_node_command = trim(system('which node'))
 let g:copilot_filetypes = {
     \ 'gitcommit': v:true,
     \ 'markdown': v:true,
