@@ -73,6 +73,8 @@ macos:
 	@defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 	@killall Finder Dock 2>/dev/null || true
 
+LEAN_FULL ?= true
+
 devenv:
 	@# Node (nvm)
 	@mkdir -p $(HOME)/.nvm
@@ -81,8 +83,9 @@ devenv:
 	@rustup default nightly
 	@rustup component add rust-analyzer clippy rustfmt
 	@# Lean4
-	@command -v elan > /dev/null || curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
-	@elan default leanprover/lean4:stable
+	@[ -f "$(HOME)/.elan/bin/elan" ] || curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+	@$(HOME)/.elan/bin/elan default leanprover/lean4:stable
+	@[ "$(LEAN_FULL)" = "true" ] && $(HOME)/.elan/bin/lake exe cache get || true
 
 clean:
 	@rm -f $(HOME)/.zshrc $(HOME)/.gitconfig
