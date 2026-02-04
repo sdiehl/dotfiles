@@ -1,1 +1,0 @@
-xmodmap -e "keycode 49 = asciitilde asciitilde"

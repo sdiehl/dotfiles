@@ -1,9 +1,10 @@
-Stephen Diehl's Dotfiles
-------------------------
+# Dotfiles
 
-```shell
-make nvim
+```bash
+make all      # Full setup
+make brew     # Install packages
+make configs  # Symlink configs
+make help     # Show all targets
 ```
 
-After setup, run nvim and execute :Copilot setup to authenticate GitHub Copilot.
-
+With ❤️ from Stephen

@@ -1,1 +1,0 @@
-setxkbmap us

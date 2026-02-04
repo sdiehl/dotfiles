@@ -1,0 +1,2 @@
+# Disable secure keyboard entry to allow skhd hotkey daemon
+macos-secure-input-indication = false
