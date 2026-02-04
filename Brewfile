@@ -1,6 +1,7 @@
 # CLI
 brew "neovim"
 brew "ripgrep"
+brew "fd"
 brew "the_silver_searcher"
 brew "tree"
 brew "btop"
@@ -47,7 +48,7 @@ brew "jinja2-cli"
 # Apps
 cask "ghostty"
 cask "zed"
-cask "neovide"
+cask "neovide-app"
 cask "chatgpt"
 cask "claude-code"
 cask "codex"

@@ -15,11 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate Brewfile
-        run: brew bundle check --file=Brewfile || brew bundle list --file=Brewfile
+      - name: Validate Brewfile syntax
+        run: brew bundle list --file=Brewfile
 
       - name: Install minimal deps
-        run: brew install neovim zoxide nvm rustup
+        run: brew install neovim zoxide nvm rustup fd
 
       - name: Setup configs
         run: make configs
@@ -34,7 +34,7 @@ jobs:
         run: make macos
 
       - name: Setup devenv
-        run: make devenv
+        run: make devenv LEAN_FULL=false
 
       - name: Validate sync.sh
         run: bash -n sync.sh
