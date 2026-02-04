@@ -15,10 +15,12 @@ brew "mas"
 
 # Languages
 brew "node"
+brew "nvm"
 brew "rustup"
 brew "python@3.14"
 brew "uv"
 brew "openjdk"
+brew "z3"
 
 # Build
 brew "cmake"
@@ -59,6 +61,7 @@ cask "scrivener"
 cask "spotify"
 cask "vlc"
 cask "gcloud-cli"
+cask "tla-plus-toolbox"
 
 # Fonts
 cask "font-fira-code"

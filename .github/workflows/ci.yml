@@ -19,7 +19,7 @@ jobs:
         run: brew bundle check --file=Brewfile || brew bundle list --file=Brewfile
 
       - name: Install minimal deps
-        run: brew install neovim zoxide
+        run: brew install neovim zoxide nvm rustup
 
       - name: Setup configs
         run: make configs
@@ -32,6 +32,9 @@ jobs:
 
       - name: Set macos defaults
         run: make macos
+
+      - name: Setup devenv
+        run: make devenv
 
       - name: Validate sync.sh
         run: bash -n sync.sh

@@ -3,9 +3,9 @@
 DOTFILES := $(shell pwd)
 CONFIG := $(HOME)/.config
 
-.PHONY: all brew configs zsh git nvim ghostty zed macos clean
+.PHONY: all brew configs zsh git nvim ghostty zed macos devenv clean
 
-all: brew configs nvim-plugins macos
+all: brew configs nvim-plugins macos devenv
 
 brew:
 	@which brew > /dev/null || /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -47,20 +47,42 @@ zed:
 	@ln -sf $(DOTFILES)/zed/settings.json $(CONFIG)/zed/settings.json
 
 macos:
+	@# Keyboard
 	@defaults write NSGlobalDomain KeyRepeat -int 2
 	@defaults write NSGlobalDomain InitialKeyRepeat -int 15
 	@defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 	@hidutil property --set '{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc":0x700000039,"HIDKeyboardModifierMappingDst":0x700000029}]}' > /dev/null
+	@# Trackpad
+	@defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+	@defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
+	@defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool false
+	@defaults write com.apple.AppleMultitouchTrackpad TrackpadTwoFingerDoubleTapGesture -int 1
+	@defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
+	@# Finder
 	@defaults write com.apple.finder AppleShowAllFiles -bool true
 	@defaults write com.apple.finder ShowPathbar -bool true
 	@defaults write com.apple.finder ShowStatusBar -bool true
+	@# Dock
 	@defaults write com.apple.dock autohide -bool true
 	@defaults write com.apple.dock tilesize -int 48
+	@# Screenshots
 	@defaults write com.apple.screencapture location -string "$(HOME)/Downloads"
+	@# Typing
 	@defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 	@defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 	@defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 	@killall Finder Dock 2>/dev/null || true
+
+devenv:
+	@# Node (nvm)
+	@mkdir -p $(HOME)/.nvm
+	@. /opt/homebrew/opt/nvm/nvm.sh && nvm install --lts
+	@# Rust
+	@rustup default nightly
+	@rustup component add rust-analyzer clippy rustfmt
+	@# Lean4
+	@command -v elan > /dev/null || curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+	@elan default leanprover/lean4:stable
 
 clean:
 	@rm -f $(HOME)/.zshrc $(HOME)/.gitconfig
