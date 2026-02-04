@@ -23,6 +23,7 @@ Plug 'lewis6991/gitsigns.nvim'
 Plug 'numToStr/Comment.nvim'
 Plug 'windwp/nvim-autopairs'
 Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'folke/which-key.nvim'
 
 " Language syntax
 Plug 'neovimhaskell/haskell-vim'
@@ -53,6 +54,7 @@ set mouse=a
 set clipboard+=unnamedplus
 set tw=80
 set cmdheight=2
+set timeoutlen=500
 
 set smarttab
 set smartindent
@@ -145,6 +147,7 @@ require('gitsigns').setup()
 require('Comment').setup()
 require('nvim-autopairs').setup()
 require('ibl').setup()
+require('which-key').setup()
 require('nvim-treesitter.configs').setup {
   ensure_installed = { "python", "rust", "lua", "vim", "json", "yaml", "toml", "markdown", "haskell", "sql" },
   highlight = { enable = true },

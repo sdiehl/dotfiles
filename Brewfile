@@ -14,6 +14,8 @@ brew "zoxide"
 brew "coreutils"
 brew "grep"
 brew "mas"
+brew "starship"
+brew "atuin"
 
 # Languages
 brew "node"

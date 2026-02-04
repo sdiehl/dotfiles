@@ -1,0 +1,13 @@
+--smart-case
+--hidden
+--glob=!.git
+--glob=!node_modules
+--glob=!.cache
+--glob=!target
+--glob=!_build
+--glob=!.stack-work
+--glob=!dist-newstyle
+--glob=!__pycache__
+--glob=!.mypy_cache
+--glob=!.pytest_cache
+--glob=!*.lock

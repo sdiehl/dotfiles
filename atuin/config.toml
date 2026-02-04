@@ -1,0 +1,28 @@
+# Atuin config - local only, no sync
+
+[sync]
+# Disable sync entirely
+sync_address = ""
+
+[settings]
+# Search mode: prefix, fulltext, fuzzy, skim
+search_mode = "fuzzy"
+filter_mode = "global"
+filter_mode_shell_up_key_binding = "directory"
+
+# Style
+style = "compact"
+inline_height = 20
+show_preview = true
+
+# History
+history_filter = [
+    "^ls",
+    "^cd",
+    "^pwd",
+    "^exit",
+    "^clear",
+]
+
+# Keybindings - Ctrl+R
+ctrl_n_shortcuts = false

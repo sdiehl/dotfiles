@@ -4,7 +4,7 @@ DOTFILES := $(shell pwd)
 CONFIG := $(HOME)/.config
 ZSH_CUSTOM := $(HOME)/.oh-my-zsh/custom/plugins
 
-.PHONY: all brew configs zsh git nvim ghostty zed macos devenv clean
+.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep macos devenv clean
 
 all: brew configs nvim-plugins macos devenv
 
@@ -15,7 +15,7 @@ brew:
 brew-dump:
 	@brew bundle dump --force --file=$(DOTFILES)/Brewfile
 
-configs: zsh git nvim-config ghostty zed
+configs: zsh git nvim-config ghostty zed starship atuin ripgrep
 
 zsh:
 	@[ -d "$(HOME)/.oh-my-zsh" ] || sh -c "$$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -51,6 +51,17 @@ zed:
 	@mkdir -p $(CONFIG)/zed
 	@ln -sf $(DOTFILES)/zed/settings.json $(CONFIG)/zed/settings.json
 
+starship:
+	@mkdir -p $(CONFIG)
+	@ln -sf $(DOTFILES)/starship.toml $(CONFIG)/starship.toml
+
+atuin:
+	@mkdir -p $(CONFIG)/atuin
+	@ln -sf $(DOTFILES)/atuin/config.toml $(CONFIG)/atuin/config.toml
+
+ripgrep:
+	@ln -sf $(DOTFILES)/ripgreprc $(HOME)/.ripgreprc
+
 macos:
 	@defaults write NSGlobalDomain KeyRepeat -int 2
 	@defaults write NSGlobalDomain InitialKeyRepeat -int 15
@@ -82,8 +93,9 @@ devenv:
 	@[ -f "$(HOME)/.elan/bin/elan" ] || curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
 	@$(HOME)/.elan/bin/elan default leanprover/lean4:stable
 	@[ "$(LEAN_FULL)" = "true" ] && $(HOME)/.elan/bin/lake exe cache get || true
+	@gh extension install dlvhdr/gh-dash 2>/dev/null || true
 
 clean:
-	@rm -f $(HOME)/.zshrc $(HOME)/.gitconfig
-	@rm -rf $(CONFIG)/nvim $(CONFIG)/ghostty
-	@rm -f $(CONFIG)/zed/settings.json
+	@rm -f $(HOME)/.zshrc $(HOME)/.gitconfig $(HOME)/.ripgreprc
+	@rm -rf $(CONFIG)/nvim $(CONFIG)/ghostty $(CONFIG)/atuin
+	@rm -f $(CONFIG)/zed/settings.json $(CONFIG)/starship.toml
