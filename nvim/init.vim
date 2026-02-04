@@ -5,15 +5,34 @@
 " ==============================================
 
 call plug#begin()
-Plug 'github/copilot.vim'           " AI completion
-Plug 'nvim-lua/plenary.nvim'        " Lua utilities (required by telescope/neo-tree)
-Plug 'nvim-telescope/telescope.nvim'" Fuzzy finder
-Plug 'nvim-tree/nvim-web-devicons'  " File icons
-Plug 'MunifTanjim/nui.nvim'         " UI components
-Plug 'nvim-neo-tree/neo-tree.nvim'  " File explorer
-Plug 'vim-airline/vim-airline'      " Status line
-Plug 'tpope/vim-fugitive'           " Git integration
-Plug 'godlygeek/tabular'            " Text alignment
+
+" Core
+Plug 'github/copilot.vim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'MunifTanjim/nui.nvim'
+Plug 'nvim-neo-tree/neo-tree.nvim'
+Plug 'vim-airline/vim-airline'
+Plug 'tpope/vim-fugitive'
+Plug 'godlygeek/tabular'
+
+" Editor enhancements
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'lewis6991/gitsigns.nvim'
+Plug 'numToStr/Comment.nvim'
+Plug 'windwp/nvim-autopairs'
+Plug 'lukas-reineke/indent-blankline.nvim'
+
+" Language syntax
+Plug 'neovimhaskell/haskell-vim'
+Plug 'rust-lang/rust.vim'
+Plug 'whonore/Coqtail'
+Plug 'derekelkins/agda-vim'
+Plug 'edwinb/idris2-vim'
+Plug 'souffle-lang/souffle.vim'
+Plug 'lifepillar/pgsql.vim'
+
 call plug#end()
 
 " ==============================================
@@ -23,7 +42,6 @@ call plug#end()
 syntax on
 filetype plugin indent on
 
-" Editor
 set nocompatible
 set number
 set nowrap
@@ -36,7 +54,6 @@ set clipboard+=unnamedplus
 set tw=80
 set cmdheight=2
 
-" Indentation
 set smarttab
 set smartindent
 set autoindent
@@ -45,19 +62,16 @@ set shiftwidth=2
 set expandtab
 set nofoldenable
 
-" Search
 set incsearch
 set hlsearch
 set smartcase
 set inccommand=split
 
-" Completion
 set pumheight=12
 set wildmenu
 set wildmode=longest,list,full
 set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox,.stack-work
 
-" Colors
 set termguicolors
 set t_Co=256
 colorscheme jellybeans
@@ -66,30 +80,25 @@ colorscheme jellybeans
 " KEYBINDINGS
 " ==============================================
 
-" Disable recording
 map q <Nop>
-
-" Search
 map ff /\c
 nnoremap <silent> <CR> :noh<CR>
 
-" Navigation
 nnoremap <C-j> <C-W>w
 map ` g;
 map gl <C-^>
 
-" Tabs
 map <C-t> :tabnew<CR>
 map tn :tabnext<CR>
 map tp :tabprevious<CR>
 
-" Window
 noremap <silent> <F12> :wincmd =<CR>
 autocmd VimResized * wincmd =
 
-" Terminal
 tnoremap <Esc> <C-\><C-n>
 autocmd TermOpen * setlocal nonumber norelativenumber
+
+nnoremap <C-n> :Neotree toggle<CR>
 
 " ==============================================
 " PLUGIN CONFIG
@@ -127,11 +136,25 @@ vmap a; :Tabularize /::<CR>
 vmap a, :Tabularize /,<CR>
 vmap a- :Tabularize /-><CR>
 
+" PostgreSQL
+let g:sql_type_default = 'pgsql'
+
+" Lua plugin setup
+lua << EOF
+require('gitsigns').setup()
+require('Comment').setup()
+require('nvim-autopairs').setup()
+require('ibl').setup()
+require('nvim-treesitter.configs').setup {
+  ensure_installed = { "python", "rust", "lua", "vim", "json", "yaml", "toml", "markdown", "haskell", "sql" },
+  highlight = { enable = true },
+}
+EOF
+
 " ==============================================
 " FILETYPES
 " ==============================================
 
-" Custom filetypes
 autocmd BufNewFile,BufRead *.y set filetype=happy
 autocmd BufNewFile,BufRead *.x set filetype=alex
 autocmd BufNewFile,BufRead *.agda set filetype=agda
@@ -141,11 +164,11 @@ autocmd BufNewFile,BufRead *.fp set filetype=haskell
 autocmd BufNewFile,BufRead *.dl set filetype=souffle
 autocmd BufNewFile,BufRead *.lean set filetype=lean
 autocmd BufNewFile,BufRead *.typ set filetype=typst
+autocmd BufNewFile,BufRead *.kk set filetype=koka
+autocmd BufNewFile,BufRead *.v set filetype=coq
 
-" Prose: enable spelling, disable line numbers
 autocmd BufNewFile,BufRead *.rst,*.txt,*.tex,*.latex,*.md,*.typ setlocal spell nonumber
 
-" Strip trailing whitespace on save
 autocmd BufWritePre *.py,*.hs :%s/\s\+$//e
 autocmd BufWritePre *.py,*.hs :%s/\(\s*\n\)\+\%$//e
 
@@ -153,15 +176,12 @@ autocmd BufWritePre *.py,*.hs :%s/\(\s*\n\)\+\%$//e
 " UTILITIES
 " ==============================================
 
-" Autocorrect
 ab teh the
 ab sefl self
 ab equivelant equivalent
 
-" Flush swap files
 command! Flush exec "!find . -name '.*.swp' | xargs rm -f"
 
-" Wipe inactive buffers
 function! Wipeout()
   let l:buffers = range(1, bufnr('$'))
   let l:currentTab = tabpagenr()

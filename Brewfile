@@ -2,6 +2,7 @@
 brew "neovim"
 brew "ripgrep"
 brew "fd"
+brew "fzf"
 brew "the_silver_searcher"
 brew "tree"
 brew "btop"
@@ -66,6 +67,7 @@ cask "tla-plus-toolbox"
 
 # Fonts
 cask "font-fira-code"
+cask "font-fira-code-nerd-font"
 cask "font-fira-sans"
 cask "font-source-code-pro"
 cask "font-computer-modern"

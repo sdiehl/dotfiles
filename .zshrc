@@ -4,7 +4,7 @@
 
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
-plugins=(git extract git-extras rust 1password)
+plugins=(git extract git-extras rust 1password zsh-autosuggestions zsh-syntax-highlighting fzf)
 source $ZSH/oh-my-zsh.sh
 
 zstyle ':omz:update' mode reminder
@@ -33,16 +33,12 @@ unsetopt beep
 # ALIASES
 # ==============================================
 
-# Editor
 alias vim='nvim'
-
-# Utils
 alias ls='ls --color'
 alias j='z'
 alias pcr='pre-commit run --all-files'
 alias pcp='pre-commit run --hook-stage pre-push --all-files'
 
-# AI tools (yolo mode)
 alias claudes='claude --dangerously-skip-permissions'
 alias codexs='codex --full-auto'
 alias geminis='gemini --yolo'
@@ -52,24 +48,20 @@ alias opencodes='opencode --yolo'
 # TOOLS (optional, loaded if installed)
 # ==============================================
 
-# Zoxide
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
-# NVM
 export NVM_DIR="$HOME/.nvm"
 [[ -s "/opt/homebrew/opt/nvm/nvm.sh" ]] && source "/opt/homebrew/opt/nvm/nvm.sh"
 
-# OCaml
 [[ -r "$HOME/.opam/opam-init/init.zsh" ]] && source "$HOME/.opam/opam-init/init.zsh" &>/dev/null
 
-# Lean
 [[ -r "$HOME/.elan/env" ]] && source "$HOME/.elan/env"
 
-# LM Studio
 [[ -d "$HOME/.lmstudio/bin" ]] && export PATH="$PATH:$HOME/.lmstudio/bin"
 
-# ccache
 [[ -d "/opt/homebrew/opt/ccache/libexec" ]] && export PATH="$PATH:/opt/homebrew/opt/ccache/libexec"
+
+[[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
 
 # ==============================================
 # LOCAL CONFIG (not in repo)
