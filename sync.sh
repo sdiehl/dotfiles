@@ -12,7 +12,8 @@ sync_file() {
     local src="$1"
     local dst="$2"
     if [ -L "$src" ]; then
-        local target=$(readlink "$src")
+        local target
+        target=$(readlink "$src")
         if [ "$target" = "$dst" ] || [ "$target" = "$(cd "$(dirname "$dst")" && pwd)/$(basename "$dst")" ]; then
             return 0 # Already symlinked, skip
         fi
