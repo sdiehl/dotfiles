@@ -9,15 +9,15 @@ echo "Syncing dotfiles from local machine..."
 
 # Helper: copy file only if not already symlinked to destination
 sync_file() {
-	local src="$1"
-	local dst="$2"
-	if [ -L "$src" ]; then
-		local target=$(readlink "$src")
-		if [ "$target" = "$dst" ] || [ "$target" = "$(cd "$(dirname "$dst")" && pwd)/$(basename "$dst")" ]; then
-			return 0 # Already symlinked, skip
-		fi
-	fi
-	cp "$src" "$dst"
+    local src="$1"
+    local dst="$2"
+    if [ -L "$src" ]; then
+        local target=$(readlink "$src")
+        if [ "$target" = "$dst" ] || [ "$target" = "$(cd "$(dirname "$dst")" && pwd)/$(basename "$dst")" ]; then
+            return 0 # Already symlinked, skip
+        fi
+    fi
+    cp "$src" "$dst"
 }
 
 # Zsh
@@ -55,25 +55,25 @@ brew bundle dump --force --file="$DOTFILES_DIR/Brewfile"
 # Obsidian (configs only, not plugin data with secrets)
 VAULT="$HOME/Documents/DevBrain"
 if [ -d "$VAULT/.obsidian" ]; then
-	mkdir -p "$DOTFILES_DIR/obsidian"
-	cp "$VAULT/.obsidian/community-plugins.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
-	cp "$VAULT/.obsidian/core-plugins.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
-	cp "$VAULT/.obsidian/app.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
-	cp "$VAULT/.obsidian/appearance.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
+    mkdir -p "$DOTFILES_DIR/obsidian"
+    cp "$VAULT/.obsidian/community-plugins.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
+    cp "$VAULT/.obsidian/core-plugins.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
+    cp "$VAULT/.obsidian/app.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
+    cp "$VAULT/.obsidian/appearance.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
 fi
 
 # Claude Code memory
 if [ -d "$HOME/.claude" ]; then
-	mkdir -p "$DOTFILES_DIR/claude/rules"
-	cp "$HOME/.claude/CLAUDE.md" "$DOTFILES_DIR/claude/CLAUDE.md" 2>/dev/null || true
-	cp "$HOME/.claude/rules/"*.md "$DOTFILES_DIR/claude/rules/" 2>/dev/null || true
+    mkdir -p "$DOTFILES_DIR/claude/rules"
+    cp "$HOME/.claude/CLAUDE.md" "$DOTFILES_DIR/claude/CLAUDE.md" 2>/dev/null || true
+    cp "$HOME/.claude/rules/"*.md "$DOTFILES_DIR/claude/rules/" 2>/dev/null || true
 fi
 
 # Codex
 if [ -d "$HOME/.codex" ]; then
-	mkdir -p "$DOTFILES_DIR/codex"
-	cp "$HOME/.codex/AGENTS.md" "$DOTFILES_DIR/codex/AGENTS.md" 2>/dev/null || true
-	cp "$HOME/.codex/config.toml" "$DOTFILES_DIR/codex/config.toml" 2>/dev/null || true
+    mkdir -p "$DOTFILES_DIR/codex"
+    cp "$HOME/.codex/AGENTS.md" "$DOTFILES_DIR/codex/AGENTS.md" 2>/dev/null || true
+    cp "$HOME/.codex/config.toml" "$DOTFILES_DIR/codex/config.toml" 2>/dev/null || true
 fi
 
 echo "Done. Review changes with: git diff"
