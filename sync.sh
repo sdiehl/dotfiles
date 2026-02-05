@@ -56,4 +56,11 @@ if [ -d "$HOME/.claude" ]; then
     cp "$HOME/.claude/rules/"*.md "$DOTFILES_DIR/claude/rules/" 2>/dev/null || true
 fi
 
+# Codex
+if [ -d "$HOME/.codex" ]; then
+    mkdir -p "$DOTFILES_DIR/codex"
+    cp "$HOME/.codex/AGENTS.md" "$DOTFILES_DIR/codex/AGENTS.md" 2>/dev/null || true
+    cp "$HOME/.codex/config.toml" "$DOTFILES_DIR/codex/config.toml" 2>/dev/null || true
+fi
+
 echo "Done. Review changes with: git diff"

@@ -6,12 +6,65 @@ on:
   pull_request:
     branches: [master, main]
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: "0 0 * * 0"
   workflow_dispatch:
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install formatters
+        run: |
+          cargo install taplo-cli
+          cargo install dprint
+          sudo apt-get install -y shfmt jq
+
+      - name: Check Markdown formatting (dprint)
+        run: dprint check .
+
+      - name: Check TOML formatting (taplo)
+        run: taplo fmt --check
+
+      - name: Check shell formatting (shfmt)
+        run: shfmt -d -i 4 sync.sh
+
+      - name: Check JSON formatting (jq)
+        run: |
+          for f in obsidian/*.json; do
+            jq '.' "$f" > /tmp/formatted.json
+            diff -q "$f" /tmp/formatted.json || (echo "FAIL: $f not formatted" && exit 1)
+          done
+          echo "OK: All JSON files formatted"
+
+      - name: Lint shell scripts (shellcheck)
+        run: |
+          bash -n sync.sh
+          shellcheck sync.sh
+
+      - name: Validate Brewfile syntax
+        run: ruby -c Brewfile
+
+      - name: Validate YAML syntax
+        run: |
+          python3 -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml'))"
+
+      - name: Check for trailing whitespace
+        run: |
+          if grep -rn '[[:space:]]$' --include="*.md" --include="*.toml" --include="*.sh" .; then
+            echo "FAIL: Trailing whitespace found"
+            exit 1
+          fi
+          echo "OK: No trailing whitespace"
+
+      - name: Check for TODO/FIXME comments
+        run: |
+          grep -rn 'TODO\|FIXME\|XXX' --include="*.sh" --include="*.vim" . || echo "OK: No TODO/FIXME found"
+
   test:
     runs-on: macos-15
+    needs: lint
     steps:
       - uses: actions/checkout@v4
 
@@ -28,13 +81,10 @@ jobs:
         run: make nvim-plugins
 
       - name: Verify neovim loads
-        run: nvim --headless -c 'quit'
+        run: nvim --headless -c "quit"
 
       - name: Set macos defaults
         run: make macos
 
       - name: Setup devenv
         run: make devenv LEAN_FULL=false
-
-      - name: Validate sync.sh
-        run: bash -n sync.sh

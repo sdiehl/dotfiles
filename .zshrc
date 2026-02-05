@@ -28,6 +28,9 @@ export LD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${LD_LIBRARY_PATH:+:"${LD_LIBRARY_
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export WORKTREE_ROOT="$HOME/work"
 
+# MCP Server Keys (Obsidian knowledge graph)
+export OBSIDIAN_MCP_KEY="6b2b3198e07829e4f56a89b7789044ce3eb028e00fd59d2f09d0bc82efebe0ba"
+
 unsetopt beep
 
 # ==============================================

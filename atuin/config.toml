@@ -16,13 +16,7 @@ inline_height = 20
 show_preview = true
 
 # History
-history_filter = [
-    "^ls",
-    "^cd",
-    "^pwd",
-    "^exit",
-    "^clear",
-]
+history_filter = ["^ls", "^cd", "^pwd", "^exit", "^clear"]
 
 # Keybindings - Ctrl+R
 ctrl_n_shortcuts = false

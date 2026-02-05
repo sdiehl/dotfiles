@@ -4,9 +4,9 @@ DOTFILES := $(shell pwd)
 CONFIG := $(HOME)/.config
 ZSH_CUSTOM := $(HOME)/.oh-my-zsh/custom/plugins
 
-.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep macos devenv obsidian claude clean
+.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep macos devenv obsidian claude codex opencode clean
 
-all: brew configs nvim-plugins macos devenv obsidian claude
+all: brew configs nvim-plugins macos devenv obsidian claude codex
 
 brew:
 	@which brew > /dev/null || /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -133,6 +133,13 @@ opencode:
 	else \
 		echo "Set OBSIDIAN_MCP_KEY env var to configure OpenCode MCP"; \
 	fi
+
+codex:
+	@echo "Setting up Codex..."
+	@mkdir -p $(HOME)/.codex
+	@ln -sf $(DOTFILES)/codex/AGENTS.md $(HOME)/.codex/AGENTS.md
+	@ln -sf $(DOTFILES)/codex/config.toml $(HOME)/.codex/config.toml
+	@echo "Codex: AGENTS.md and config.toml linked"
 
 clean:
 	@rm -f $(HOME)/.zshrc $(HOME)/.gitconfig $(HOME)/.ripgreprc
