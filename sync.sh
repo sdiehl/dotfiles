@@ -57,10 +57,11 @@ brew bundle dump --force --file="$DOTFILES_DIR/Brewfile"
 VAULT="$HOME/Documents/DevBrain"
 if [ -d "$VAULT/.obsidian" ]; then
     mkdir -p "$DOTFILES_DIR/obsidian"
-    cp "$VAULT/.obsidian/community-plugins.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
-    cp "$VAULT/.obsidian/core-plugins.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
-    cp "$VAULT/.obsidian/app.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
-    cp "$VAULT/.obsidian/appearance.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
+    for json in community-plugins.json core-plugins.json app.json appearance.json daily-notes.json; do
+        if [ -f "$VAULT/.obsidian/$json" ]; then
+            jq '.' "$VAULT/.obsidian/$json" >"$DOTFILES_DIR/obsidian/$json"
+        fi
+    done
 fi
 
 # Claude Code memory
@@ -76,5 +77,8 @@ if [ -d "$HOME/.codex" ]; then
     cp "$HOME/.codex/AGENTS.md" "$DOTFILES_DIR/codex/AGENTS.md" 2>/dev/null || true
     cp "$HOME/.codex/config.toml" "$DOTFILES_DIR/codex/config.toml" 2>/dev/null || true
 fi
+
+# Auto-format synced files for CI
+command -v taplo &>/dev/null && taplo fmt "$DOTFILES_DIR" 2>/dev/null || true
 
 echo "Done. Review changes with: git diff"
