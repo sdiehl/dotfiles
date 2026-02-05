@@ -20,6 +20,8 @@ jobs:
           cargo install taplo-cli
           cargo install dprint
           sudo apt-get install -y shfmt jq
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
 
       - name: Check Markdown formatting (dprint)
         run: dprint check .
@@ -47,8 +49,7 @@ jobs:
         run: ruby -c Brewfile
 
       - name: Validate YAML syntax
-        run: |
-          python3 -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml'))"
+        run: yq '.' .github/workflows/ci.yml > /dev/null
 
       - name: Check for trailing whitespace
         run: |
