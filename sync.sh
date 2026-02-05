@@ -39,4 +39,21 @@ cp ~/.ripgreprc "$DOTFILES_DIR/ripgreprc" 2>/dev/null || true
 # Brewfile
 brew bundle dump --force --file="$DOTFILES_DIR/Brewfile"
 
+# Obsidian (configs only, not plugin data with secrets)
+VAULT="$HOME/Documents/DevBrain"
+if [ -d "$VAULT/.obsidian" ]; then
+    mkdir -p "$DOTFILES_DIR/obsidian"
+    cp "$VAULT/.obsidian/community-plugins.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
+    cp "$VAULT/.obsidian/core-plugins.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
+    cp "$VAULT/.obsidian/app.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
+    cp "$VAULT/.obsidian/appearance.json" "$DOTFILES_DIR/obsidian/" 2>/dev/null || true
+fi
+
+# Claude Code memory
+if [ -d "$HOME/.claude" ]; then
+    mkdir -p "$DOTFILES_DIR/claude/rules"
+    cp "$HOME/.claude/CLAUDE.md" "$DOTFILES_DIR/claude/CLAUDE.md" 2>/dev/null || true
+    cp "$HOME/.claude/rules/"*.md "$DOTFILES_DIR/claude/rules/" 2>/dev/null || true
+fi
+
 echo "Done. Review changes with: git diff"

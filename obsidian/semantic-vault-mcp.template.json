@@ -1,0 +1,30 @@
+{
+  "httpEnabled": true,
+  "httpPort": 3001,
+  "httpsEnabled": false,
+  "httpsPort": 3443,
+  "certificateConfig": {
+    "enabled": false,
+    "selfSigned": true,
+    "autoGenerate": true,
+    "rejectUnauthorized": false,
+    "minTLSVersion": "TLSv1.2"
+  },
+  "debugLogging": false,
+  "showConnectionStatus": true,
+  "autoDetectPortConflicts": true,
+  "enableConcurrentSessions": false,
+  "maxConcurrentConnections": 32,
+  "apiKey": "GENERATE_IN_OBSIDIAN_SETTINGS",
+  "dangerouslyDisableAuth": false,
+  "readOnlyMode": false,
+  "pathExclusionsEnabled": false,
+  "enableIgnoreContextMenu": false,
+  "validation": {
+    "maxFileSize": 10485760,
+    "maxBatchSize": 100,
+    "maxPathLength": 255,
+    "maxRegexComplexity": 100,
+    "strictMode": false
+  }
+}

@@ -4,9 +4,9 @@ DOTFILES := $(shell pwd)
 CONFIG := $(HOME)/.config
 ZSH_CUSTOM := $(HOME)/.oh-my-zsh/custom/plugins
 
-.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep macos devenv clean
+.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep macos devenv obsidian claude clean
 
-all: brew configs nvim-plugins macos devenv
+all: brew configs nvim-plugins macos devenv obsidian claude
 
 brew:
 	@which brew > /dev/null || /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -15,7 +15,7 @@ brew:
 brew-dump:
 	@brew bundle dump --force --file=$(DOTFILES)/Brewfile
 
-configs: zsh git nvim-config ghostty zed starship atuin ripgrep
+configs: zsh git nvim-config ghostty zed starship atuin ripgrep claude-memory
 
 zsh:
 	@[ -d "$(HOME)/.oh-my-zsh" ] || sh -c "$$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -62,6 +62,11 @@ atuin:
 ripgrep:
 	@ln -sf $(DOTFILES)/ripgreprc $(HOME)/.ripgreprc
 
+claude-memory:
+	@mkdir -p $(HOME)/.claude/rules
+	@ln -sf $(DOTFILES)/claude/CLAUDE.md $(HOME)/.claude/CLAUDE.md
+	@ln -sf $(DOTFILES)/claude/rules/onechronos.md $(HOME)/.claude/rules/onechronos.md
+
 macos:
 	@defaults write NSGlobalDomain KeyRepeat -int 2
 	@defaults write NSGlobalDomain InitialKeyRepeat -int 15
@@ -94,6 +99,40 @@ devenv:
 	@$(HOME)/.elan/bin/elan default leanprover/lean4:stable
 	@[ "$(LEAN_FULL)" = "true" ] && $(HOME)/.elan/bin/lake exe cache get || true
 	@gh extension install dlvhdr/gh-dash 2>/dev/null || true
+
+VAULT := $(HOME)/Documents/DevBrain
+
+obsidian:
+	@echo "Setting up Obsidian vault..."
+	@mkdir -p $(VAULT)/{formal-methods,rust,onechronos,scratch,daily}
+	@mkdir -p $(VAULT)/.obsidian/plugins
+	@cp $(DOTFILES)/obsidian/community-plugins.json $(VAULT)/.obsidian/ 2>/dev/null || true
+	@cp $(DOTFILES)/obsidian/core-plugins.json $(VAULT)/.obsidian/ 2>/dev/null || true
+	@cp $(DOTFILES)/obsidian/app.json $(VAULT)/.obsidian/ 2>/dev/null || true
+	@cp $(DOTFILES)/obsidian/appearance.json $(VAULT)/.obsidian/ 2>/dev/null || true
+	@echo "NOTE: Install plugins via Obsidian GUI:"
+	@echo "  1. Enable community plugins"
+	@echo "  2. Install BRAT, add: aaronsb/obsidian-mcp-plugin"
+	@echo "  3. Configure API key in Semantic MCP settings"
+
+claude:
+	@echo "Setting up Claude Code MCP servers..."
+	@if [ -n "$$OBSIDIAN_MCP_KEY" ]; then \
+		claude mcp add obsidian --scope user -- npx mcp-remote http://localhost:3001/mcp --header "Authorization: Bearer $$OBSIDIAN_MCP_KEY" 2>/dev/null || true; \
+		echo "Claude Code: Obsidian MCP configured"; \
+	else \
+		echo "Set OBSIDIAN_MCP_KEY env var to configure Claude Code MCP"; \
+	fi
+
+opencode:
+	@echo "Setting up OpenCode MCP servers..."
+	@mkdir -p $(CONFIG)/opencode
+	@if [ -n "$$OBSIDIAN_MCP_KEY" ]; then \
+		echo '{"$$schema":"https://opencode.ai/config.json","mcp":{"obsidian":{"type":"remote","url":"http://localhost:3001/mcp","headers":{"Authorization":"Bearer '$$OBSIDIAN_MCP_KEY'"}}}}' > $(CONFIG)/opencode/opencode.json; \
+		echo "OpenCode: Obsidian MCP configured"; \
+	else \
+		echo "Set OBSIDIAN_MCP_KEY env var to configure OpenCode MCP"; \
+	fi
 
 clean:
 	@rm -f $(HOME)/.zshrc $(HOME)/.gitconfig $(HOME)/.ripgreprc

@@ -141,17 +141,35 @@ vmap a- :Tabularize /-><CR>
 " PostgreSQL
 let g:sql_type_default = 'pgsql'
 
-" Lua plugin setup
+" Lua plugin setup (guarded for first-time install)
 lua << EOF
-require('gitsigns').setup()
-require('Comment').setup()
-require('nvim-autopairs').setup()
-require('ibl').setup()
-require('which-key').setup()
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { "python", "rust", "lua", "vim", "json", "yaml", "toml", "markdown", "haskell", "sql" },
-  highlight = { enable = true },
-}
+local function safe_require(module)
+  local ok, m = pcall(require, module)
+  return ok and m or nil
+end
+
+local gitsigns = safe_require('gitsigns')
+if gitsigns then gitsigns.setup() end
+
+local comment = safe_require('Comment')
+if comment then comment.setup() end
+
+local autopairs = safe_require('nvim-autopairs')
+if autopairs then autopairs.setup() end
+
+local ibl = safe_require('ibl')
+if ibl then ibl.setup() end
+
+local whichkey = safe_require('which-key')
+if whichkey then whichkey.setup() end
+
+local treesitter = safe_require('nvim-treesitter.configs')
+if treesitter then
+  treesitter.setup {
+    ensure_installed = { "python", "rust", "lua", "vim", "json", "yaml", "toml", "markdown", "haskell", "sql" },
+    highlight = { enable = true },
+  }
+end
 EOF
 
 " ==============================================
