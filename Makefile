@@ -4,9 +4,9 @@ DOTFILES := $(shell pwd)
 CONFIG := $(HOME)/.config
 ZSH_CUSTOM := $(HOME)/.oh-my-zsh/custom/plugins
 
-.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep macos devenv obsidian claude codex opencode clean
+.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep macos devenv obsidian claude codex opencode scripts clean
 
-all: brew configs nvim-plugins macos devenv obsidian claude codex
+all: brew configs nvim-plugins macos devenv obsidian claude codex scripts
 
 brew:
 	@which brew > /dev/null || /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -140,6 +140,17 @@ codex:
 	@ln -sf $(DOTFILES)/codex/AGENTS.md $(HOME)/.codex/AGENTS.md
 	@ln -sf $(DOTFILES)/codex/config.toml $(HOME)/.codex/config.toml
 	@echo "Codex: AGENTS.md and config.toml linked"
+
+scripts:
+	@echo "Installing scripts..."
+	@mkdir -p $(HOME)/bin
+	@ln -sf $(DOTFILES)/bin/morning $(HOME)/bin/morning
+	@ln -sf $(DOTFILES)/bin/eod $(HOME)/bin/eod
+	@mkdir -p $(HOME)/.claude/hooks $(HOME)/.claude/skills
+	@[ -d "$(DOTFILES)/claude/hooks" ] && cp $(DOTFILES)/claude/hooks/*.sh $(HOME)/.claude/hooks/ 2>/dev/null || true
+	@[ -d "$(DOTFILES)/claude/skills" ] && cp -r $(DOTFILES)/claude/skills/* $(HOME)/.claude/skills/ 2>/dev/null || true
+	@chmod +x $(HOME)/bin/morning $(HOME)/bin/eod $(HOME)/.claude/hooks/*.sh 2>/dev/null || true
+	@echo "Installed: morning, eod, claude hooks"
 
 clean:
 	@rm -f $(HOME)/.zshrc $(HOME)/.gitconfig $(HOME)/.ripgreprc

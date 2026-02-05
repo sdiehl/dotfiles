@@ -78,7 +78,23 @@ if [ -d "$HOME/.codex" ]; then
     cp "$HOME/.codex/config.toml" "$DOTFILES_DIR/codex/config.toml" 2>/dev/null || true
 fi
 
+# Scripts
+mkdir -p "$DOTFILES_DIR/bin"
+cp "$HOME/bin/morning" "$DOTFILES_DIR/bin/morning" 2>/dev/null || true
+cp "$HOME/bin/eod" "$DOTFILES_DIR/bin/eod" 2>/dev/null || true
+
+# Claude hooks and skills
+if [ -d "$HOME/.claude/hooks" ]; then
+    mkdir -p "$DOTFILES_DIR/claude/hooks"
+    cp "$HOME/.claude/hooks/"*.sh "$DOTFILES_DIR/claude/hooks/" 2>/dev/null || true
+fi
+if [ -d "$HOME/.claude/skills" ]; then
+    cp -r "$HOME/.claude/skills" "$DOTFILES_DIR/claude/" 2>/dev/null || true
+fi
+
 # Auto-format synced files for CI
-command -v taplo &>/dev/null && taplo fmt "$DOTFILES_DIR" 2>/dev/null || true
+if command -v taplo &>/dev/null; then
+    taplo fmt "$DOTFILES_DIR" 2>/dev/null || true
+fi
 
 echo "Done. Review changes with: git diff"
