@@ -15,11 +15,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-lint-v1
+
       - name: Install formatters
         run: |
-          cargo install taplo-cli
-          cargo install dprint
-          sudo apt-get install -y shfmt jq
+          command -v taplo || cargo install taplo-cli
+          command -v dprint || cargo install dprint
+          sudo apt-get install -y shfmt jq shellcheck
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
 
@@ -38,7 +47,6 @@ jobs:
             jq '.' "$f" > /tmp/formatted.json
             diff -q "$f" /tmp/formatted.json || (echo "FAIL: $f not formatted" && exit 1)
           done
-          echo "OK: All JSON files formatted"
 
       - name: Lint shell scripts (shellcheck)
         run: |
@@ -53,15 +61,7 @@ jobs:
 
       - name: Check for trailing whitespace
         run: |
-          if grep -rn '[[:space:]]$' --include="*.md" --include="*.toml" --include="*.sh" .; then
-            echo "FAIL: Trailing whitespace found"
-            exit 1
-          fi
-          echo "OK: No trailing whitespace"
-
-      - name: Check for TODO/FIXME comments
-        run: |
-          grep -rn 'TODO\|FIXME\|XXX' --include="*.sh" --include="*.vim" . || echo "OK: No TODO/FIXME found"
+          ! grep -rn '[[:space:]]$' --include="*.md" --include="*.toml" --include="*.sh" .
 
   test:
     runs-on: macos-15
