@@ -3,74 +3,51 @@
 [![CI](https://github.com/sdiehl/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/sdiehl/dotfiles/actions/workflows/ci.yml)
 
 ```bash
-make all       # Full setup
-make brew      # Install packages
-make configs   # Symlink configs
-make macos     # Set macOS defaults
-make devenv    # Node, Rust, Lean4
-make obsidian  # Setup vault structure
-make claude    # Configure Claude Code MCP
-make codex     # Configure Codex
-make opencode  # Configure OpenCode
-make clean     # Remove symlinks
+make all           # Full setup
+make brew          # Install packages
+make brew-dump     # Snapshot current brew packages to Brewfile
+make configs       # Symlink configs (includes claude-config)
+make claude-config # Symlink Claude Code config from DevBrain
+make scripts       # Install ~/bin scripts (morning, eod)
+make macos         # Set macOS defaults
+make devenv        # Node, Rust, Lean4
+make obsidian      # Setup vault structure
+make claude        # Configure Claude Code MCP
+make codex         # Configure Codex
+make clean         # Remove symlinks
 ```
 
 ```bash
-./sync.sh      # Pull configs from local machine
+./sync.sh          # Pull configs from local machine
 ```
 
-## AI Agent Configuration
+## Claude Code
 
-Three AI coding agents are configured with shared rules and access to an Obsidian knowledge graph.
+Claude Code config (CLAUDE.md, rules, hooks, skills, commands, settings) lives in
+`~/Documents/DevBrain/claude/` under git. `~/.claude/` contains symlinks into DevBrain.
+`make claude-config` creates the symlinks. Skips gracefully if DevBrain is not present (CI).
 
-| Agent       | Config Location                    | Instructions                            |
-| ----------- | ---------------------------------- | --------------------------------------- |
-| Claude Code | `~/.claude/CLAUDE.md`              | Global rules + path-specific rules      |
-| Codex       | `~/.codex/AGENTS.md`               | Global rules + agent-overlay delegation |
-| OpenCode    | `~/.config/opencode/opencode.json` | MCP config only                         |
+| File                                   | Source of truth                        |
+| -------------------------------------- | -------------------------------------- |
+| `settings.json`                        | `DevBrain/claude/settings.json`        |
+| `CLAUDE.md`                            | `DevBrain/claude/CLAUDE.md`            |
+| `rules/onechronos.md`                  | `DevBrain/claude/rules/onechronos.md`  |
+| `hooks/session-end.sh`                 | `DevBrain/claude/hooks/session-end.sh` |
+| `skills/{morning,eod,standup,weekly}/` | `DevBrain/claude/skills/*/`            |
+| `commands/{sync,morning,eod}.md`       | `DevBrain/claude/commands/`            |
 
-### Shared Rules
+## Other Agents
 
-All agents follow:
-
-- **Git read-only**: No commits, pushes, merges, or PR creation
-- **Worktree conventions**: `~/work/worktrees/sdiehl-<branch>`
-- **Knowledge base**: Query DevBrain via Obsidian MCP
-
-### Codex + Agent-Overlay
-
-When working in `~/work/` worktrees, Codex delegates to the corporate `agent-overlay` framework when present.
+| Agent    | Config Location                    | Instructions                            |
+| -------- | ---------------------------------- | --------------------------------------- |
+| Codex    | `~/.codex/AGENTS.md`               | Global rules + agent-overlay delegation |
+| OpenCode | `~/.config/opencode/opencode.json` | MCP config only                         |
 
 ## Obsidian Knowledge Graph
 
 AI agents connect to an Obsidian vault via MCP for semantic search and graph traversal.
 
-**Setup:**
-
 ```bash
-make obsidian                    # Create vault structure
+make obsidian    # Create vault structure
+make claude      # Configure Claude Code MCP (requires OBSIDIAN_MCP_KEY)
 ```
-
-Then in Obsidian GUI:
-
-1. Open `~/Documents/DevBrain` as vault
-2. Enable Community Plugins
-3. Install BRAT plugin
-4. BRAT -> Add Beta Plugin -> `aaronsb/obsidian-mcp-plugin`
-5. Enable "Semantic MCP" plugin
-6. Copy API key from Semantic MCP settings
-
-**Configure agents:**
-
-```bash
-export OBSIDIAN_MCP_KEY="your-api-key"  # Add to .zshrc
-make claude      # Configure Claude Code
-make codex       # Configure Codex
-make opencode    # Configure OpenCode
-```
-
-**Config locations:**
-
-- Claude Code: `~/.claude/CLAUDE.md`, `~/.claude.json`
-- Codex: `~/.codex/AGENTS.md`, `~/.codex/config.toml`
-- OpenCode: `~/.config/opencode/opencode.json`

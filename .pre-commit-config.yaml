@@ -27,14 +27,14 @@ repos:
     hooks:
       - id: taplo
         name: taplo (TOML format)
-        entry: taplo fmt --check
+        entry: taplo fmt
         language: system
         types: [file]
         files: \.toml$
 
       - id: dprint
         name: dprint (Markdown format)
-        entry: dprint check
+        entry: dprint fmt
         language: system
         types: [markdown]
         pass_filenames: false
