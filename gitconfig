@@ -8,6 +8,17 @@
 	email = stephen.m.diehl@gmail.com
 [push]
 	autoSetupRemote = true
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	dark = true
+	line-numbers = true
+	syntax-theme = base16
+[merge]
+	conflictStyle = zdiff3
 [credential "https://github.com"]
 	helper =
 	helper = !/opt/homebrew/bin/gh auth git-credential
