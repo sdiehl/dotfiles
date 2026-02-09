@@ -1,0 +1,160 @@
+#!/usr/bin/env bash
+# Morning briefing: create today's daily note with context from yesterday,
+# git activity, and open PRs.
+set -euo pipefail
+
+VAULT="$HOME/Documents/DevBrain"
+TODAY=$(date +%Y-%m-%d)
+YESTERDAY=$(date -v-1d +%Y-%m-%d 2>/dev/null || date -d "yesterday" +%Y-%m-%d)
+NOTE="$VAULT/daily/$TODAY.md"
+TEMPLATE="$VAULT/daily/template.md"
+YESTERDAY_NOTE="$VAULT/daily/$YESTERDAY.md"
+WORKTREE_ROOT="${WORKTREE_ROOT:-$HOME/work}"
+GIT_SCAN_DIRS=("$WORKTREE_ROOT" "$HOME/Git")
+
+# List all git repos across scan dirs
+find_repos() {
+    for dir in "${GIT_SCAN_DIRS[@]}"; do
+        [ -d "$dir" ] || continue
+        find "$dir" -maxdepth 4 -name ".git" -type d 2>/dev/null | while read -r g; do
+            dirname "$g"
+        done
+    done
+}
+
+# Create today's note from template if it doesn't exist
+if [ ! -f "$NOTE" ]; then
+    if [ -f "$TEMPLATE" ]; then
+        sed "s/{{date}}/$TODAY/g" "$TEMPLATE" > "$NOTE"
+    else
+        echo "# $TODAY" > "$NOTE"
+    fi
+fi
+
+# --- Inject Yesterday section ---
+yesterday_content=""
+if [ -f "$YESTERDAY_NOTE" ]; then
+    # Extract Focus section from yesterday
+    focus=$(awk '/^## Focus$/,/^## /' "$YESTERDAY_NOTE" | grep -v '^## ' | sed '/^$/d')
+    # Extract Tomorrow section from yesterday (what we planned)
+    tomorrow=$(awk '/^## Tomorrow$/,/^## |^$/' "$YESTERDAY_NOTE" | grep -v '^## ' | sed '/^$/d')
+
+    if [ -n "$focus" ] || [ -n "$tomorrow" ]; then
+        yesterday_content=""
+        if [ -n "$focus" ]; then
+            yesterday_content+="**Focus:** $focus"$'\n'
+        fi
+        if [ -n "$tomorrow" ]; then
+            yesterday_content+="**Planned:** $tomorrow"$'\n'
+        fi
+    fi
+fi
+
+# --- Git activity across all repos ---
+git_activity=""
+while IFS= read -r wt_path; do
+    [ -z "$wt_path" ] && continue
+    branch=$(git -C "$wt_path" branch --show-current 2>/dev/null || true)
+    [ -z "$branch" ] && continue
+    repo=$(basename "$(git -C "$wt_path" rev-parse --show-toplevel 2>/dev/null)")
+    commits=$(git -C "$wt_path" log --oneline --since="yesterday" --author="sdiehl" 2>/dev/null || true)
+    if [ -n "$commits" ]; then
+        git_activity+="**$repo/$branch**:"$'\n'
+        while IFS= read -r commit; do
+            git_activity+="- $commit"$'\n'
+        done <<< "$commits"
+    fi
+done < <(find_repos)
+
+# --- Open PRs ---
+pr_list=""
+if command -v gh &>/dev/null; then
+    # shellcheck disable=SC2016
+    authored=$(gh pr list --author @me --repo onechronos/monoclonal --json number,title,headRefName --jq '.[] | "- #\(.number) `\(.headRefName)` \(.title)"' 2>/dev/null || true)
+    # shellcheck disable=SC2016
+    review=$(gh pr list --search "review-requested:sdiehl" --repo onechronos/monoclonal --json number,title,headRefName --jq '.[] | "- #\(.number) `\(.headRefName)` \(.title)"' 2>/dev/null || true)
+    if [ -n "$authored" ]; then
+        pr_list+="**My PRs:**"$'\n'"$authored"$'\n'
+    fi
+    if [ -n "$review" ]; then
+        pr_list+="**Review requested:**"$'\n'"$review"$'\n'
+    fi
+fi
+
+# --- Active branches (with commits in last 7 days) ---
+branches=""
+while IFS= read -r wt_path; do
+    [ -z "$wt_path" ] && continue
+    branch=$(git -C "$wt_path" branch --show-current 2>/dev/null || true)
+    [ -z "$branch" ] && continue
+    # Skip if no commits in last 7 days
+    recent=$(git -C "$wt_path" log -1 --since="7 days ago" --author="sdiehl" --format='%h' 2>/dev/null || true)
+    [ -z "$recent" ] && continue
+    repo=$(basename "$(git -C "$wt_path" rev-parse --show-toplevel 2>/dev/null)")
+    last=$(git -C "$wt_path" log -1 --format='%ar: %s' 2>/dev/null || true)
+    branches+="- \`$repo/$branch\` -- $last"$'\n'
+done < <(find_repos)
+
+# --- Build Active Work section ---
+active_work=""
+if [ -n "$branches" ]; then
+    active_work+="$branches"$'\n'
+fi
+if [ -n "$pr_list" ]; then
+    active_work+="$pr_list"
+fi
+
+# --- Helper: inject content after a ## heading ---
+inject_section() {
+    local heading="$1"
+    local content="$2"
+    local file="$3"
+    [ -z "$content" ] && return
+    local tmpfile
+    tmpfile=$(mktemp)
+    local in_section=0
+    local injected=0
+    while IFS= read -r line; do
+        if [ "$line" = "## $heading" ]; then
+            {
+                echo "$line"
+                echo ""
+                echo "$content"
+            } >> "$tmpfile"
+            in_section=1
+            injected=1
+            continue
+        fi
+        if [ "$in_section" -eq 1 ]; then
+            if [[ "$line" == "## "* ]]; then
+                in_section=0
+                echo "$line" >> "$tmpfile"
+            fi
+            continue
+        fi
+        echo "$line" >> "$tmpfile"
+    done < "$file"
+    if [ "$injected" -eq 1 ]; then
+        mv "$tmpfile" "$file"
+    else
+        rm -f "$tmpfile"
+    fi
+}
+
+# --- Inject into note ---
+inject=""
+if [ -n "$yesterday_content" ]; then
+    inject="$yesterday_content"
+fi
+if [ -n "$git_activity" ]; then
+    inject+=$'\n'"**Commits:**"$'\n'"$git_activity"
+fi
+inject_section "Yesterday" "$inject" "$NOTE"
+inject_section "Active Work" "$active_work" "$NOTE"
+
+# --- Open in Obsidian ---
+if [ "$(uname)" = "Darwin" ]; then
+    open "obsidian://open?vault=DevBrain&file=daily%2F$TODAY"
+fi
+
+echo "Morning briefing ready: daily/$TODAY.md"

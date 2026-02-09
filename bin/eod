@@ -1,0 +1,138 @@
+#!/usr/bin/env bash
+# End-of-day wrap: summarize git activity, update daily note and scratch.
+set -euo pipefail
+
+VAULT="$HOME/Documents/DevBrain"
+TODAY=$(date +%Y-%m-%d)
+NOTE="$VAULT/daily/$TODAY.md"
+SCRATCH="$VAULT/scratch/this-week.md"
+WORKTREE_ROOT="${WORKTREE_ROOT:-$HOME/work}"
+GIT_SCAN_DIRS=("$WORKTREE_ROOT" "$HOME/Git")
+
+# List all git repos across scan dirs
+find_repos() {
+    for dir in "${GIT_SCAN_DIRS[@]}"; do
+        [ -d "$dir" ] || continue
+        find "$dir" -maxdepth 4 -name ".git" -type d 2>/dev/null | while read -r g; do
+            dirname "$g"
+        done
+    done
+}
+
+if [ ! -f "$NOTE" ]; then
+    echo "No daily note for today. Run 'morning' first."
+    exit 1
+fi
+
+# --- Collect today's commits across all repos ---
+log_entries=""
+while IFS= read -r wt_path; do
+    [ -z "$wt_path" ] && continue
+    branch=$(git -C "$wt_path" branch --show-current 2>/dev/null || true)
+    [ -z "$branch" ] && continue
+    commits=$(git -C "$wt_path" log --oneline --since="6am" --author="sdiehl" 2>/dev/null || true)
+    repo=$(basename "$(git -C "$wt_path" rev-parse --show-toplevel 2>/dev/null)")
+    if [ -n "$commits" ]; then
+        log_entries+="**$repo/$branch:**"$'\n'
+        while IFS= read -r commit; do
+            log_entries+="- $commit"$'\n'
+        done <<< "$commits"
+        log_entries+=$'\n'
+    fi
+done < <(find_repos)
+
+# --- Helper: inject content after a ## heading ---
+inject_section() {
+    local heading="$1"
+    local content="$2"
+    local file="$3"
+    [ -z "$content" ] && return
+    local tmpfile
+    tmpfile=$(mktemp)
+    local in_section=0
+    local injected=0
+    while IFS= read -r line; do
+        if [ "$line" = "## $heading" ]; then
+            {
+                echo "$line"
+                echo ""
+                echo "$content"
+            } >> "$tmpfile"
+            in_section=1
+            injected=1
+            continue
+        fi
+        if [ "$in_section" -eq 1 ]; then
+            if [[ "$line" == "## "* ]]; then
+                in_section=0
+                echo "$line" >> "$tmpfile"
+            fi
+            continue
+        fi
+        echo "$line" >> "$tmpfile"
+    done < "$file"
+    if [ "$injected" -eq 1 ]; then
+        mv "$tmpfile" "$file"
+    else
+        rm -f "$tmpfile"
+    fi
+}
+
+# --- Append to Log section ---
+if [ -n "$log_entries" ]; then
+    inject_section "Log" "$log_entries" "$NOTE"
+    echo "Added commit log to daily note."
+fi
+
+# --- Update scratch/this-week.md ---
+branches=""
+while IFS= read -r wt_path; do
+    [ -z "$wt_path" ] && continue
+    branch=$(git -C "$wt_path" branch --show-current 2>/dev/null || true)
+    [ -z "$branch" ] && continue
+    repo=$(basename "$(git -C "$wt_path" rev-parse --show-toplevel 2>/dev/null)")
+    last=$(git -C "$wt_path" log -1 --format='%s' 2>/dev/null || true)
+    branches+="- \`$repo/$branch\` -- $last"$'\n'
+done < <(find_repos)
+
+# Extract today's Focus for scratch
+focus=$(awk '/^## Focus$/,/^## /' "$NOTE" | grep -v '^## ' | sed '/^$/d' || true)
+
+cat > "$SCRATCH" << EOF
+# This Week
+
+Agent scratchpad for current work context.
+
+## Current Focus
+
+${focus:-"-"}
+
+## Active Branches
+
+${branches:-"No active worktrees."}
+
+## In Progress
+
+-
+
+## Blockers
+
+-
+
+## Notes
+
+$TODAY: end-of-day wrap
+
+---
+
+*Updated by agents during sessions. Safe to overwrite.*
+EOF
+
+echo "Updated scratch/this-week.md"
+
+# --- Open note for final edits ---
+if [ "$(uname)" = "Darwin" ]; then
+    open "obsidian://open?vault=DevBrain&file=daily%2F$TODAY"
+fi
+
+echo "EOD wrap complete. Add tomorrow's focus before closing."

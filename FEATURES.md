@@ -30,13 +30,15 @@
 - `wta <branch>` - Add worktree to `~/work/`
 - `wtl` - List worktrees
 - `wtr <path>` - Remove worktree
+- `wts` - Status across all worktrees (dirty files, ahead/behind, sorted by recent commit)
 
 **Aliases:**
 
-- `vim` → `nvim`
-- `j` → `zoxide` (smart cd)
-- `claudes`, `codexs`, `geminis`, `opencodes` - AI tools yolo mode
-- `pcr`, `pcp` - pre-commit run
+- `vim` -> `nvim`
+- `j` -> `zoxide` (smart cd)
+- `pcr` / `pcp` - pre-commit run (all / pre-push)
+- `gpp` - git push origin --no-verify
+- `claudes`, `codexs`, `geminis`, `opencodes` - AI agents in yolo mode
 
 ## Neovim
 
@@ -85,8 +87,8 @@
 **Search:**
 
 - `ripgrep` - Fast grep (with smart defaults via `~/.ripgreprc`)
-- `fd` - Fast find
-- `fzf` - Fuzzy finder
+- `fd` - Fast find (respects .gitignore)
+- `fzf` - Fuzzy finder (files, history, branches)
 - `the_silver_searcher` - ag
 
 **Git:**
@@ -94,12 +96,51 @@
 - `gh` - GitHub CLI
 - `gh dash` - PR/issues dashboard
 - `git-lfs` - Large file storage
+- `git-delta` - Syntax-aware diff pager (default for git diff, log, blame)
+- `lazygit` - Terminal UI for git (worktree support, interactive staging)
+
+**Data:**
+
+- `jq` / `yq` - JSON/YAML processors
+- `fx` - Interactive JSON viewer (terminal)
+- `duckdb` - Analytical SQL engine (Parquet, CSV, JSON)
 
 **Development:**
 
 - `just` - Command runner
 - `pre-commit` - Git hooks
+- `bat` - Syntax-highlighted cat
 - `btop`, `htop` - Process monitors
+- `dprint` - Markdown/JSON formatter
+- `taplo` - TOML formatter
+- `shfmt` - Shell formatter
+- `shellcheck` - Shell linter
+
+## Pre-commit Hooks (dotfiles)
+
+- `trailing-whitespace` - Auto-fix trailing whitespace
+- `end-of-file-fixer` - Ensure files end with newline
+- `check-yaml` - Validate YAML syntax
+- `check-json` - Validate JSON (obsidian configs)
+- `check-merge-conflict` - Catch conflict markers
+- `shfmt` - Auto-format shell scripts (4-space indent)
+- `shellcheck` - Lint shell scripts
+- `taplo fmt` - Auto-format TOML
+- `dprint fmt` - Auto-format Markdown
+- `brewfile-syntax` - Validate Brewfile
+
+## Claude Code Config
+
+All config lives in `~/Documents/DevBrain/claude/` (git-tracked, Obsidian-ignored)
+and is symlinked into `~/.claude/` via `make claude-config`.
+
+**Skills:** morning, eod, standup, weekly, sync
+
+**Commands:** `/morning`, `/eod`, `/sync`
+
+**Hooks:** session-end (appends timestamp to daily note)
+
+**Rules:** CLAUDE.md (global), onechronos.md (work repos)
 
 ## Development Environments
 
@@ -128,15 +169,17 @@
 **Other:**
 
 - `z3` - SMT solver
-- `openjdk` - Java
+- `openjdk` + `google-java-format`
 - `tla-plus-toolbox` - TLA+
+- `typst` - Document typesetting
+- `texlive` - LaTeX
 
 ## macOS Settings
 
 **Keyboard:**
 
 - Fast key repeat
-- Caps Lock → Escape
+- Caps Lock -> Escape
 - Disable press-and-hold
 
 **Trackpad:**
@@ -159,8 +202,7 @@
 **Other:**
 
 - Screenshots to ~/Downloads
-- Disable auto-correct
-- Disable auto-capitalize
+- Disable auto-correct, auto-capitalize, auto-period
 
 ## Apps (Homebrew)
 
@@ -176,8 +218,9 @@
 - ChatGPT
 - Claude Code
 - Codex
+- Gemini CLI
+- OpenCode
 - LM Studio
-- Perplexity (App Store)
 
 **Productivity:**
 
@@ -195,7 +238,7 @@
 
 ## Fonts
 
-- Fira Code (+ Nerd Font variant)
+- Fira Code
 - Fira Sans
 - Source Code Pro
 - Computer Modern

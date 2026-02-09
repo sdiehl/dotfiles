@@ -45,6 +45,7 @@ alias ls='ls --color'
 alias j='z'
 alias pcr='pre-commit run --all-files'
 alias pcp='pre-commit run --hook-stage pre-push --all-files'
+alias gpp='git push origin --no-verify'
 
 alias claudes='claude --dangerously-skip-permissions'
 alias codexs='codex --full-auto'
