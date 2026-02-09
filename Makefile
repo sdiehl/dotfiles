@@ -157,6 +157,7 @@ claude-config:
 	@for skill in morning eod standup weekly; do \
 		ln -sfn $(VAULT)/claude/skills/$$skill $(HOME)/.claude/skills/$$skill; \
 	done
+	@ln -sfn $(VAULT)/claude/commands $(HOME)/.claude/commands
 	@echo "Claude Code config linked from DevBrain ($(VAULT)/claude/)"
 
 clean:
