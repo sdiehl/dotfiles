@@ -148,17 +148,22 @@ scripts:
 	@echo "Installed: morning, eod"
 
 claude-config:
-	@echo "Symlinking Claude Code config from DevBrain..."
-	@mkdir -p $(HOME)/.claude/rules $(HOME)/.claude/hooks $(HOME)/.claude/skills
-	@ln -sf $(VAULT)/claude/CLAUDE.md $(HOME)/.claude/CLAUDE.md
-	@ln -sf $(VAULT)/claude/rules/onechronos.md $(HOME)/.claude/rules/onechronos.md
-	@ln -sf $(VAULT)/claude/hooks/session-end.sh $(HOME)/.claude/hooks/session-end.sh
-	@chmod +x $(VAULT)/claude/hooks/session-end.sh
-	@for skill in morning eod standup weekly; do \
-		ln -sfn $(VAULT)/claude/skills/$$skill $(HOME)/.claude/skills/$$skill; \
-	done
-	@ln -sfn $(VAULT)/claude/commands $(HOME)/.claude/commands
-	@echo "Claude Code config linked from DevBrain ($(VAULT)/claude/)"
+	@if [ ! -d "$(VAULT)/claude" ]; then \
+		echo "DevBrain not found at $(VAULT)/claude -- skipping claude-config"; \
+	else \
+		echo "Symlinking Claude Code config from DevBrain..."; \
+		mkdir -p $(HOME)/.claude/rules $(HOME)/.claude/hooks $(HOME)/.claude/skills; \
+		ln -sf $(VAULT)/claude/settings.json $(HOME)/.claude/settings.json; \
+		ln -sf $(VAULT)/claude/CLAUDE.md $(HOME)/.claude/CLAUDE.md; \
+		ln -sf $(VAULT)/claude/rules/onechronos.md $(HOME)/.claude/rules/onechronos.md; \
+		ln -sf $(VAULT)/claude/hooks/session-end.sh $(HOME)/.claude/hooks/session-end.sh; \
+		chmod +x $(VAULT)/claude/hooks/session-end.sh; \
+		for skill in morning eod standup weekly; do \
+			ln -sfn $(VAULT)/claude/skills/$$skill $(HOME)/.claude/skills/$$skill; \
+		done; \
+		ln -sfn $(VAULT)/claude/commands $(HOME)/.claude/commands; \
+		echo "Claude Code config linked from DevBrain ($(VAULT)/claude/)"; \
+	fi
 
 clean:
 	@rm -f $(HOME)/.zshrc $(HOME)/.gitconfig $(HOME)/.ripgreprc
