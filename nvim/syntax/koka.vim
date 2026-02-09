@@ -7,9 +7,9 @@ if exists("b:current_syntax")
 endif
 
 " Keywords
-syn keyword KokaKeyword infix infixr infixl module import as pub abstract 
-            \ type struct alias effect con forall exists some 
-            \ fun fn val var extern if then else elif match return with in handle handler mask 
+syn keyword KokaKeyword infix infixr infixl module import as pub abstract
+            \ type struct alias effect con forall exists some
+            \ fun fn val var extern if then else elif match return with in handle handler mask
             \ ctl final raw override named interface break continue unsafe
             \ co rec open extend behind linear value reference inline noinline initially finally
 

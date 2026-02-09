@@ -4,9 +4,9 @@ DOTFILES := $(shell pwd)
 CONFIG := $(HOME)/.config
 ZSH_CUSTOM := $(HOME)/.oh-my-zsh/custom/plugins
 
-.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep macos devenv obsidian claude codex opencode scripts clean
+.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep macos devenv obsidian claude codex opencode scripts claude-config clean
 
-all: brew configs nvim-plugins macos devenv obsidian claude codex scripts
+all: brew configs nvim-plugins macos devenv obsidian claude codex scripts claude-config
 
 brew:
 	@which brew > /dev/null || /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -15,7 +15,7 @@ brew:
 brew-dump:
 	@brew bundle dump --force --file=$(DOTFILES)/Brewfile
 
-configs: zsh git nvim-config ghostty zed starship atuin ripgrep claude-memory
+configs: zsh git nvim-config ghostty zed starship atuin ripgrep claude-config
 
 zsh:
 	@[ -d "$(HOME)/.oh-my-zsh" ] || sh -c "$$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -63,9 +63,7 @@ ripgrep:
 	@ln -sf $(DOTFILES)/ripgreprc $(HOME)/.ripgreprc
 
 claude-memory:
-	@mkdir -p $(HOME)/.claude/rules
-	@ln -sf $(DOTFILES)/claude/CLAUDE.md $(HOME)/.claude/CLAUDE.md
-	@ln -sf $(DOTFILES)/claude/rules/onechronos.md $(HOME)/.claude/rules/onechronos.md
+	@echo "DEPRECATED: Claude config now lives in DevBrain. Use 'make claude-config' instead."
 
 macos:
 	@defaults write NSGlobalDomain KeyRepeat -int 2
@@ -146,11 +144,20 @@ scripts:
 	@mkdir -p $(HOME)/bin
 	@ln -sf $(DOTFILES)/bin/morning $(HOME)/bin/morning
 	@ln -sf $(DOTFILES)/bin/eod $(HOME)/bin/eod
-	@mkdir -p $(HOME)/.claude/hooks $(HOME)/.claude/skills
-	@[ -d "$(DOTFILES)/claude/hooks" ] && cp $(DOTFILES)/claude/hooks/*.sh $(HOME)/.claude/hooks/ 2>/dev/null || true
-	@[ -d "$(DOTFILES)/claude/skills" ] && cp -r $(DOTFILES)/claude/skills/* $(HOME)/.claude/skills/ 2>/dev/null || true
-	@chmod +x $(HOME)/bin/morning $(HOME)/bin/eod $(HOME)/.claude/hooks/*.sh 2>/dev/null || true
-	@echo "Installed: morning, eod, claude hooks"
+	@chmod +x $(HOME)/bin/morning $(HOME)/bin/eod 2>/dev/null || true
+	@echo "Installed: morning, eod"
+
+claude-config:
+	@echo "Symlinking Claude Code config from DevBrain..."
+	@mkdir -p $(HOME)/.claude/rules $(HOME)/.claude/hooks $(HOME)/.claude/skills
+	@ln -sf $(VAULT)/claude/CLAUDE.md $(HOME)/.claude/CLAUDE.md
+	@ln -sf $(VAULT)/claude/rules/onechronos.md $(HOME)/.claude/rules/onechronos.md
+	@ln -sf $(VAULT)/claude/hooks/session-end.sh $(HOME)/.claude/hooks/session-end.sh
+	@chmod +x $(VAULT)/claude/hooks/session-end.sh
+	@for skill in morning eod standup weekly; do \
+		ln -sfn $(VAULT)/claude/skills/$$skill $(HOME)/.claude/skills/$$skill; \
+	done
+	@echo "Claude Code config linked from DevBrain ($(VAULT)/claude/)"
 
 clean:
 	@rm -f $(HOME)/.zshrc $(HOME)/.gitconfig $(HOME)/.ripgreprc
