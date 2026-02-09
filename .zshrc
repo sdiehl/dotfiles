@@ -55,33 +55,76 @@ alias opencodes='opencode --yolo'
 # ==============================================
 # WORKTREE MANAGEMENT
 # ==============================================
+#
+# Convention (monoclonal):
+#   Bare repo:  ~/work/worktrees/monoclonal.git
+#   Folders:    ~/work/worktrees/sdiehl-<name>
+#   Branches:   sdiehl/<name>
+#
+# Functions:
+#   wt          Switch worktree (fzf)
+#   wta <name>  Create new worktree (sdiehl/<name> off origin/main)
+#   wtp <branch> Pull remote branch into local worktree
+#   wtl         List worktrees
+#   wtr <path>  Remove worktree
+#   wts         Status across all worktrees
+
+WORKTREE_BARE="${WORKTREE_ROOT:-$HOME/work}/worktrees/monoclonal.git"
 
 wt() {
-  local repo=$(basename $(git rev-parse --show-toplevel 2>/dev/null))
-  [[ -z "$repo" ]] && echo "Not in a git repo" && return 1
-  local worktrees=$(git worktree list | tail -n +2 | awk '{print $1}')
-  [[ -z "$worktrees" ]] && echo "No worktrees" && return 1
+  local root="${WORKTREE_ROOT:-$HOME/work}"
+  local worktrees=$(find "$root" "$root/worktrees" -maxdepth 1 -type d 2>/dev/null | while read -r d; do
+    [ -d "$d/.git" ] || [ -f "$d/.git" ] || continue
+    echo "$d"
+  done)
+  [[ -z "$worktrees" ]] && echo "No worktrees found" && return 1
   local selected=$(echo "$worktrees" | fzf --prompt="Switch worktree: ")
   [[ -n "$selected" ]] && cd "$selected"
 }
 
+# Create new worktree: wta foo-bar -> sdiehl/foo-bar at ~/work/worktrees/sdiehl-foo-bar
 wta() {
-  local repo=$(basename $(git rev-parse --show-toplevel 2>/dev/null))
-  [[ -z "$repo" ]] && echo "Not in a git repo" && return 1
-  local branch=$1
-  [[ -z "$branch" ]] && echo "Usage: wta <branch>" && return 1
-  mkdir -p "$WORKTREE_ROOT"
-  git worktree add "$WORKTREE_ROOT/$repo-$branch" "$branch" 2>/dev/null || \
-  git worktree add -b "$branch" "$WORKTREE_ROOT/$repo-$branch"
-  cd "$WORKTREE_ROOT/$repo-$branch"
+  local name=$1
+  [[ -z "$name" ]] && echo "Usage: wta <name>" && return 1
+  local branch="sdiehl/$name"
+  local dir="${WORKTREE_ROOT:-$HOME/work}/worktrees/sdiehl-$name"
+  [[ -d "$dir" ]] && echo "Already exists: $dir" && return 1
+  git -C "$WORKTREE_BARE" fetch origin main
+  git -C "$WORKTREE_BARE" worktree add -b "$branch" "$dir" origin/main
+  cd "$dir"
 }
 
-wtl() { git worktree list; }
+# Pull a remote branch into a local worktree (for checking out other people's branches)
+wtp() {
+  local branch=$1
+  [[ -z "$branch" ]] && echo "Usage: wtp <branch> (e.g. sdiehl/my-feature or max/his-feature)" && return 1
+  local worktree_name="${branch##*/}"
+  local dir="${WORKTREE_ROOT:-$HOME/work}/worktrees/$worktree_name"
+  git -C "$WORKTREE_BARE" fetch origin --prune
+  git -C "$WORKTREE_BARE" worktree prune
+  if ! git -C "$WORKTREE_BARE" rev-parse --verify "origin/$branch" &>/dev/null; then
+    echo "Branch '$branch' not found on origin" && return 1
+  fi
+  if [[ -d "$dir" ]]; then
+    echo "Worktree exists, pulling: $dir"
+    git -C "$dir" pull --ff-only || true
+  else
+    if git -C "$WORKTREE_BARE" show-ref --verify --quiet "refs/heads/$branch"; then
+      git -C "$WORKTREE_BARE" worktree add "$dir" "$branch"
+    else
+      git -C "$WORKTREE_BARE" worktree add -b "$branch" "$dir" "origin/$branch"
+    fi
+    git -C "$dir" branch --set-upstream-to="origin/$branch" "$branch"
+  fi
+  echo "cd $dir"
+}
+
+wtl() { git -C "$WORKTREE_BARE" worktree list 2>/dev/null || git worktree list; }
 
 wtr() {
   local path=$1
   [[ -z "$path" ]] && echo "Usage: wtr <path>" && return 1
-  git worktree remove "$path"
+  git -C "$WORKTREE_BARE" worktree remove "$path" 2>/dev/null || git worktree remove "$path"
 }
 
 # Status across all worktrees, sorted by most recent commit

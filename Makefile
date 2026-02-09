@@ -158,7 +158,7 @@ claude-config:
 		ln -sf $(VAULT)/claude/rules/onechronos.md $(HOME)/.claude/rules/onechronos.md; \
 		ln -sf $(VAULT)/claude/hooks/session-end.sh $(HOME)/.claude/hooks/session-end.sh; \
 		chmod +x $(VAULT)/claude/hooks/session-end.sh; \
-		for skill in morning eod standup weekly sync; do \
+		for skill in morning eod standup weekly sync review; do \
 			ln -sfn $(VAULT)/claude/skills/$$skill $(HOME)/.claude/skills/$$skill; \
 		done; \
 		ln -sfn $(VAULT)/claude/commands $(HOME)/.claude/commands; \
