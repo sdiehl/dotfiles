@@ -115,6 +115,12 @@
 - `taplo` - TOML formatter
 - `shfmt` - Shell formatter
 - `shellcheck` - Shell linter
+- `llvm` - LLVM toolchain (clang, opt, llc, llvm-as, etc.)
+- `tmux` - Terminal multiplexer (persistent sessions)
+- `ncdu` - Interactive disk usage viewer
+- `pv` - Pipe viewer (throughput/progress on any pipe)
+- `watch` - Repeat a command every N seconds
+- `wget` - HTTP downloader (recursive, resumable)
 
 ## Pre-commit Hooks (dotfiles)
 
@@ -165,6 +171,12 @@ and is symlinked into `~/.claude/` via `make claude-config`.
 
 - `uv` - Fast package manager
 - `python@3.14`
+- `black` - Code formatter
+- `huggingface-hub` - HuggingFace CLI (model downloads, repo management)
+- `jpterm` - Jupyter notebooks in the terminal
+- `nbconvert` - Notebook conversion (to HTML, PDF, Markdown, etc.)
+- `nbpreview` - Terminal notebook previewer
+- `parquet-tools` - Inspect and query Parquet files
 
 **Other:**
 

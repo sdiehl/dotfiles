@@ -4,7 +4,7 @@ DOTFILES := $(shell pwd)
 CONFIG := $(HOME)/.config
 ZSH_CUSTOM := $(HOME)/.oh-my-zsh/custom/plugins
 
-.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep macos devenv obsidian claude codex opencode scripts claude-config clean
+.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep macos devenv python-tools obsidian claude codex opencode scripts claude-config clean
 
 all: brew configs nvim-plugins macos devenv obsidian claude codex scripts claude-config
 
@@ -97,6 +97,18 @@ devenv:
 	@$(HOME)/.elan/bin/elan default leanprover/lean4:stable
 	@[ "$(LEAN_FULL)" = "true" ] && $(HOME)/.elan/bin/lake exe cache get || true
 	@gh extension install dlvhdr/gh-dash 2>/dev/null || true
+	@$(MAKE) python-tools
+
+python-tools:
+	@which uv > /dev/null || { echo "uv not found. Run 'make brew' first."; exit 1; }
+	@echo "Installing Python CLI tools via uv..."
+	@uv tool install black
+	@uv tool install huggingface-hub
+	@uv tool install jpterm
+	@uv tool install nbconvert
+	@uv tool install nbpreview
+	@uv tool install parquet-tools
+	@echo "Python tools installed"
 
 VAULT := $(HOME)/Documents/DevBrain
 

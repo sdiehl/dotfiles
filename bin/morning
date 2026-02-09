@@ -152,6 +152,30 @@ fi
 inject_section "Yesterday" "$inject" "$NOTE"
 inject_section "Active Work" "$active_work" "$NOTE"
 
+# --- Worktree status (terminal only, not injected into note) ---
+wt_status=""
+for dir in "$WORKTREE_ROOT"/*/ "$WORKTREE_ROOT"/worktrees/*/; do
+    [ -d "$dir" ] || continue
+    [ -d "$dir/.git" ] || [ -f "$dir/.git" ] || continue
+    wt_branch=$(git -C "$dir" branch --show-current 2>/dev/null || true)
+    [ -z "$wt_branch" ] && continue
+    wt_name=$(basename "$dir")
+    wt_dirty=$(git -C "$dir" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+    wt_ahead=$(git -C "$dir" rev-list --count '@{u}..HEAD' 2>/dev/null || echo "?")
+    wt_behind=$(git -C "$dir" rev-list --count 'HEAD..@{u}' 2>/dev/null || echo "?")
+    wt_info=""
+    [[ "$wt_dirty" -gt 0 ]] && wt_info+="${wt_dirty}d "
+    [[ "$wt_ahead" != "0" && "$wt_ahead" != "?" ]] && wt_info+="${wt_ahead}+ "
+    [[ "$wt_behind" != "0" && "$wt_behind" != "?" ]] && wt_info+="${wt_behind}- "
+    [[ -z "$wt_info" ]] && wt_info="clean"
+    wt_status+="  $(printf '%-28s %-30s %s' "$wt_name" "$wt_branch" "$wt_info")"$'\n'
+done
+if [ -n "$wt_status" ]; then
+    echo ""
+    echo "Worktree status:"
+    echo "$wt_status"
+fi
+
 # --- Open in Obsidian ---
 if [ "$(uname)" = "Darwin" ]; then
     open "obsidian://open?vault=DevBrain&file=daily%2F$TODAY"
