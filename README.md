@@ -3,51 +3,52 @@
 [![CI](https://github.com/sdiehl/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/sdiehl/dotfiles/actions/workflows/ci.yml)
 
 ```bash
-make all           # Full setup
-make brew          # Install packages
-make brew-dump     # Snapshot current brew packages to Brewfile
-make configs       # Symlink configs (includes claude-config)
-make claude-config # Symlink Claude Code config from DevBrain
-make scripts       # Install ~/bin scripts (morning, eod)
-make macos         # Set macOS defaults
-make devenv        # Node, Rust, Lean4
-make obsidian      # Setup vault structure
-make claude        # Configure Claude Code MCP
-make codex         # Configure Codex
-make clean         # Remove symlinks
+make brew           # Install Homebrew + Brewfile packages
+make brew-dump      # Snapshot installed packages to Brewfile
+make zsh            # Oh My Zsh + plugins + .zshrc
+make git            # Symlink gitconfig (delta pager, LFS, credentials)
+make nvim-config    # Symlink neovim config, colors, syntax files
+make nvim-plugins   # Install neovim plugins (vim-plug)
+make nvim-update    # Update neovim plugins
+make ghostty        # Symlink Ghostty terminal config
+make zed            # Symlink Zed settings
+make starship       # Symlink Starship prompt config
+make atuin          # Symlink Atuin shell history config
+make ripgrep        # Symlink ripgrep config
+make macos          # Set macOS defaults (key repeat, Finder, Dock)
+make devenv         # Node (LTS), Rust (nightly), Lean 4, gh-dash
+make obsidian       # Create DevBrain vault structure + plugin configs
+make claude         # Connect Claude Code to Obsidian MCP
+make codex          # Symlink Codex AGENTS.md + config.toml
+make opencode       # Configure OpenCode MCP
+make claude-config  # Symlink Claude Code config from DevBrain
+make scripts        # Install ~/bin scripts (morning, eod)
+make clean          # Remove all symlinks
 ```
 
 ```bash
-./sync.sh          # Pull configs from local machine
+./sync.sh           # Pull configs from local machine into repo
 ```
 
-## Claude Code
+## Coding Agents
 
-Claude Code config (CLAUDE.md, rules, hooks, skills, commands, settings) lives in
-`~/Documents/DevBrain/claude/` under git. `~/.claude/` contains symlinks into DevBrain.
-`make claude-config` creates the symlinks. Skips gracefully if DevBrain is not present (CI).
+Agent configs (Claude Code, Codex, OpenCode) are managed here. Claude Code config
+lives in `~/Documents/DevBrain/claude/` and is symlinked into `~/.claude/` via
+`make claude-config`. Codex and OpenCode configs are symlinked directly from this repo.
 
-| File                                   | Source of truth                        |
-| -------------------------------------- | -------------------------------------- |
-| `settings.json`                        | `DevBrain/claude/settings.json`        |
-| `CLAUDE.md`                            | `DevBrain/claude/CLAUDE.md`            |
-| `rules/onechronos.md`                  | `DevBrain/claude/rules/onechronos.md`  |
-| `hooks/session-end.sh`                 | `DevBrain/claude/hooks/session-end.sh` |
-| `skills/{morning,eod,standup,weekly}/` | `DevBrain/claude/skills/*/`            |
-| `commands/{sync,morning,eod}.md`       | `DevBrain/claude/commands/`            |
+All agents share read-only git rules, worktree conventions, and access to an
+Obsidian knowledge graph via MCP (`make claude` / `make codex` / `make opencode`).
 
-## Other Agents
-
-| Agent    | Config Location                    | Instructions                            |
-| -------- | ---------------------------------- | --------------------------------------- |
-| Codex    | `~/.codex/AGENTS.md`               | Global rules + agent-overlay delegation |
-| OpenCode | `~/.config/opencode/opencode.json` | MCP config only                         |
-
-## Obsidian Knowledge Graph
-
-AI agents connect to an Obsidian vault via MCP for semantic search and graph traversal.
+## Obsidian
 
 ```bash
-make obsidian    # Create vault structure
-make claude      # Configure Claude Code MCP (requires OBSIDIAN_MCP_KEY)
+make obsidian    # Create vault structure + copy plugin configs
+```
+
+Then in Obsidian: open `~/Documents/DevBrain`, enable Community Plugins, install
+BRAT, add `aaronsb/obsidian-mcp-plugin`, enable Semantic MCP, copy API key.
+
+```bash
+export OBSIDIAN_MCP_KEY="your-key"  # Add to .zshrc
+make claude                         # Connect Claude Code to vault
 ```
