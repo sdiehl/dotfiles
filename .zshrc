@@ -83,6 +83,35 @@ wtr() {
   git worktree remove "$path"
 }
 
+# Status across all worktrees, sorted by most recent commit
+wts() {
+  local root="${WORKTREE_ROOT:-$HOME/work}"
+  local rows=()
+  local maxname=0 maxbranch=0
+  for dir in "$root"/*/ "$root"/worktrees/*/; do
+    [ -d "$dir" ] || continue
+    [ -d "$dir/.git" ] || [ -f "$dir/.git" ] || continue
+    local branch=$(git -C "$dir" branch --show-current 2>/dev/null)
+    [ -z "$branch" ] && continue
+    local name=$(basename "$dir")
+    local ts=$(git -C "$dir" log -1 --format=%ct 2>/dev/null || echo "0")
+    local dirty=$(git -C "$dir" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+    local ahead=$(git -C "$dir" rev-list --count @{u}..HEAD 2>/dev/null || echo "?")
+    local behind=$(git -C "$dir" rev-list --count HEAD..@{u} 2>/dev/null || echo "?")
+    local info=""
+    [[ "$dirty" -gt 0 ]] && info+="${dirty}d "
+    [[ "$ahead" != "0" && "$ahead" != "?" ]] && info+="${ahead}+ "
+    [[ "$behind" != "0" && "$behind" != "?" ]] && info+="${behind}- "
+    [[ -z "$info" ]] && info="clean"
+    (( ${#name} > maxname )) && maxname=${#name}
+    (( ${#branch} > maxbranch )) && maxbranch=${#branch}
+    rows+=("${ts}|${name}|${branch}|${info}")
+  done
+  printf '%s\n' "${rows[@]}" | sort -t'|' -k1 -rn | while IFS='|' read -r _ n b i; do
+    printf "  %-${maxname}s  %-${maxbranch}s  %s\n" "$n" "$b" "$i"
+  done
+}
+
 # ==============================================
 # TOOLS
 # ==============================================
