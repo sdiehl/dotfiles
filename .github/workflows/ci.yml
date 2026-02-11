@@ -57,7 +57,11 @@ jobs:
         run: ruby -c Brewfile
 
       - name: Validate YAML syntax
-        run: yq '.' .github/workflows/ci.yml > /dev/null
+        run: |
+          find . -name '*.yml' -o -name '*.yaml' | while read -r f; do
+            echo "Checking $f"
+            yq '.' "$f" > /dev/null || exit 1
+          done
 
       - name: Check for trailing whitespace
         run: |
