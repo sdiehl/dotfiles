@@ -73,7 +73,7 @@ jobs:
         run: brew bundle list --file=Brewfile
 
       - name: Install minimal deps
-        run: brew install neovim zoxide nvm rustup fd starship atuin
+        run: brew install neovim zoxide nvm rustup fd starship atuin uv
 
       - name: Setup configs
         run: make configs
