@@ -13,7 +13,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Cache Cargo
         uses: actions/cache@v4
@@ -71,7 +71,7 @@ jobs:
     runs-on: macos-15
     needs: lint
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Validate Brewfile syntax
         run: brew bundle list --file=Brewfile
