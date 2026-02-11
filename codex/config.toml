@@ -1,0 +1,23 @@
+model = "gpt-5.2-codex"
+model_reasoning_effort = "medium"
+approval_policy = "never"
+model_personality = "pragmatic"
+
+[projects."/Users/sdiehl/work/monoclonal"]
+trust_level = "trusted"
+
+[mcp_servers.obsidian]
+url = "http://localhost:3001/mcp"
+bearer_token_env_var = "OBSIDIAN_MCP_KEY"
+
+[mcp_servers.github]
+command = "docker"
+args = [
+  "run",
+  "-i",
+  "--rm",
+  "-e",
+  "GITHUB_PERSONAL_ACCESS_TOKEN",
+  "ghcr.io/github/github-mcp-server",
+]
+env = { GITHUB_PERSONAL_ACCESS_TOKEN = "$GITHUB_TOKEN" }

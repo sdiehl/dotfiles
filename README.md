@@ -52,3 +52,5 @@ BRAT, add `aaronsb/obsidian-mcp-plugin`, enable Semantic MCP, copy API key.
 export OBSIDIAN_MCP_KEY="your-key"  # Add to .zshrc
 make claude                         # Connect Claude Code to vault
 ```
+
+With ❤️ from Stephen
