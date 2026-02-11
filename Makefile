@@ -44,8 +44,8 @@ nvim-update:
 	@nvim --headless +PlugUpdate +qa 2>/dev/null || true
 
 ghostty:
-	@mkdir -p $(CONFIG)/ghostty
-	@ln -sf $(DOTFILES)/ghostty/config $(CONFIG)/ghostty/config
+	@mkdir -p "$(HOME)/Library/Application Support/com.mitchellh.ghostty"
+	@ln -sf $(DOTFILES)/ghostty/config "$(HOME)/Library/Application Support/com.mitchellh.ghostty/config"
 
 zed:
 	@mkdir -p $(CONFIG)/zed
@@ -83,6 +83,7 @@ macos:
 	@defaults write com.apple.finder ShowStatusBar -bool true
 	@defaults write com.apple.dock autohide -bool true
 	@defaults write com.apple.dock tilesize -int 48
+	@defaults write com.apple.dock mru-spaces -bool false
 	@defaults write com.apple.screencapture location -string "$(HOME)/Downloads"
 	@defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 	@defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
@@ -182,5 +183,6 @@ claude-config:
 
 clean:
 	@rm -f $(HOME)/.zshrc $(HOME)/.gitconfig $(HOME)/.ripgreprc $(HOME)/.aerospace.toml
-	@rm -rf $(CONFIG)/nvim $(CONFIG)/ghostty $(CONFIG)/atuin
+	@rm -rf $(CONFIG)/nvim $(CONFIG)/atuin
+	@rm -f "$(HOME)/Library/Application Support/com.mitchellh.ghostty/config"
 	@rm -f $(CONFIG)/zed/settings.json $(CONFIG)/starship.toml

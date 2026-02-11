@@ -23,7 +23,7 @@ accordion-padding = 0
 
 # Default layout
 default-root-container-layout = 'tiles'
-default-root-container-orientation = 'auto'
+default-root-container-orientation = 'horizontal'
 
 # Mouse follows focused monitor (like xmonad warpToWindow)
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
@@ -62,20 +62,22 @@ if.app-id = 'com.apple.calculator'
 run = 'layout floating'
 
 [[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
 if.app-id = 'md.obsidian'
-run = 'move-node-to-workspace 5'
+run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace 3'
 
 # Main binding mode
 [mode.main.binding]
 
 # Terminal launcher: Cmd+Shift+Enter
-# Sends Cmd+N to the running Ghostty instance (new window, single process)
-cmd-shift-enter = '''exec-and-forget osascript -e '
-        tell application "Ghostty"
-            activate
-            tell application "System Events" to keystroke "n" using command down
-        end tell'
-    '''
+cmd-shift-enter = 'exec-and-forget open -a Ghostty'
 
 # Workspace switching: Cmd+1..9
 cmd-1 = 'workspace 1'

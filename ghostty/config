@@ -14,8 +14,7 @@ theme = Jellybeans
 # Window
 window-padding-x = 4
 window-padding-y = 4
-window-decoration = false
-macos-titlebar-style = hidden
+macos-titlebar-style = tabs
 macos-option-as-alt = true
 
 # Cursor
@@ -30,7 +29,7 @@ shell-integration-features = cursor,sudo,title
 scrollback-limit = 50000
 
 # Clipboard
-copy-on-select = clipboard
+copy-on-select = false
 clipboard-read = allow
 clipboard-write = allow
 clipboard-paste-protection = false
