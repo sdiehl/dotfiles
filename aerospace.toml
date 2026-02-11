@@ -1,0 +1,154 @@
+# AeroSpace - xmonad-style tiling window manager
+#
+# Modifier mapping:
+#   Cmd (super) = workspace operations
+#   Opt (option) = window operations
+#
+# AeroSpace config uses "alt" to mean the Option key.
+# AeroSpace config uses "cmd" to mean the Command key.
+#
+# Avoids conflicting with: Cmd+H (Hide), Cmd+Space (Spotlight),
+# Cmd+Tab (App Switcher), Cmd+Q (Quit)
+
+config-version = 2
+
+start-at-login = true
+
+# Normalizations (keep defaults, sane for xmonad-style usage)
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# No accordion padding (full tiling, xmonad-style)
+accordion-padding = 0
+
+# Default layout
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+# Mouse follows focused monitor (like xmonad warpToWindow)
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# Unhide apps hidden via Cmd+H (prevents confusing invisible windows)
+automatically-unhide-macos-hidden-apps = true
+
+# Keep workspaces 1-9 alive
+persistent-workspaces = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+# No gaps (xmonad default)
+[gaps]
+inner.horizontal = 0
+inner.vertical = 0
+outer.left = 0
+outer.bottom = 0
+outer.top = 0
+outer.right = 0
+
+# Homebrew PATH for exec-and-forget
+[exec.env-vars]
+PATH = '/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
+
+# Float rules for dialog-like apps
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+check-further-callbacks = true
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.calculator'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = 'move-node-to-workspace 5'
+
+# Main binding mode
+[mode.main.binding]
+
+# Terminal launcher: Cmd+Shift+Enter
+# Sends Cmd+N to the running Ghostty instance (new window, single process)
+cmd-shift-enter = '''exec-and-forget osascript -e '
+        tell application "Ghostty"
+            activate
+            tell application "System Events" to keystroke "n" using command down
+        end tell'
+    '''
+
+# Workspace switching: Cmd+1..9
+cmd-1 = 'workspace 1'
+cmd-2 = 'workspace 2'
+cmd-3 = 'workspace 3'
+cmd-4 = 'workspace 4'
+cmd-5 = 'workspace 5'
+cmd-6 = 'workspace 6'
+cmd-7 = 'workspace 7'
+cmd-8 = 'workspace 8'
+cmd-9 = 'workspace 9'
+
+# Move window to workspace: Cmd+Shift+1..9
+cmd-shift-1 = 'move-node-to-workspace 1'
+cmd-shift-2 = 'move-node-to-workspace 2'
+cmd-shift-3 = 'move-node-to-workspace 3'
+cmd-shift-4 = 'move-node-to-workspace 4'
+cmd-shift-5 = 'move-node-to-workspace 5'
+cmd-shift-6 = 'move-node-to-workspace 6'
+cmd-shift-7 = 'move-node-to-workspace 7'
+cmd-shift-8 = 'move-node-to-workspace 8'
+cmd-shift-9 = 'move-node-to-workspace 9'
+
+# Focus window: Opt+h/j/k/l (vim directions)
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+# Move window: Opt+Shift+h/j/k/l
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+
+# Layout controls
+alt-f = 'fullscreen'
+alt-space = 'layout tiles horizontal vertical'
+alt-shift-space = 'layout accordion horizontal vertical'
+
+# Resize: Opt+minus / Opt+equal
+alt-minus = 'resize smart -50'
+alt-equal = 'resize smart +50'
+
+# Close window: Opt+Shift+C
+alt-shift-c = 'close'
+
+# Monitor focus: Opt+W/E/R
+alt-w = 'focus-monitor 1'
+alt-e = 'focus-monitor 2'
+alt-r = 'focus-monitor 3'
+
+# Move window to monitor: Opt+Shift+W/E/R
+alt-shift-w = 'move-node-to-monitor 1'
+alt-shift-e = 'move-node-to-monitor 2'
+alt-shift-r = 'move-node-to-monitor 3'
+
+# Workspace back-and-forth: Opt+Tab
+alt-tab = 'workspace-back-and-forth'
+
+# Move workspace to next monitor: Opt+Shift+Tab
+alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
+# Service mode: Opt+Shift+;
+alt-shift-semicolon = 'mode service'
+
+# Service binding mode (reload config, reset layout, toggle float)
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main']
+f = ['layout floating tiling', 'mode main']
+backspace = ['close-all-windows-but-current', 'mode main']
+alt-shift-h = ['join-with left', 'mode main']
+alt-shift-j = ['join-with down', 'mode main']
+alt-shift-k = ['join-with up', 'mode main']
+alt-shift-l = ['join-with right', 'mode main']

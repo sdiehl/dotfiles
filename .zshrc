@@ -119,7 +119,46 @@ wtp() {
   echo "cd $dir"
 }
 
-wtl() { git -C "$WORKTREE_BARE" worktree list 2>/dev/null || git worktree list; }
+wtl() {
+  local bare="$WORKTREE_BARE"
+  local origin_main=$(git -C "$bare" rev-parse refs/remotes/origin/main 2>/dev/null)
+  local rows=()
+  local maxname=0 maxbranch=0
+
+  while IFS= read -r line; do
+    if [[ "$line" =~ ^worktree\ (.+) ]]; then
+      local wt_path="${match[1]}"
+      local head="" branch="" name=""
+      name=$(basename "$wt_path")
+    elif [[ "$line" == "bare" ]]; then
+      continue
+    elif [[ "$line" =~ ^HEAD\ (.+) ]]; then
+      head="${match[1]}"
+    elif [[ "$line" =~ ^branch\ refs/heads/(.+) ]]; then
+      branch="${match[1]}"
+    elif [[ -z "$line" && -n "$head" ]]; then
+      local age=$(git -C "$bare" log -1 --format='%cr' "$head" 2>/dev/null)
+      local behind=""
+      if [[ -n "$origin_main" ]]; then
+        local n=$(git -C "$bare" rev-list --count "$head".."$origin_main" 2>/dev/null)
+        if [[ "$n" -gt 0 ]] 2>/dev/null; then
+          behind="${n} behind main"
+        else
+          behind="up to date"
+        fi
+      fi
+      (( ${#name} > maxname )) && maxname=${#name}
+      (( ${#branch} > maxbranch )) && maxbranch=${#branch}
+      rows+=("${name}|${branch}|${age}|${behind}")
+      head="" branch=""
+    fi
+  done < <(git -C "$bare" worktree list --porcelain 2>/dev/null; echo "")
+
+  for row in "${rows[@]}"; do
+    IFS='|' read -r n b a bh <<< "$row"
+    printf "  %-${maxname}s  %-${maxbranch}s  %-14s %s\n" "$n" "$b" "$a" "$bh"
+  done
+}
 
 wtr() {
   local path=$1
@@ -155,6 +194,8 @@ wts() {
     printf "  %-${maxname}s  %-${maxbranch}s  %s\n" "$n" "$b" "$i"
   done
 }
+
+alias ticky='~/Git/pygui/pygui.py'
 
 # ==============================================
 # TOOLS

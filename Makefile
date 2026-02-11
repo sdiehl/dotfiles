@@ -4,7 +4,7 @@ DOTFILES := $(shell pwd)
 CONFIG := $(HOME)/.config
 ZSH_CUSTOM := $(HOME)/.oh-my-zsh/custom/plugins
 
-.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep macos devenv python-tools obsidian claude codex opencode scripts claude-config clean
+.PHONY: all brew configs zsh git nvim ghostty zed starship atuin ripgrep aerospace macos devenv python-tools obsidian claude codex opencode scripts claude-config clean
 
 all: brew configs nvim-plugins macos devenv obsidian claude codex scripts claude-config
 
@@ -15,7 +15,7 @@ brew:
 brew-dump:
 	@brew bundle dump --force --file=$(DOTFILES)/Brewfile
 
-configs: zsh git nvim-config ghostty zed starship atuin ripgrep claude-config
+configs: zsh git nvim-config ghostty zed starship atuin ripgrep aerospace claude-config
 
 zsh:
 	@[ -d "$(HOME)/.oh-my-zsh" ] || sh -c "$$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -61,6 +61,9 @@ atuin:
 
 ripgrep:
 	@ln -sf $(DOTFILES)/ripgreprc $(HOME)/.ripgreprc
+
+aerospace:
+	@ln -sf $(DOTFILES)/aerospace.toml $(HOME)/.aerospace.toml
 
 claude-memory:
 	@echo "DEPRECATED: Claude config now lives in DevBrain. Use 'make claude-config' instead."
@@ -178,6 +181,6 @@ claude-config:
 	fi
 
 clean:
-	@rm -f $(HOME)/.zshrc $(HOME)/.gitconfig $(HOME)/.ripgreprc
+	@rm -f $(HOME)/.zshrc $(HOME)/.gitconfig $(HOME)/.ripgreprc $(HOME)/.aerospace.toml
 	@rm -rf $(CONFIG)/nvim $(CONFIG)/ghostty $(CONFIG)/atuin
 	@rm -f $(CONFIG)/zed/settings.json $(CONFIG)/starship.toml

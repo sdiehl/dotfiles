@@ -1,2 +1,48 @@
-# Disable secure keyboard entry to allow skhd hotkey daemon
+# Ghostty terminal configuration
+
+# Font
+font-family = "Fira Code"
+font-size = 14
+font-feature = ss01
+font-feature = ss02
+font-feature = ss03
+font-feature = cv01
+
+# Theme
+theme = Jellybeans
+
+# Window
+window-padding-x = 4
+window-padding-y = 4
+window-decoration = false
+macos-titlebar-style = hidden
+macos-option-as-alt = true
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+
+# Shell integration
+shell-integration = zsh
+shell-integration-features = cursor,sudo,title
+
+# Scrollback
+scrollback-limit = 50000
+
+# Clipboard
+copy-on-select = clipboard
+clipboard-read = allow
+clipboard-write = allow
+clipboard-paste-protection = false
+
+# Performance
+# Ghostty uses Metal on macOS by default, no extra config needed
+
+# No secure input indicator (allows window manager hotkey daemons)
 macos-secure-input-indication = false
+
+# Quick terminal (quake-style dropdown)
+keybind = global:cmd+grave_accent=toggle_quick_terminal
+quick-terminal-position = top
+quick-terminal-screen = main
+quick-terminal-animation-duration = 0.1
