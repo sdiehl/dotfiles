@@ -29,19 +29,21 @@ git:
 nvim: nvim-config nvim-plugins
 
 nvim-config:
-	@mkdir -p $(CONFIG)/nvim/{autoload,colors,syntax,ftdetect}
+	@mkdir -p $(CONFIG)/nvim/{colors,syntax,ftdetect}
 	@ln -sf $(DOTFILES)/nvim/init.vim $(CONFIG)/nvim/init.vim
-	@ln -sf $(DOTFILES)/nvim/autoload/plug.vim $(CONFIG)/nvim/autoload/plug.vim
+	@ln -sf $(DOTFILES)/nvim/lazy-lock.json $(CONFIG)/nvim/lazy-lock.json
 	@[ -f "$(DOTFILES)/nvim/colors/jellybeans.vim" ] && ln -sf $(DOTFILES)/nvim/colors/jellybeans.vim $(CONFIG)/nvim/colors/ || true
 	@[ -f "$(DOTFILES)/nvim/syntax/lean.vim" ] && ln -sf $(DOTFILES)/nvim/syntax/lean.vim $(CONFIG)/nvim/syntax/ || true
 	@[ -f "$(DOTFILES)/nvim/syntax/koka.vim" ] && ln -sf $(DOTFILES)/nvim/syntax/koka.vim $(CONFIG)/nvim/syntax/ || true
 	@[ -f "$(DOTFILES)/nvim/ftdetect/koka.vim" ] && ln -sf $(DOTFILES)/nvim/ftdetect/koka.vim $(CONFIG)/nvim/ftdetect/ || true
+	@rm -f $(CONFIG)/nvim/autoload/plug.vim 2>/dev/null || true
+	@rmdir $(CONFIG)/nvim/autoload 2>/dev/null || true
 
 nvim-plugins:
-	@nvim --headless +PlugInstall +qa 2>/dev/null || true
+	@nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
 
 nvim-update:
-	@nvim --headless +PlugUpdate +qa 2>/dev/null || true
+	@nvim --headless "+Lazy! update" +qa 2>/dev/null || true
 
 ghostty:
 	@mkdir -p "$(HOME)/Library/Application Support/com.mitchellh.ghostty"
@@ -139,14 +141,10 @@ claude:
 	fi
 
 opencode:
-	@echo "Setting up OpenCode MCP servers..."
+	@echo "Setting up OpenCode..."
 	@mkdir -p $(CONFIG)/opencode
-	@if [ -n "$$OBSIDIAN_MCP_KEY" ]; then \
-		echo '{"$$schema":"https://opencode.ai/config.json","mcp":{"obsidian":{"type":"remote","url":"http://localhost:3001/mcp","headers":{"Authorization":"Bearer '$$OBSIDIAN_MCP_KEY'"}}}}' > $(CONFIG)/opencode/opencode.json; \
-		echo "OpenCode: Obsidian MCP configured"; \
-	else \
-		echo "Set OBSIDIAN_MCP_KEY env var to configure OpenCode MCP"; \
-	fi
+	@ln -sf $(DOTFILES)/opencode/opencode.json $(CONFIG)/opencode/opencode.json
+	@echo "OpenCode: config linked"
 
 codex:
 	@echo "Setting up Codex..."

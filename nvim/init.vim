@@ -1,40 +1,57 @@
 " Stephen Diehl init.vim
 
 " ==============================================
-" PLUGINS
+" LAZY.NVIM BOOTSTRAP
 " ==============================================
 
-call plug#begin()
+lua << EOF
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git", "clone", "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
-" Core
-Plug 'github/copilot.vim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-tree/nvim-web-devicons'
-Plug 'MunifTanjim/nui.nvim'
-Plug 'nvim-neo-tree/neo-tree.nvim'
-Plug 'vim-airline/vim-airline'
-Plug 'tpope/vim-fugitive'
-Plug 'godlygeek/tabular'
+require("lazy").setup({
+  -- Core
+  { "github/copilot.vim" },
+  { "nvim-lua/plenary.nvim", lazy = true },
+  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
+  { "nvim-tree/nvim-web-devicons", lazy = true },
+  { "MunifTanjim/nui.nvim", lazy = true },
+  { "nvim-neo-tree/neo-tree.nvim", dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons", "MunifTanjim/nui.nvim" } },
+  { "vim-airline/vim-airline" },
+  { "tpope/vim-fugitive" },
+  { "godlygeek/tabular", cmd = "Tabularize" },
 
-" Editor enhancements
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'lewis6991/gitsigns.nvim'
-Plug 'numToStr/Comment.nvim'
-Plug 'windwp/nvim-autopairs'
-Plug 'lukas-reineke/indent-blankline.nvim'
-Plug 'folke/which-key.nvim'
+  -- Editor enhancements
+  { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+  { "lewis6991/gitsigns.nvim" },
+  { "numToStr/Comment.nvim" },
+  { "windwp/nvim-autopairs" },
+  { "lukas-reineke/indent-blankline.nvim" },
+  { "folke/which-key.nvim" },
 
-" Language syntax
-Plug 'neovimhaskell/haskell-vim'
-Plug 'rust-lang/rust.vim'
-Plug 'whonore/Coqtail'
-Plug 'derekelkins/agda-vim'
-Plug 'edwinb/idris2-vim'
-Plug 'souffle-lang/souffle.vim'
-Plug 'lifepillar/pgsql.vim'
+  -- Format on save
+  { "stevearc/conform.nvim" },
 
-call plug#end()
+  -- Language syntax (lazy-loaded by filetype)
+  { "neovimhaskell/haskell-vim", ft = "haskell" },
+  { "rust-lang/rust.vim", ft = "rust" },
+  { "whonore/Coqtail", ft = "coq" },
+  { "derekelkins/agda-vim", ft = "agda" },
+  { "edwinb/idris2-vim", ft = { "idris", "idris2" } },
+  { "souffle-lang/souffle.vim", ft = "souffle" },
+  { "lifepillar/pgsql.vim", ft = { "sql", "pgsql" } },
+}, {
+  ui = { border = "rounded" },
+  checker = { enabled = false },
+  change_detection = { notify = false },
+})
+EOF
 
 " ==============================================
 " SETTINGS
@@ -141,7 +158,7 @@ vmap a- :Tabularize /-><CR>
 " PostgreSQL
 let g:sql_type_default = 'pgsql'
 
-" Lua plugin setup (guarded for first-time install)
+" Lua plugin setup
 lua << EOF
 local function safe_require(module)
   local ok, m = pcall(require, module)
@@ -169,6 +186,31 @@ if treesitter then
     ensure_installed = { "python", "rust", "lua", "vim", "json", "yaml", "toml", "markdown", "haskell", "sql" },
     highlight = { enable = true },
   }
+end
+
+-- Format on save (conform.nvim)
+local conform = safe_require('conform')
+if conform then
+  conform.setup({
+    formatters_by_ft = {
+      rust = { "rustfmt" },
+      markdown = { "dprint" },
+      python = { "black" },
+    },
+    format_on_save = {
+      timeout_ms = 500,
+      lsp_format = "fallback",
+    },
+    formatters = {
+      rustfmt = {
+        prepend_args = { "--edition", "2021" },
+      },
+      dprint = {
+        command = "dprint",
+        args = { "fmt", "--stdin", "$FILENAME" },
+      },
+    },
+  })
 end
 EOF
 

@@ -9,16 +9,16 @@ echo "Syncing dotfiles from local machine..."
 
 # Helper: copy file only if not already symlinked to destination
 sync_file() {
-    local src="$1"
-    local dst="$2"
-    if [ -L "$src" ]; then
-        local target
-        target=$(readlink "$src")
-        if [ "$target" = "$dst" ] || [ "$target" = "$(cd "$(dirname "$dst")" && pwd)/$(basename "$dst")" ]; then
-            return 0 # Already symlinked, skip
-        fi
-    fi
-    cp "$src" "$dst"
+	local src="$1"
+	local dst="$2"
+	if [ -L "$src" ]; then
+		local target
+		target=$(readlink "$src")
+		if [ "$target" = "$dst" ] || [ "$target" = "$(cd "$(dirname "$dst")" && pwd)/$(basename "$dst")" ]; then
+			return 0 # Already symlinked, skip
+		fi
+	fi
+	cp "$src" "$dst"
 }
 
 # Zsh
@@ -29,7 +29,7 @@ sync_file ~/.gitconfig "$DOTFILES_DIR/gitconfig"
 
 # Neovim
 sync_file ~/.config/nvim/init.vim "$DOTFILES_DIR/nvim/init.vim"
-sync_file ~/.config/nvim/autoload/plug.vim "$DOTFILES_DIR/nvim/autoload/plug.vim"
+sync_file ~/.config/nvim/lazy-lock.json "$DOTFILES_DIR/nvim/lazy-lock.json"
 sync_file ~/.config/nvim/colors/jellybeans.vim "$DOTFILES_DIR/nvim/colors/jellybeans.vim"
 cp ~/.config/nvim/syntax/lean.vim "$DOTFILES_DIR/nvim/syntax/lean.vim" 2>/dev/null || true
 cp ~/.config/nvim/syntax/koka.vim "$DOTFILES_DIR/nvim/syntax/koka.vim" 2>/dev/null || true
@@ -56,22 +56,25 @@ brew bundle dump --force --file="$DOTFILES_DIR/Brewfile"
 # Obsidian (configs only, not plugin data with secrets)
 VAULT="$HOME/Documents/DevBrain"
 if [ -d "$VAULT/.obsidian" ]; then
-    mkdir -p "$DOTFILES_DIR/obsidian"
-    for json in community-plugins.json core-plugins.json app.json appearance.json daily-notes.json; do
-        if [ -f "$VAULT/.obsidian/$json" ]; then
-            jq '.' "$VAULT/.obsidian/$json" >"$DOTFILES_DIR/obsidian/$json"
-        fi
-    done
+	mkdir -p "$DOTFILES_DIR/obsidian"
+	for json in community-plugins.json core-plugins.json app.json appearance.json daily-notes.json; do
+		if [ -f "$VAULT/.obsidian/$json" ]; then
+			jq '.' "$VAULT/.obsidian/$json" >"$DOTFILES_DIR/obsidian/$json"
+		fi
+	done
 fi
+
+# OpenCode
+sync_file ~/.config/opencode/opencode.json "$DOTFILES_DIR/opencode/opencode.json"
 
 # Claude Code config lives in DevBrain now (~/Documents/DevBrain/claude/)
 # ~/.claude/ files are symlinks into DevBrain -- nothing to sync here.
 
 # Codex
 if [ -d "$HOME/.codex" ]; then
-    mkdir -p "$DOTFILES_DIR/codex"
-    cp "$HOME/.codex/AGENTS.md" "$DOTFILES_DIR/codex/AGENTS.md" 2>/dev/null || true
-    cp "$HOME/.codex/config.toml" "$DOTFILES_DIR/codex/config.toml" 2>/dev/null || true
+	mkdir -p "$DOTFILES_DIR/codex"
+	cp "$HOME/.codex/AGENTS.md" "$DOTFILES_DIR/codex/AGENTS.md" 2>/dev/null || true
+	cp "$HOME/.codex/config.toml" "$DOTFILES_DIR/codex/config.toml" 2>/dev/null || true
 fi
 
 # Scripts
@@ -81,7 +84,7 @@ cp "$HOME/bin/eod" "$DOTFILES_DIR/bin/eod" 2>/dev/null || true
 
 # Auto-format synced files for CI
 if command -v taplo &>/dev/null; then
-    taplo fmt "$DOTFILES_DIR" 2>/dev/null || true
+	taplo fmt "$DOTFILES_DIR" 2>/dev/null || true
 fi
 
 echo "Done. Review changes with: git diff"

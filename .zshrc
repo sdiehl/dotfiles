@@ -29,11 +29,19 @@ export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export WORKTREE_ROOT="$HOME/work"
 
 # MCP Server Keys (Obsidian knowledge graph)
-export OBSIDIAN_MCP_KEY="6b2b3198e07829e4f56a89b7789044ce3eb028e00fd59d2f09d0bc82efebe0ba"
+# MCP keys loaded from ~/.zshrc_local (not committed to git)
 
-# GitHub MCP (read-only access for agents)
-# Loaded on demand: run `ghtoken` to populate, or agents read it from keychain directly
-ghtoken() { export GITHUB_TOKEN="$(security find-generic-password -a $USER -s github-token -w 2>/dev/null)"; }
+# GitHub token: lazy-load from keychain on first gh invocation
+ghtoken() {
+  export GITHUB_TOKEN="$(security find-generic-password -a $USER -s github-token -w 2>/dev/null)"
+}
+gh() {
+  if [[ -z "$GITHUB_TOKEN" ]]; then
+    ghtoken
+  fi
+  unfunction gh 2>/dev/null
+  command gh "$@"
+}
 
 unsetopt beep
 
