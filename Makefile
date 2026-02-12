@@ -133,6 +133,11 @@ obsidian:
 
 claude:
 	@echo "Setting up Claude Code MCP servers..."
+	@claude mcp add lean-lsp --scope user -- uvx lean-lsp-mcp 2>/dev/null || true
+	@echo "Claude Code: Lean LSP MCP configured"
+	@claude plugin marketplace add cameronfreer/lean4-skills 2>/dev/null || true
+	@claude plugin install lean4@lean4-skills 2>/dev/null || true
+	@echo "Claude Code: lean4-skills plugin installed"
 	@if [ -n "$$OBSIDIAN_MCP_KEY" ]; then \
 		claude mcp add obsidian --scope user -- npx mcp-remote http://localhost:3001/mcp --header "Authorization: Bearer $$OBSIDIAN_MCP_KEY" 2>/dev/null || true; \
 		echo "Claude Code: Obsidian MCP configured"; \

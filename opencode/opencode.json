@@ -18,6 +18,10 @@
   },
   "instructions": ["~/Documents/DevBrain/workflow/agent-rules.md"],
   "mcp": {
+    "lean-lsp": {
+      "type": "local",
+      "command": ["uvx", "lean-lsp-mcp"]
+    },
     "obsidian": {
       "type": "remote",
       "url": "http://localhost:3001/mcp",
