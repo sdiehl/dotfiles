@@ -39,7 +39,7 @@ jobs:
         run: taplo fmt --check
 
       - name: Check shell formatting (shfmt)
-        run: shfmt -d -i 4 sync.sh
+        run: shfmt -d -i 4 sync.sh bin/*
 
       - name: Check JSON formatting (jq)
         run: |
@@ -51,10 +51,15 @@ jobs:
       - name: Lint shell scripts (shellcheck)
         run: |
           bash -n sync.sh
-          shellcheck sync.sh
+          shellcheck sync.sh bin/*
 
       - name: Validate Brewfile syntax
         run: ruby -c Brewfile
+
+      - name: Validate justfile syntax
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+          just --list
 
       - name: Validate YAML syntax
         run: |
@@ -77,19 +82,19 @@ jobs:
         run: brew bundle list --file=Brewfile
 
       - name: Install minimal deps
-        run: brew install neovim zoxide nvm rustup fd starship atuin uv
+        run: brew install neovim zoxide nvm rustup fd starship atuin uv just
 
       - name: Setup configs
-        run: make configs
+        run: just configs
 
       - name: Install neovim plugins
-        run: make nvim-plugins
+        run: just nvim-plugins
 
       - name: Verify neovim loads
         run: nvim --headless -c "quit"
 
       - name: Set macos defaults
-        run: make macos
+        run: just macos
 
       - name: Setup devenv
-        run: make devenv LEAN_FULL=false
+        run: LEAN_FULL=false just devenv

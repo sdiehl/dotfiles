@@ -134,11 +134,12 @@
 - `taplo fmt` - Auto-format TOML
 - `dprint fmt` - Auto-format Markdown
 - `brewfile-syntax` - Validate Brewfile
+- `justfile-check` - Validate justfile syntax
 
 ## Claude Code Config
 
 All config lives in `~/Documents/DevBrain/claude/` (git-tracked, Obsidian-ignored)
-and is symlinked into `~/.claude/` via `make claude-config`.
+and is symlinked into `~/.claude/` via `just claude-config`.
 
 **Skills:** morning, eod, standup, weekly, sync
 

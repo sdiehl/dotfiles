@@ -44,3 +44,10 @@ repos:
         entry: ruby -c
         language: system
         files: ^Brewfile$
+
+      - id: justfile-check
+        name: Validate justfile syntax
+        entry: just --list --justfile
+        language: system
+        files: ^justfile$
+        pass_filenames: true
