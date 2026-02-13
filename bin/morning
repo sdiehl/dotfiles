@@ -25,9 +25,9 @@ find_repos() {
 # Create today's note from template if it doesn't exist
 if [ ! -f "$NOTE" ]; then
     if [ -f "$TEMPLATE" ]; then
-        sed "s/{{date}}/$TODAY/g" "$TEMPLATE" > "$NOTE"
+        sed "s/{{date}}/$TODAY/g" "$TEMPLATE" >"$NOTE"
     else
-        echo "# $TODAY" > "$NOTE"
+        echo "# $TODAY" >"$NOTE"
     fi
 fi
 
@@ -62,7 +62,7 @@ while IFS= read -r wt_path; do
         git_activity+="**$repo/$branch**:"$'\n'
         while IFS= read -r commit; do
             git_activity+="- $commit"$'\n'
-        done <<< "$commits"
+        done <<<"$commits"
     fi
 done < <(find_repos)
 
@@ -120,7 +120,7 @@ inject_section() {
                 echo "$line"
                 echo ""
                 echo "$content"
-            } >> "$tmpfile"
+            } >>"$tmpfile"
             in_section=1
             injected=1
             continue
@@ -128,12 +128,12 @@ inject_section() {
         if [ "$in_section" -eq 1 ]; then
             if [[ "$line" == "## "* ]]; then
                 in_section=0
-                echo "$line" >> "$tmpfile"
+                echo "$line" >>"$tmpfile"
             fi
             continue
         fi
-        echo "$line" >> "$tmpfile"
-    done < "$file"
+        echo "$line" >>"$tmpfile"
+    done <"$file"
     if [ "$injected" -eq 1 ]; then
         mv "$tmpfile" "$file"
     else

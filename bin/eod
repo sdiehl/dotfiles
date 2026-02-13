@@ -36,7 +36,7 @@ while IFS= read -r wt_path; do
         log_entries+="**$repo/$branch:**"$'\n'
         while IFS= read -r commit; do
             log_entries+="- $commit"$'\n'
-        done <<< "$commits"
+        done <<<"$commits"
         log_entries+=$'\n'
     fi
 done < <(find_repos)
@@ -57,7 +57,7 @@ inject_section() {
                 echo "$line"
                 echo ""
                 echo "$content"
-            } >> "$tmpfile"
+            } >>"$tmpfile"
             in_section=1
             injected=1
             continue
@@ -65,12 +65,12 @@ inject_section() {
         if [ "$in_section" -eq 1 ]; then
             if [[ "$line" == "## "* ]]; then
                 in_section=0
-                echo "$line" >> "$tmpfile"
+                echo "$line" >>"$tmpfile"
             fi
             continue
         fi
-        echo "$line" >> "$tmpfile"
-    done < "$file"
+        echo "$line" >>"$tmpfile"
+    done <"$file"
     if [ "$injected" -eq 1 ]; then
         mv "$tmpfile" "$file"
     else
@@ -98,7 +98,7 @@ done < <(find_repos)
 # Extract today's Focus for scratch
 focus=$(awk '/^## Focus$/,/^## /' "$NOTE" | grep -v '^## ' | sed '/^$/d' || true)
 
-cat > "$SCRATCH" << EOF
+cat >"$SCRATCH" <<EOF
 # This Week
 
 Agent scratchpad for current work context.
