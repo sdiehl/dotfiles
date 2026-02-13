@@ -102,7 +102,7 @@ macos:
 
 devenv: python-tools
     @mkdir -p $HOME/.nvm
-    @. /opt/homebrew/opt/nvm/nvm.sh && nvm install --lts
+    @export NVM_DIR="$HOME/.nvm" && . /opt/homebrew/opt/nvm/nvm.sh && nvm install --lts
     @rustup default nightly
     @rustup component add rust-analyzer clippy rustfmt
     @[ -f "$HOME/.elan/bin/elan" ] || curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
