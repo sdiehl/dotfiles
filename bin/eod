@@ -2,22 +2,13 @@
 # End-of-day wrap: summarize git activity, update daily note and scratch.
 set -euo pipefail
 
-VAULT="$HOME/Documents/DevBrain"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=lib.sh
+source "$SCRIPT_DIR/lib.sh"
+
 TODAY=$(date +%Y-%m-%d)
 NOTE="$VAULT/daily/$TODAY.md"
 SCRATCH="$VAULT/scratch/this-week.md"
-WORKTREE_ROOT="${WORKTREE_ROOT:-$HOME/work}"
-GIT_SCAN_DIRS=("$WORKTREE_ROOT" "$HOME/Git")
-
-# List all git repos across scan dirs
-find_repos() {
-    for dir in "${GIT_SCAN_DIRS[@]}"; do
-        [ -d "$dir" ] || continue
-        find "$dir" -maxdepth 4 -name ".git" -type d 2>/dev/null | while read -r g; do
-            dirname "$g"
-        done
-    done
-}
 
 if [ ! -f "$NOTE" ]; then
     echo "No daily note for today. Run 'morning' first."
@@ -40,43 +31,6 @@ while IFS= read -r wt_path; do
         log_entries+=$'\n'
     fi
 done < <(find_repos)
-
-# --- Helper: inject content after a ## heading ---
-inject_section() {
-    local heading="$1"
-    local content="$2"
-    local file="$3"
-    [ -z "$content" ] && return
-    local tmpfile
-    tmpfile=$(mktemp)
-    local in_section=0
-    local injected=0
-    while IFS= read -r line; do
-        if [ "$line" = "## $heading" ]; then
-            {
-                echo "$line"
-                echo ""
-                echo "$content"
-            } >>"$tmpfile"
-            in_section=1
-            injected=1
-            continue
-        fi
-        if [ "$in_section" -eq 1 ]; then
-            if [[ "$line" == "## "* ]]; then
-                in_section=0
-                echo "$line" >>"$tmpfile"
-            fi
-            continue
-        fi
-        echo "$line" >>"$tmpfile"
-    done <"$file"
-    if [ "$injected" -eq 1 ]; then
-        mv "$tmpfile" "$file"
-    else
-        rm -f "$tmpfile"
-    fi
-}
 
 # --- Append to Log section ---
 if [ -n "$log_entries" ]; then

@@ -8,6 +8,16 @@
 	email = stephen.m.diehl@gmail.com
 [push]
 	autoSetupRemote = true
+[pull]
+	rebase = true
+[fetch]
+	prune = true
+[rebase]
+	autoStash = true
+[rerere]
+	enabled = true
+[diff]
+	algorithm = histogram
 [core]
 	pager = delta
 [interactive]

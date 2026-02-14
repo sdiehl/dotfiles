@@ -56,6 +56,23 @@ alias pcr='pre-commit run --all-files'
 alias pcp='pre-commit run --hook-stage pre-push --all-files'
 alias gpp='git push origin --no-verify'
 
+# Git shortcuts
+alias ga='git add'
+alias gc='git commit'
+alias gco='git checkout'
+alias gst='git status'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias gl='git log --oneline -20'
+alias glg='git log --oneline --graph --all -30'
+
+# Better defaults
+alias cat='bat --paging=never 2>/dev/null || command cat'
+alias tree='tree -C --gitignore'
+alias du='du -sh'
+alias df='df -h'
+
+# AI agents
 alias claudes='claude --dangerously-skip-permissions'
 alias codexs='codex --full-auto'
 alias geminis='gemini --yolo'
@@ -214,8 +231,24 @@ command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 command -v starship &>/dev/null && eval "$(starship init zsh)"
 command -v atuin &>/dev/null && eval "$(atuin init zsh)"
 
+# fzf: keybindings (Ctrl-T files, Ctrl-R history, Alt-C cd) and completion
+if command -v fzf &>/dev/null; then
+    source <(fzf --zsh 2>/dev/null) || true
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+fi
+
+# NVM: lazy-load to avoid ~300ms shell startup penalty
 export NVM_DIR="$HOME/.nvm"
-[[ -s "/opt/homebrew/opt/nvm/nvm.sh" ]] && source "/opt/homebrew/opt/nvm/nvm.sh"
+_nvm_lazy_load() {
+    unset -f nvm node npm npx 2>/dev/null
+    [[ -s "/opt/homebrew/opt/nvm/nvm.sh" ]] && source "/opt/homebrew/opt/nvm/nvm.sh"
+}
+nvm()  { _nvm_lazy_load; nvm "$@"; }
+node() { _nvm_lazy_load; node "$@"; }
+npm()  { _nvm_lazy_load; npm "$@"; }
+npx()  { _nvm_lazy_load; npx "$@"; }
 
 [[ -r "$HOME/.opam/opam-init/init.zsh" ]] && source "$HOME/.opam/opam-init/init.zsh" &>/dev/null
 

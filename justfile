@@ -9,7 +9,7 @@ lean_full := env("LEAN_FULL", "true")
 
 default: all
 
-all: brew configs nvim-plugins macos devenv obsidian claude codex scripts claude-config
+all: brew configs nvim-plugins macos devenv obsidian claude codex scripts hooks claude-config
 
 # --- Package management ---
 
@@ -171,10 +171,18 @@ codex:
 scripts:
     @echo "Installing scripts..."
     @mkdir -p $HOME/bin
+    @ln -sf {{dotfiles}}/bin/lib.sh $HOME/bin/lib.sh
     @ln -sf {{dotfiles}}/bin/morning $HOME/bin/morning
     @ln -sf {{dotfiles}}/bin/eod $HOME/bin/eod
     @chmod +x $HOME/bin/morning $HOME/bin/eod 2>/dev/null || true
-    @echo "Installed: morning, eod"
+    @echo "Installed: lib.sh, morning, eod"
+
+hooks:
+    @echo "Installing pre-commit hooks..."
+    @which pre-commit > /dev/null || { echo "pre-commit not found. Run 'just brew' first."; exit 1; }
+    @pre-commit install
+    @pre-commit install --hook-type pre-push
+    @echo "Pre-commit hooks installed"
 
 # --- Claude Code config from DevBrain ---
 

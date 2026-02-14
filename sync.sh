@@ -50,6 +50,9 @@ sync_file ~/.config/atuin/config.toml "$DOTFILES_DIR/atuin/config.toml"
 # Ripgrep
 sync_file ~/.ripgreprc "$DOTFILES_DIR/ripgreprc"
 
+# AeroSpace
+sync_file ~/.aerospace.toml "$DOTFILES_DIR/aerospace.toml"
+
 # Brewfile
 brew bundle dump --force --file="$DOTFILES_DIR/Brewfile"
 
@@ -81,6 +84,7 @@ fi
 mkdir -p "$DOTFILES_DIR/bin"
 cp "$HOME/bin/morning" "$DOTFILES_DIR/bin/morning" 2>/dev/null || true
 cp "$HOME/bin/eod" "$DOTFILES_DIR/bin/eod" 2>/dev/null || true
+cp "$HOME/bin/lib.sh" "$DOTFILES_DIR/bin/lib.sh" 2>/dev/null || true
 
 # Auto-format synced files for CI
 if command -v taplo &>/dev/null; then
