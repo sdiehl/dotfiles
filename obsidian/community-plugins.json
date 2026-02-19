@@ -1,5 +1,7 @@
 [
   "obsidian-local-rest-api",
   "obsidian42-brat",
-  "semantic-vault-mcp"
+  "semantic-vault-mcp",
+  "obsidian-tikzjax",
+  "obsidian-latex"
 ]
