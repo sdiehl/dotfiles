@@ -231,3 +231,7 @@ export NVM_DIR="$HOME/.nvm"
 
 [[ -r "$HOME/.zshrc_work" ]] && source "$HOME/.zshrc_work"
 [[ -r "$HOME/.zshrc_local" ]] && source "$HOME/.zshrc_local"
+
+# omnara
+export OMNARA_INSTALL="$HOME/.omnara"
+export PATH="$OMNARA_INSTALL/bin:$PATH"
