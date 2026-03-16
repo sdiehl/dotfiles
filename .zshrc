@@ -4,10 +4,11 @@
 
 export ZSH="$HOME/.oh-my-zsh"
 plugins=(git extract git-extras rust zsh-autosuggestions zsh-syntax-highlighting)
-source $ZSH/oh-my-zsh.sh
 
 zstyle ':omz:update' mode reminder
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+source $ZSH/oh-my-zsh.sh
 
 # ==============================================
 # PATH

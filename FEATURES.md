@@ -8,7 +8,6 @@
 - `extract` - Extract any archive with `x`
 - `git-extras` - Additional git commands
 - `rust` - Rust/cargo completions
-- `1password` - 1Password CLI completions
 - `zsh-autosuggestions` - Fish-like suggestions
 - `zsh-syntax-highlighting` - Command highlighting
 
@@ -62,7 +61,7 @@
 
 **LSP (Language Server Protocol):**
 
-- `nvim-lspconfig` with `rust-analyzer` (go-to-definition, hover, diagnostics, code actions)
+- Native `vim.lsp.config` (Neovim 0.11+) with `rust-analyzer` (go-to-definition, hover, diagnostics, code actions)
 - Clippy integration via `check.command = "clippy"`
 
 **Language Support:**
@@ -175,7 +174,7 @@ and is symlinked into `~/.claude/` via `just claude-config`.
 **Python:**
 
 - `uv` - Fast package manager
-- `python@3.14`
+- `python@3.13` (via uv)
 - `black` - Code formatter
 - `huggingface-hub` - HuggingFace CLI (model downloads, repo management)
 - `jpterm` - Jupyter notebooks in the terminal

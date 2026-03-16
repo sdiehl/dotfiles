@@ -1,9 +1,5 @@
 # Atuin config - local only, no sync
 
-[sync]
-# Disable sync entirely
-sync_address = ""
-
 # Search mode: prefix, fulltext, fuzzy, skim
 search_mode = "fuzzy"
 filter_mode = "global"
@@ -19,3 +15,7 @@ history_filter = ["^ls", "^cd", "^pwd", "^exit", "^clear"]
 
 # Keybindings - Ctrl+R
 ctrl_n_shortcuts = false
+
+[sync]
+# Disable sync entirely
+sync_address = ""

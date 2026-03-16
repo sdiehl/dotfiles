@@ -4,7 +4,7 @@
 .PHONY: all bootstrap configs macos devenv nvim-plugins
 
 all: bootstrap
-	@just all
+	@just full
 
 bootstrap:
 	@which just > /dev/null 2>&1 || { \

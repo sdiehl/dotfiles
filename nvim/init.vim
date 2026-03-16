@@ -88,7 +88,7 @@ set inccommand=split
 set pumheight=12
 set wildmenu
 set wildmode=longest,list,full
-set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox,.stack-work
+set wildignore+=*/tmp/*,*.swp,*.swo,*.zip,.git
 
 set termguicolors
 colorscheme jellybeans
@@ -97,17 +97,17 @@ colorscheme jellybeans
 " KEYBINDINGS
 " ==============================================
 
-map q <Nop>
-map ff /\c
+nnoremap q <Nop>
+nnoremap <leader>/ /\c
 nnoremap <silent> <CR> :noh<CR>
 
 nnoremap <C-j> <C-W>w
-map ` g;
-map gl <C-^>
+nnoremap ` g;
+nnoremap gl <C-^>
 
-map <C-t> :tabnew<CR>
-map tn :tabnext<CR>
-map tp :tabprevious<CR>
+nnoremap <C-t> :tabnew<CR>
+nnoremap tn :tabnext<CR>
+nnoremap tp :tabprevious<CR>
 
 noremap <silent> <F12> :wincmd =<CR>
 autocmd VimResized * wincmd =
@@ -143,15 +143,14 @@ let g:airline#extensions#default#section_truncate_width = {
     \ 'warning': 10000, 'error': 10000 }
 
 " Fugitive
-map <leader>gd :Gdiff<CR>
-map gb :Git blame<CR>
-vmap do :diffget<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap gb :Git blame<CR>
 
 " Tabular
-vmap a= :Tabularize /=<CR>
-vmap a; :Tabularize /::<CR>
-vmap a, :Tabularize /,<CR>
-vmap a- :Tabularize /-><CR>
+vnoremap a= :Tabularize /=<CR>
+vnoremap a; :Tabularize /::<CR>
+vnoremap a, :Tabularize /,<CR>
+vnoremap a- :Tabularize /-><CR>
 
 " PostgreSQL
 let g:sql_type_default = 'pgsql'
@@ -263,7 +262,6 @@ autocmd BufNewFile,BufRead *.fp set filetype=haskell
 autocmd BufNewFile,BufRead *.dl set filetype=souffle
 autocmd BufNewFile,BufRead *.lean set filetype=lean
 autocmd BufNewFile,BufRead *.typ set filetype=typst
-autocmd BufNewFile,BufRead *.kk set filetype=koka
 autocmd BufNewFile,BufRead *.v set filetype=coq
 
 autocmd BufNewFile,BufRead *.rst,*.txt,*.tex,*.latex,*.md,*.typ setlocal spell nonumber

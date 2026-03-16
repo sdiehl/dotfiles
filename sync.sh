@@ -9,16 +9,16 @@ echo "Syncing dotfiles from local machine..."
 
 # Helper: copy file only if not already symlinked to destination
 sync_file() {
-    local src="$1"
-    local dst="$2"
-    if [ -L "$src" ]; then
-        local target
-        target=$(readlink "$src")
-        if [ "$target" = "$dst" ] || [ "$target" = "$(cd "$(dirname "$dst")" && pwd)/$(basename "$dst")" ]; then
-            return 0 # Already symlinked, skip
-        fi
-    fi
-    cp "$src" "$dst"
+	local src="$1"
+	local dst="$2"
+	if [ -L "$src" ]; then
+		local target
+		target=$(readlink "$src")
+		if [ "$target" = "$dst" ] || [ "$target" = "$(cd "$(dirname "$dst")" && pwd)/$(basename "$dst")" ]; then
+			return 0 # Already symlinked, skip
+		fi
+	fi
+	cp "$src" "$dst"
 }
 
 # Zsh
@@ -36,7 +36,7 @@ cp ~/.config/nvim/syntax/koka.vim "$DOTFILES_DIR/nvim/syntax/koka.vim" 2>/dev/nu
 cp ~/.config/nvim/ftdetect/koka.vim "$DOTFILES_DIR/nvim/ftdetect/koka.vim" 2>/dev/null || true
 
 # Ghostty
-sync_file ~/.config/ghostty/config "$DOTFILES_DIR/ghostty/config"
+sync_file "$HOME/Library/Application Support/com.mitchellh.ghostty/config" "$DOTFILES_DIR/ghostty/config"
 
 # Zed
 sync_file ~/.config/zed/settings.json "$DOTFILES_DIR/zed/settings.json"
@@ -56,12 +56,12 @@ brew bundle dump --force --file="$DOTFILES_DIR/Brewfile"
 # Obsidian (configs only, not plugin data with secrets)
 VAULT="$HOME/Documents/DevBrain"
 if [ -d "$VAULT/.obsidian" ]; then
-    mkdir -p "$DOTFILES_DIR/obsidian"
-    for json in community-plugins.json core-plugins.json app.json appearance.json daily-notes.json; do
-        if [ -f "$VAULT/.obsidian/$json" ]; then
-            jq '.' "$VAULT/.obsidian/$json" >"$DOTFILES_DIR/obsidian/$json"
-        fi
-    done
+	mkdir -p "$DOTFILES_DIR/obsidian"
+	for json in community-plugins.json core-plugins.json app.json appearance.json daily-notes.json; do
+		if [ -f "$VAULT/.obsidian/$json" ]; then
+			jq '.' "$VAULT/.obsidian/$json" >"$DOTFILES_DIR/obsidian/$json"
+		fi
+	done
 fi
 
 # OpenCode
@@ -72,9 +72,9 @@ sync_file ~/.config/opencode/opencode.json "$DOTFILES_DIR/opencode/opencode.json
 
 # Codex
 if [ -d "$HOME/.codex" ]; then
-    mkdir -p "$DOTFILES_DIR/codex"
-    cp "$HOME/.codex/AGENTS.md" "$DOTFILES_DIR/codex/AGENTS.md" 2>/dev/null || true
-    cp "$HOME/.codex/config.toml" "$DOTFILES_DIR/codex/config.toml" 2>/dev/null || true
+	mkdir -p "$DOTFILES_DIR/codex"
+	cp "$HOME/.codex/AGENTS.md" "$DOTFILES_DIR/codex/AGENTS.md" 2>/dev/null || true
+	cp "$HOME/.codex/config.toml" "$DOTFILES_DIR/codex/config.toml" 2>/dev/null || true
 fi
 
 # Scripts
@@ -85,7 +85,7 @@ cp "$HOME/bin/eod" "$DOTFILES_DIR/bin/eod" 2>/dev/null || true
 
 # Auto-format synced files for CI
 if command -v taplo &>/dev/null; then
-    taplo fmt "$DOTFILES_DIR" 2>/dev/null || true
+	taplo fmt "$DOTFILES_DIR" 2>/dev/null || true
 fi
 
 echo "Done. Review changes with: git diff"

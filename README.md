@@ -14,7 +14,7 @@ fzf, fd, bat) and symlinks zsh, git, neovim, starship, and ripgrep configs.
 For everything (full Brewfile, all configs, devenv, macOS defaults, AI tooling):
 
 ```bash
-just all
+just full
 ```
 
 ## Recipes
