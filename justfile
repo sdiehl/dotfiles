@@ -13,11 +13,17 @@ zsh_custom := env("HOME") / ".oh-my-zsh/custom/plugins"
 vault := env("HOME") / "Documents/DevBrain"
 lean_full := env("LEAN_FULL", "true")
 
+# Toolchain versions (bump here)
+python_version := "3.13"
+node_version := "22"
+rust_channel := "nightly"
+lean_toolchain := "leanprover/lean4:stable"
+
 # Default: alias for basic (shell + editor essentials)
 default: basic
 
 # Basic: install + configure shell and editor essentials
-basic: brew-essentials zsh git nvim starship ripgrep
+basic: brew-essentials zsh git nvim starship ripgrep lean4
 
 # Full: packages, all configs, devenv, AI tooling, macOS, scripts
 full: brew configs nvim-plugins macos devenv obsidian ai scripts
@@ -115,25 +121,30 @@ macos:
 
 # --- Development environment ---
 
-devenv: python-tools
+devenv: lean4 python-tools
     @mkdir -p $HOME/.nvm
-    @export NVM_DIR="$HOME/.nvm" && . /opt/homebrew/opt/nvm/nvm.sh && nvm install --lts
-    @rustup default nightly
+    @export NVM_DIR="$HOME/.nvm" && . /opt/homebrew/opt/nvm/nvm.sh && nvm install {{node_version}}
+    @rustup default {{rust_channel}}
     @rustup component add rust-analyzer clippy rustfmt
-    @[ -f "$HOME/.elan/bin/elan" ] || curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
-    @$HOME/.elan/bin/elan default leanprover/lean4:stable
-    @[ "{{lean_full}}" = "true" ] && $HOME/.elan/bin/lake exe cache get || true
     @gh extension install dlvhdr/gh-dash 2>/dev/null || true
 
+# Lean4 toolchain: elan, lean, lake, leanc
+lean4:
+    @[ -f "$HOME/.elan/bin/elan" ] || curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y
+    @$HOME/.elan/bin/elan default {{lean_toolchain}}
+    @[ "{{lean_full}}" = "true" ] && $HOME/.elan/bin/lake exe cache get || true
+
+# Python via uv (latest stable)
 python-tools:
     @which uv > /dev/null || { echo "uv not found. Run 'just brew' first."; exit 1; }
-    @echo "Installing Python CLI tools via uv..."
-    @uv tool install black
-    @uv tool install huggingface-hub
-    @uv tool install jpterm
-    @uv tool install nbconvert
-    @uv tool install nbpreview
-    @uv tool install parquet-tools
+    @uv python install {{python_version}}
+    @echo "Installing Python {{python_version}} CLI tools via uv..."
+    @uv tool install --python {{python_version}} black || true
+    @uv tool install --python {{python_version}} huggingface-hub || true
+    @uv tool install --python {{python_version}} jpterm || true
+    @uv tool install --python {{python_version}} nbconvert || true
+    @uv tool install --python {{python_version}} nbpreview || true
+    @uv tool install --python {{python_version}} parquet-tools || true
     @echo "Python tools installed"
 
 # --- Obsidian ---

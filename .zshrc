@@ -13,7 +13,7 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # PATH
 # ==============================================
 
-export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH
 export PATH=/opt/homebrew/opt/grep/libexec/gnubin:$PATH
 export PATH=/opt/homebrew/opt/llvm/bin:$PATH
@@ -237,6 +237,5 @@ export NVM_DIR="$HOME/.nvm"
 [[ -r "$HOME/.zshrc_work" ]] && source "$HOME/.zshrc_work"
 [[ -r "$HOME/.zshrc_local" ]] && source "$HOME/.zshrc_local"
 
-# omnara
-export OMNARA_INSTALL="$HOME/.omnara"
-export PATH="$OMNARA_INSTALL/bin:$PATH"
+# uv-managed Python (must be last to ensure precedence over system Python)
+path=("$HOME/.local/bin" ${path:#$HOME/.local/bin})
