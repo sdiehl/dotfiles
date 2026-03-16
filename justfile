@@ -2,8 +2,9 @@
 # Bootstrap: make (installs just, then delegates here)
 #
 # Usage:
-#   just          -- shell + editor essentials only
-#   just all      -- everything
+#   just          -- shell + editor essentials only (alias for: just basic)
+#   just basic    -- shell + editor essentials only
+#   just full     -- everything
 #   just <recipe> -- run a specific recipe (see: just --list)
 
 dotfiles := justfile_directory()
@@ -12,11 +13,14 @@ zsh_custom := env("HOME") / ".oh-my-zsh/custom/plugins"
 vault := env("HOME") / "Documents/DevBrain"
 lean_full := env("LEAN_FULL", "true")
 
-# Default: install + configure shell and editor essentials
-default: brew-essentials zsh git nvim starship ripgrep
+# Default: alias for basic (shell + editor essentials)
+default: basic
 
-# Everything: packages, all configs, devenv, AI tooling, macOS, scripts
-all: brew configs nvim-plugins macos devenv obsidian ai scripts
+# Basic: install + configure shell and editor essentials
+basic: brew-essentials zsh git nvim starship ripgrep
+
+# Full: packages, all configs, devenv, AI tooling, macOS, scripts
+full: brew configs nvim-plugins macos devenv obsidian ai scripts
 
 # --- Package management ---
 
