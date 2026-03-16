@@ -1,5 +1,10 @@
 # macOS Development Setup
 # Bootstrap: make (installs just, then delegates here)
+#
+# Usage:
+#   just          -- shell + editor essentials only
+#   just all      -- everything
+#   just <recipe> -- run a specific recipe (see: just --list)
 
 dotfiles := justfile_directory()
 config := env("HOME") / ".config"
@@ -7,12 +12,20 @@ zsh_custom := env("HOME") / ".oh-my-zsh/custom/plugins"
 vault := env("HOME") / "Documents/DevBrain"
 lean_full := env("LEAN_FULL", "true")
 
-default: all
+# Default: install + configure shell and editor essentials
+default: brew-essentials zsh git nvim starship ripgrep
 
-all: brew configs nvim-plugins macos devenv obsidian claude codex scripts claude-config
+# Everything: packages, all configs, devenv, AI tooling, macOS, scripts
+all: brew configs nvim-plugins macos devenv obsidian ai scripts
 
 # --- Package management ---
 
+# Minimal packages for shell + editor
+brew-essentials:
+    @which brew > /dev/null || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    @brew install neovim starship ripgrep git-delta zoxide fzf fd bat coreutils grep 2>/dev/null || true
+
+# Full Brewfile (all packages, casks, fonts, apps)
 brew:
     @which brew > /dev/null || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     @brew bundle install --file={{dotfiles}}/Brewfile
@@ -22,7 +35,8 @@ brew-dump:
 
 # --- Config symlinking ---
 
-configs: zsh git nvim-config ghostty zed starship atuin ripgrep claude-config
+# All configs (for use with `just all` or standalone)
+configs: zsh git nvim-config ghostty zed starship atuin ripgrep
 
 zsh:
     @[ -d "$HOME/.oh-my-zsh" ] || sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -135,6 +149,8 @@ obsidian:
 
 # --- AI tooling ---
 
+ai: claude opencode codex claude-config
+
 claude:
     #!/usr/bin/env bash
     echo "Setting up Claude Code MCP servers..."
@@ -163,19 +179,6 @@ codex:
     @ln -sf {{dotfiles}}/codex/config.toml $HOME/.codex/config.toml
     @echo "Codex: AGENTS.md and config.toml linked"
 
-# --- Scripts ---
-
-scripts:
-    @echo "Installing scripts..."
-    @mkdir -p $HOME/bin
-    @ln -sf {{dotfiles}}/bin/lib-common.sh $HOME/bin/lib-common.sh
-    @ln -sf {{dotfiles}}/bin/morning $HOME/bin/morning
-    @ln -sf {{dotfiles}}/bin/eod $HOME/bin/eod
-    @chmod +x $HOME/bin/morning $HOME/bin/eod 2>/dev/null || true
-    @echo "Installed: lib-common.sh, morning, eod"
-
-# --- Claude Code config from DevBrain ---
-
 claude-config:
     #!/usr/bin/env bash
     if [ ! -d "{{vault}}/claude" ]; then
@@ -194,6 +197,17 @@ claude-config:
         ln -sfn {{vault}}/claude/commands $HOME/.claude/commands
         echo "Claude Code config linked from DevBrain ({{vault}}/claude/)"
     fi
+
+# --- Scripts ---
+
+scripts:
+    @echo "Installing scripts..."
+    @mkdir -p $HOME/bin
+    @ln -sf {{dotfiles}}/bin/lib-common.sh $HOME/bin/lib-common.sh
+    @ln -sf {{dotfiles}}/bin/morning $HOME/bin/morning
+    @ln -sf {{dotfiles}}/bin/eod $HOME/bin/eod
+    @chmod +x $HOME/bin/morning $HOME/bin/eod 2>/dev/null || true
+    @echo "Installed: lib-common.sh, morning, eod"
 
 # --- Cleanup ---
 

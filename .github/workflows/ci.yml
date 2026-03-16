@@ -51,7 +51,7 @@ jobs:
       - name: Lint shell scripts (shellcheck)
         run: |
           bash -n sync.sh
-          shellcheck sync.sh bin/*
+          shellcheck -x sync.sh bin/*
 
       - name: Validate Brewfile syntax
         run: ruby -c Brewfile
