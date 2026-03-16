@@ -2,7 +2,6 @@
   "$schema": "https://opencode.ai/config.json",
   "model": "anthropic/claude-opus-4-6",
   "small_model": "anthropic/claude-haiku-4-5",
-  "theme": "opencode",
   "autoupdate": true,
   "share": "manual",
   "compaction": { "auto": true, "prune": true },
