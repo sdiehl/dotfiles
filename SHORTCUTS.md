@@ -1,36 +1,6 @@
 # Keyboard Shortcuts
 
-CapsLock = Escape. AeroSpace `alt` = Option key. AeroSpace `cmd` = Command key.
-
-## AeroSpace
-
-| Shortcut              | Action                         |
-| --------------------- | ------------------------------ |
-| Cmd+1..9              | Switch workspace               |
-| Cmd+Shift+1..9        | Move window to workspace       |
-| Cmd+Shift+Enter       | New Ghostty window             |
-| Opt+H/J/K/L           | Focus left/down/up/right       |
-| Opt+Shift+H/J/K/L     | Move window left/down/up/right |
-| Opt+F                 | Fullscreen                     |
-| Opt+Space             | Cycle tile layout              |
-| Opt+Shift+Space       | Cycle accordion layout         |
-| Opt+Minus / Opt+Equal | Shrink / grow window           |
-| Opt+Shift+C           | Close window                   |
-| Opt+W / E / R         | Focus monitor 1/2/3            |
-| Opt+Shift+W / E / R   | Move window to monitor 1/2/3   |
-| Opt+Tab               | Last workspace                 |
-| Opt+Shift+Tab         | Move workspace to next monitor |
-| Opt+Shift+;           | Enter service mode             |
-
-### Service Mode
-
-| Key               | Action                |
-| ----------------- | --------------------- |
-| Esc               | Reload config, exit   |
-| R                 | Reset layout          |
-| F                 | Toggle float/tile     |
-| Backspace         | Close all but current |
-| Opt+Shift+H/J/K/L | Join with neighbor    |
+CapsLock = Escape.
 
 ## Ghostty
 
@@ -103,7 +73,7 @@ CapsLock = Escape. AeroSpace `alt` = Option key. AeroSpace `cmd` = Command key.
 
 | Shortcut    | Action  |
 | ----------- | ------- |
-| gd          | Diff    |
+| \gd         | Diff    |
 | gb          | Blame   |
 | do (visual) | Diffget |
 
@@ -115,6 +85,19 @@ CapsLock = Escape. AeroSpace `alt` = Option key. AeroSpace `cmd` = Command key.
 | a;       | `::`     |
 | a,       | `,`      |
 | a-       | `->`     |
+
+### LSP (Rust)
+
+| Shortcut | Action               |
+| -------- | -------------------- |
+| gd       | Go to definition     |
+| gD       | Go to declaration    |
+| K        | Hover docs           |
+| gi       | Implementation       |
+| gr       | References           |
+| \rn      | Rename               |
+| \ca      | Code action          |
+| [d / ]d  | Prev/next diagnostic |
 
 ### Comment.nvim
 
@@ -138,6 +121,7 @@ CapsLock = Escape. AeroSpace `alt` = Option key. AeroSpace `cmd` = Command key.
 | `vim`       | `nvim`                                             |
 | `ls`        | `ls --color`                                       |
 | `j`         | `z` (zoxide)                                       |
+| `ag`        | `rg` (ripgrep)                                     |
 | `pcr`       | `pre-commit run --all-files`                       |
 | `pcp`       | `pre-commit run --hook-stage pre-push --all-files` |
 | `gpp`       | `git push origin --no-verify`                      |

@@ -60,6 +60,11 @@
 - `indent-blankline.nvim` - Visual indent guides
 - `which-key.nvim` - Keybinding hints
 
+**LSP (Language Server Protocol):**
+
+- `nvim-lspconfig` with `rust-analyzer` (go-to-definition, hover, diagnostics, code actions)
+- Clippy integration via `check.command = "clippy"`
+
 **Language Support:**
 
 - `haskell-vim` - Haskell
@@ -89,7 +94,6 @@
 - `ripgrep` - Fast grep (with smart defaults via `~/.ripgreprc`)
 - `fd` - Fast find (respects .gitignore)
 - `fzf` - Fuzzy finder (files, history, branches)
-- `the_silver_searcher` - ag
 
 **Git:**
 
@@ -239,7 +243,6 @@ and is symlinked into `~/.claude/` via `just claude-config`.
 
 - Raycast
 - 1Password CLI
-- Amethyst (tiling)
 - Caffeine
 
 **Other:**

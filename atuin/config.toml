@@ -4,7 +4,6 @@
 # Disable sync entirely
 sync_address = ""
 
-[settings]
 # Search mode: prefix, fulltext, fuzzy, skim
 search_mode = "fuzzy"
 filter_mode = "global"

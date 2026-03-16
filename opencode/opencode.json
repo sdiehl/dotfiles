@@ -7,7 +7,7 @@
   "compaction": { "auto": true, "prune": true },
   "formatter": {
     "rustfmt": {
-      "command": ["rustfmt", "--edition", "2021", "$FILE"],
+      "command": ["rustfmt", "$FILE"],
       "extensions": [".rs"]
     },
     "dprint": {
@@ -25,7 +25,7 @@
       "type": "remote",
       "url": "http://localhost:3001/mcp",
       "headers": {
-        "Authorization": "Bearer {env:OBSIDIAN_MCP_BEARER}"
+        "Authorization": "Bearer {env:OBSIDIAN_MCP_KEY}"
       }
     }
   }

@@ -52,6 +52,7 @@ unsetopt beep
 alias vim='nvim'
 alias ls='ls --color'
 alias j='z'
+alias ag='rg'
 alias pcr='pre-commit run --all-files'
 alias pcp='pre-commit run --hook-stage pre-push --all-files'
 alias gpp='git push origin --no-verify'
@@ -213,6 +214,10 @@ alias ticky='~/Git/pygui/pygui.py'
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 command -v starship &>/dev/null && eval "$(starship init zsh)"
 command -v atuin &>/dev/null && eval "$(atuin init zsh)"
+
+# fzf shell integration (Ctrl+T file picker, Alt+C cd, ** completions)
+[[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+[[ -f /opt/homebrew/opt/fzf/shell/completion.zsh ]] && source /opt/homebrew/opt/fzf/shell/completion.zsh
 
 export NVM_DIR="$HOME/.nvm"
 [[ -s "/opt/homebrew/opt/nvm/nvm.sh" ]] && source "/opt/homebrew/opt/nvm/nvm.sh"

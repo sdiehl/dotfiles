@@ -22,7 +22,7 @@ brew-dump:
 
 # --- Config symlinking ---
 
-configs: zsh git nvim-config ghostty zed starship atuin ripgrep aerospace claude-config
+configs: zsh git nvim-config ghostty zed starship atuin ripgrep claude-config
 
 zsh:
     @[ -d "$HOME/.oh-my-zsh" ] || sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -70,9 +70,6 @@ atuin:
 
 ripgrep:
     @ln -sf {{dotfiles}}/ripgreprc $HOME/.ripgreprc
-
-aerospace:
-    @ln -sf {{dotfiles}}/aerospace.toml $HOME/.aerospace.toml
 
 # --- macOS defaults ---
 
@@ -171,10 +168,11 @@ codex:
 scripts:
     @echo "Installing scripts..."
     @mkdir -p $HOME/bin
+    @ln -sf {{dotfiles}}/bin/lib-common.sh $HOME/bin/lib-common.sh
     @ln -sf {{dotfiles}}/bin/morning $HOME/bin/morning
     @ln -sf {{dotfiles}}/bin/eod $HOME/bin/eod
     @chmod +x $HOME/bin/morning $HOME/bin/eod 2>/dev/null || true
-    @echo "Installed: morning, eod"
+    @echo "Installed: lib-common.sh, morning, eod"
 
 # --- Claude Code config from DevBrain ---
 
@@ -200,7 +198,7 @@ claude-config:
 # --- Cleanup ---
 
 clean:
-    @rm -f $HOME/.zshrc $HOME/.gitconfig $HOME/.ripgreprc $HOME/.aerospace.toml
+    @rm -f $HOME/.zshrc $HOME/.gitconfig $HOME/.ripgreprc
     @rm -rf {{config}}/nvim {{config}}/atuin
     @rm -f "$HOME/Library/Application Support/com.mitchellh.ghostty/config"
     @rm -f {{config}}/zed/settings.json {{config}}/starship.toml

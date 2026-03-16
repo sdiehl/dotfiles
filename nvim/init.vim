@@ -6,7 +6,7 @@
 
 lua << EOF
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
     "git", "clone", "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
@@ -60,7 +60,6 @@ EOF
 syntax on
 filetype plugin indent on
 
-set nocompatible
 set number
 set nowrap
 set noshowmode
@@ -92,7 +91,6 @@ set wildmode=longest,list,full
 set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox,.stack-work
 
 set termguicolors
-set t_Co=256
 colorscheme jellybeans
 
 " ==============================================
@@ -145,7 +143,7 @@ let g:airline#extensions#default#section_truncate_width = {
     \ 'warning': 10000, 'error': 10000 }
 
 " Fugitive
-map gd :Gdiff<CR>
+map <leader>gd :Gdiff<CR>
 map gb :Git blame<CR>
 vmap do :diffget<CR>
 
@@ -188,7 +186,38 @@ if treesitter then
   }
 end
 
+-- LSP: rust-analyzer (native vim.lsp.config, Neovim 0.11+)
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local buf = args.buf
+    local opts = { buffer = buf, silent = true }
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, opts)
+    vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, opts)
+  end,
+})
+
+vim.lsp.config('rust_analyzer', {
+  cmd = { 'rust-analyzer' },
+  filetypes = { 'rust' },
+  root_markers = { 'Cargo.toml', 'rust-project.json' },
+  settings = {
+    ["rust-analyzer"] = {
+      check = { command = "clippy" },
+      cargo = { allFeatures = true },
+    },
+  },
+})
+vim.lsp.enable('rust_analyzer')
+
 -- Format on save (conform.nvim)
+-- Rust: use nightly rustfmt (reads edition from Cargo.toml)
 local conform = safe_require('conform')
 if conform then
   conform.setup({
@@ -196,14 +225,21 @@ if conform then
       rust = { "rustfmt" },
       markdown = { "dprint" },
       python = { "black" },
+      toml = { "taplo" },
+      json = { "prettier" },
+      jsonc = { "prettier" },
+      yaml = { "prettier" },
+      sh = { "shfmt" },
+      bash = { "shfmt" },
     },
     format_on_save = {
-      timeout_ms = 500,
+      timeout_ms = 2000,
       lsp_format = "fallback",
     },
     formatters = {
       rustfmt = {
-        prepend_args = { "--edition", "2021" },
+        command = "rustup",
+        args = { "run", "nightly", "rustfmt", "--edition", "2024", "--emit", "stdout" },
       },
       dprint = {
         command = "dprint",
