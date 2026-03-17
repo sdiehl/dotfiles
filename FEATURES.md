@@ -58,6 +58,7 @@
 - `nvim-autopairs` - Auto close brackets
 - `indent-blankline.nvim` - Visual indent guides
 - `which-key.nvim` - Keybinding hints
+- `trouble.nvim` - Aggregated diagnostics panel (`\xx` workspace, `\xX` buffer, `\cs` symbols)
 
 **LSP (Language Server Protocol):**
 
@@ -164,6 +165,12 @@ and is symlinked into `~/.claude/` via `just claude-config`.
 - `rustup` - Toolchain manager
 - Nightly default
 - `rust-analyzer`, `clippy`, `rustfmt`
+- `cargo-nextest` - Parallel test runner (replaces `cargo test`)
+- `cargo-expand` - Macro expansion viewer (`cargo expand`)
+- `cargo-insta` - Snapshot testing (`cargo insta review`)
+- `cargo-machete` - Detect unused dependencies
+- `cargo-flamegraph` - Generate flamegraphs from cargo runs
+- `cargo-outdated` - Show outdated dependencies
 
 **Lean 4:**
 

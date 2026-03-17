@@ -99,6 +99,25 @@ CapsLock = Escape.
 | \ca      | Code action          |
 | [d / ]d  | Prev/next diagnostic |
 
+### Trouble (diagnostics panel)
+
+| Shortcut           | Action                        |
+| ------------------ | ----------------------------- |
+| \\xx               | Toggle workspace diagnostics  |
+| \\xX               | Toggle buffer diagnostics     |
+| \\cs               | Toggle document symbols panel |
+| \\cl               | Toggle LSP defs/refs panel    |
+| \\xq               | Toggle quickfix list          |
+| Ctrl+Q (Telescope) | Send results to Trouble       |
+| q (in Trouble)     | Close Trouble                 |
+| o (in Trouble)     | Jump to item and close        |
+| Enter (in Trouble) | Jump to item                  |
+| } / {              | Next / prev item              |
+| Ctrl+S             | Open in horizontal split      |
+| Ctrl+V             | Open in vertical split        |
+| s                  | Cycle severity filter         |
+| gb (in Trouble)    | Toggle current-buffer-only    |
+
 ### Comment.nvim
 
 | Shortcut    | Action                   |

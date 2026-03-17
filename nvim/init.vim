@@ -35,6 +35,23 @@ require("lazy").setup({
   { "lukas-reineke/indent-blankline.nvim" },
   { "folke/which-key.nvim" },
 
+  -- Diagnostics panel
+  { "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    cmd = "Trouble",
+    keys = {
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
+      { "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
+      { "<leader>cs", "<cmd>Trouble symbols toggle focus=false<cr>", desc = "Symbols (Trouble)" },
+      { "<leader>cl", "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", desc = "LSP Defs / Refs (Trouble)" },
+      { "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
+    },
+    opts = {
+      auto_close = true,
+      focus = false,
+    },
+  },
+
   -- Format on save
   { "stevearc/conform.nvim" },
 
@@ -176,6 +193,22 @@ if ibl then ibl.setup() end
 
 local whichkey = safe_require('which-key')
 if whichkey then whichkey.setup() end
+
+-- Telescope: send results to Trouble with <C-q>
+local telescope = safe_require('telescope')
+if telescope then
+  local trouble_source = safe_require('trouble.sources.telescope')
+  if trouble_source then
+    telescope.setup({
+      defaults = {
+        mappings = {
+          i = { ["<c-q>"] = trouble_source.open },
+          n = { ["<c-q>"] = trouble_source.open },
+        },
+      },
+    })
+  end
+end
 
 local treesitter = safe_require('nvim-treesitter.configs')
 if treesitter then

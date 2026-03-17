@@ -84,3 +84,9 @@ cask "zed"
 mas "Developer", id: 640199958
 mas "Slack", id: 803453959
 cargo "cargo-fuzz"
+cargo "cargo-nextest"
+cargo "cargo-expand"
+cargo "cargo-flamegraph"
+cargo "cargo-insta"
+cargo "cargo-machete"
+cargo "cargo-outdated"
