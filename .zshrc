@@ -3,7 +3,7 @@
 # ==============================================
 
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="minimal"
+ZSH_THEME=""
 plugins=(git extract git-extras rust zsh-autosuggestions zsh-syntax-highlighting)
 
 # Speed: skip compaudit security check, disable paste magic, skip auto-title
@@ -232,6 +232,8 @@ _cached_init() {
 _cached_init zoxide
 _cached_init atuin
 unfunction _cached_init
+
+eval "$(starship init zsh)"
 
 # fzf: use fd for file search, bat for preview
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'

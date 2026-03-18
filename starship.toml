@@ -1,14 +1,9 @@
-# Starship prompt config
+# Starship prompt config — minimal
 
 format = """
 $directory\
 $git_branch\
 $git_status\
-$rust\
-$python\
-$nodejs\
-$lua\
-$cmd_duration\
 $line_break\
 $character"""
 
@@ -24,31 +19,6 @@ style = "purple"
 format = '([$all_status$ahead_behind]($style) )'
 style = "red"
 
-[rust]
-format = "[$symbol$version]($style) "
-symbol = "🦀 "
-style = "orange"
-
-[python]
-format = "[$symbol$version]($style) "
-symbol = "🐍 "
-style = "yellow"
-
-[nodejs]
-format = "[$symbol$version]($style) "
-symbol = "⬢ "
-style = "green"
-
-[lua]
-format = "[$symbol$version]($style) "
-symbol = "🌙 "
-style = "blue"
-
-[cmd_duration]
-min_time = 2_000
-format = "[$duration]($style) "
-style = "yellow"
-
 [character]
-success_symbol = "[❯](green)"
-error_symbol = "[❯](red)"
+success_symbol = "[>](green)"
+error_symbol = "[>](red)"

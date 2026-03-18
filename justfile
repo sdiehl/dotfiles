@@ -11,7 +11,7 @@ dotfiles := justfile_directory()
 config := env("HOME") / ".config"
 zsh_custom := env("HOME") / ".oh-my-zsh/custom/plugins"
 vault := env("HOME") / "Documents/DevBrain"
-lean_full := env("LEAN_FULL", "true")
+lean_full := env("LEAN_FULL", "false")
 
 # Toolchain versions (bump here)
 python_version := "3.13"
