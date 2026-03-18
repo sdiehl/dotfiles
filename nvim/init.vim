@@ -96,9 +96,11 @@ set softtabstop=2
 set shiftwidth=2
 set expandtab
 set nofoldenable
+set undofile
 
 set incsearch
 set hlsearch
+set ignorecase
 set smartcase
 set inccommand=split
 
@@ -127,10 +129,14 @@ nnoremap tn :tabnext<CR>
 nnoremap tp :tabprevious<CR>
 
 noremap <silent> <F12> :wincmd =<CR>
-autocmd VimResized * wincmd =
+
+augroup sd_windows
+  autocmd!
+  autocmd VimResized * wincmd =
+  autocmd TermOpen * setlocal nonumber norelativenumber
+augroup END
 
 tnoremap <Esc> <C-\><C-n>
-autocmd TermOpen * setlocal nonumber norelativenumber
 
 nnoremap <C-n> :Neotree toggle<CR>
 
@@ -147,8 +153,11 @@ let g:copilot_filetypes = {
     \ 'toml': v:true,
     \ 'typst': v:true
     \ }
-autocmd BufReadPre * let f=getfsize(expand("<afile>"))
-    \ | if f > 100000 || f == -2 | let b:copilot_enabled = v:false | endif
+augroup sd_copilot
+  autocmd!
+  autocmd BufReadPre * let f=getfsize(expand("<afile>"))
+      \ | if f > 100000 || f == -2 | let b:copilot_enabled = v:false | endif
+augroup END
 
 " Telescope
 nnoremap <C-p> <cmd>Telescope find_files<cr>
@@ -286,21 +295,26 @@ EOF
 " FILETYPES
 " ==============================================
 
-autocmd BufNewFile,BufRead *.y set filetype=happy
-autocmd BufNewFile,BufRead *.x set filetype=alex
-autocmd BufNewFile,BufRead *.agda set filetype=agda
-autocmd BufNewFile,BufRead *.idr set filetype=idris
-autocmd BufNewFile,BufRead *.ll set filetype=llvm
-autocmd BufNewFile,BufRead *.fp set filetype=haskell
-autocmd BufNewFile,BufRead *.dl set filetype=souffle
-autocmd BufNewFile,BufRead *.lean set filetype=lean
-autocmd BufNewFile,BufRead *.typ set filetype=typst
-autocmd BufNewFile,BufRead *.v set filetype=coq
+augroup sd_filetypes
+  autocmd!
+  autocmd BufNewFile,BufRead *.y set filetype=happy
+  autocmd BufNewFile,BufRead *.x set filetype=alex
+  autocmd BufNewFile,BufRead *.agda set filetype=agda
+  autocmd BufNewFile,BufRead *.idr set filetype=idris
+  autocmd BufNewFile,BufRead *.ll set filetype=llvm
+  autocmd BufNewFile,BufRead *.fp set filetype=haskell
+  autocmd BufNewFile,BufRead *.dl set filetype=souffle
+  autocmd BufNewFile,BufRead *.lean set filetype=lean
+  autocmd BufNewFile,BufRead *.typ set filetype=typst
+  autocmd BufNewFile,BufRead *.v set filetype=coq
+  autocmd BufNewFile,BufRead *.rst,*.txt,*.tex,*.latex,*.md,*.typ setlocal spell nonumber
+augroup END
 
-autocmd BufNewFile,BufRead *.rst,*.txt,*.tex,*.latex,*.md,*.typ setlocal spell nonumber
-
-autocmd BufWritePre *.py,*.hs :%s/\s\+$//e
-autocmd BufWritePre *.py,*.hs :%s/\(\s*\n\)\+\%$//e
+augroup sd_trailing_whitespace
+  autocmd!
+  autocmd BufWritePre *.py,*.hs :%s/\s\+$//e
+  autocmd BufWritePre *.py,*.hs :%s/\(\s*\n\)\+\%$//e
+augroup END
 
 " ==============================================
 " UTILITIES

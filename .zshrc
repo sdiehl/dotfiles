@@ -3,9 +3,15 @@
 # ==============================================
 
 export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="minimal"
 plugins=(git extract git-extras rust zsh-autosuggestions zsh-syntax-highlighting)
 
-zstyle ':omz:update' mode reminder
+# Speed: skip compaudit security check, disable paste magic, skip auto-title
+ZSH_DISABLE_COMPFIX=true
+DISABLE_MAGIC_FUNCTIONS=true
+DISABLE_AUTO_TITLE=true
+
+zstyle ':omz:update' mode disabled
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 source $ZSH/oh-my-zsh.sh
@@ -209,12 +215,29 @@ wts() {
 alias ticky='~/Git/pygui/pygui.py'
 
 # ==============================================
-# TOOLS
+# TOOLS (cached init: regenerates when binary changes)
 # ==============================================
 
-command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
-command -v starship &>/dev/null && eval "$(starship init zsh)"
-command -v atuin &>/dev/null && eval "$(atuin init zsh)"
+# Cache tool init output, keyed on binary mtime
+_cached_init() {
+  local tool=$1 cache="$HOME/.cache/zsh/${tool}.zsh"
+  local bin=$(command -v "$tool" 2>/dev/null) || return
+  mkdir -p "$HOME/.cache/zsh"
+  if [[ ! -f "$cache" || "$bin" -nt "$cache" ]]; then
+    "$tool" init zsh > "$cache" 2>/dev/null
+  fi
+  source "$cache"
+}
+
+_cached_init zoxide
+_cached_init atuin
+unfunction _cached_init
+
+# fzf: use fd for file search, bat for preview
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
+export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
 
 # fzf shell integration (Ctrl+T file picker, Alt+C cd, ** completions)
 [[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh

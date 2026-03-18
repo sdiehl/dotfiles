@@ -93,7 +93,8 @@
 
 - `ripgrep` - Fast grep (with smart defaults via `~/.ripgreprc`)
 - `fd` - Fast find (respects .gitignore)
-- `fzf` - Fuzzy finder (files, history, branches)
+- `fzf` - Fuzzy finder (files, history, branches), uses `fd` for file search and `bat` for preview
+- `tokei` - Fast code statistics by language
 
 **Git:**
 
