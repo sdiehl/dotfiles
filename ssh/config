@@ -1,0 +1,6 @@
+# Secretive: Secure Enclave SSH agent (Touch ID on every use)
+# The Secretive agent socket handles keys stored in the Secure Enclave.
+# Falls back to the standard ed25519 key for hosts not using the SE key.
+Host *
+    IdentityAgent ~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+    IdentityFile ~/.ssh/id_ed25519

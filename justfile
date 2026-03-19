@@ -46,7 +46,7 @@ brew-dump:
 # --- Config symlinking ---
 
 # All configs (for use with `just all` or standalone)
-configs: zsh git nvim-config ghostty zed starship atuin ripgrep
+configs: zsh git ssh nvim-config ghostty zed starship atuin ripgrep
 
 zsh:
     @[ -d "$HOME/.oh-my-zsh" ] || sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -94,6 +94,11 @@ atuin:
 
 ripgrep:
     @ln -sf {{dotfiles}}/ripgreprc $HOME/.ripgreprc
+
+ssh:
+    @mkdir -p $HOME/.ssh
+    @chmod 700 $HOME/.ssh
+    @ln -sf {{dotfiles}}/ssh/config $HOME/.ssh/config
 
 # --- macOS defaults ---
 
