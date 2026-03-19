@@ -45,8 +45,8 @@ brew-dump:
 
 # --- Config symlinking ---
 
-# All configs (for use with `just all` or standalone)
-configs: zsh git ssh nvim-config ghostty zed starship atuin ripgrep
+# All configs (shell, editor, AI)
+configs: zsh git ssh nvim-config ghostty zed starship atuin ripgrep claude codex opencode
 
 zsh:
     @[ -d "$HOME/.oh-my-zsh" ] || sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -57,8 +57,10 @@ zsh:
 git:
     @ln -sf {{dotfiles}}/gitconfig $HOME/.gitconfig
 
+# Neovim: config symlinks and plugin sync
 nvim: nvim-config nvim-plugins
 
+# Neovim: config symlinks only
 nvim-config:
     @mkdir -p {{config}}/nvim/{colors,syntax,ftdetect}
     @ln -sf {{dotfiles}}/nvim/init.vim {{config}}/nvim/init.vim
@@ -169,54 +171,58 @@ obsidian:
 
 # --- AI tooling ---
 
-ai: claude opencode codex claude-config
+# AI setup: MCP servers, plugins, and config for all AI tools
+ai: claude codex opencode
 
+# Claude Code: MCP servers, plugins, and DevBrain config
 claude:
     #!/usr/bin/env bash
-    echo "Setting up Claude Code MCP servers..."
-    claude mcp add lean-lsp --scope user -- uvx lean-lsp-mcp 2>/dev/null || true
-    echo "Claude Code: Lean LSP MCP configured"
-    claude plugin marketplace add cameronfreer/lean4-skills 2>/dev/null || true
-    claude plugin install lean4@lean4-skills 2>/dev/null || true
-    echo "Claude Code: lean4-skills plugin installed"
-    if [ -n "$OBSIDIAN_MCP_KEY" ]; then
-        claude mcp add obsidian --scope user -- npx mcp-remote http://localhost:3001/mcp --header "Authorization: Bearer $OBSIDIAN_MCP_KEY" 2>/dev/null || true
-        echo "Claude Code: Obsidian MCP configured"
+    echo "Setting up Claude Code..."
+    # MCP servers and plugins (skip if claude CLI not installed)
+    if command -v claude &>/dev/null; then
+        claude mcp add lean-lsp --scope user -- uvx lean-lsp-mcp 2>/dev/null || true
+        echo "Claude Code: Lean LSP MCP configured"
+        claude plugin marketplace add cameronfreer/lean4-skills 2>/dev/null || true
+        claude plugin install lean4@lean4-skills 2>/dev/null || true
+        echo "Claude Code: lean4-skills plugin installed"
+        if [ -n "$OBSIDIAN_MCP_KEY" ]; then
+            claude mcp add obsidian --scope user -- npx mcp-remote http://localhost:3001/mcp --header "Authorization: Bearer $OBSIDIAN_MCP_KEY" 2>/dev/null || true
+            echo "Claude Code: Obsidian MCP configured"
+        else
+            echo "Set OBSIDIAN_MCP_KEY env var to configure Obsidian MCP"
+        fi
     else
-        echo "Set OBSIDIAN_MCP_KEY env var to configure Claude Code MCP"
+        echo "Claude CLI not found, skipping MCP/plugin setup"
     fi
-
-opencode:
-    @echo "Setting up OpenCode..."
-    @mkdir -p {{config}}/opencode
-    @ln -sf {{dotfiles}}/opencode/opencode.json {{config}}/opencode/opencode.json
-    @echo "OpenCode: config linked"
-
-codex:
-    @echo "Setting up Codex..."
-    @mkdir -p $HOME/.codex
-    @ln -sf {{dotfiles}}/codex/AGENTS.md $HOME/.codex/AGENTS.md
-    @ln -sf {{dotfiles}}/codex/config.toml $HOME/.codex/config.toml
-    @echo "Codex: AGENTS.md and config.toml linked"
-
-claude-config:
-    #!/usr/bin/env bash
+    # DevBrain config (settings, CLAUDE.md, skills, commands, rules, hooks)
     if [ ! -d "{{vault}}/claude" ]; then
-        echo "DevBrain not found at {{vault}}/claude -- skipping claude-config"
+        echo "DevBrain not found at {{vault}}/claude, skipping config symlinks"
     else
-        echo "Symlinking Claude Code config from DevBrain..."
         mkdir -p $HOME/.claude/rules $HOME/.claude/hooks $HOME/.claude/skills
         ln -sf {{vault}}/claude/settings.json $HOME/.claude/settings.json
         ln -sf {{vault}}/claude/CLAUDE.md $HOME/.claude/CLAUDE.md
         ln -sf {{vault}}/claude/rules/onechronos.md $HOME/.claude/rules/onechronos.md
         ln -sf {{vault}}/claude/hooks/session-end.sh $HOME/.claude/hooks/session-end.sh
         chmod +x {{vault}}/claude/hooks/session-end.sh
-        for skill in morning eod standup weekly sync review; do
-            ln -sfn {{vault}}/claude/skills/$skill $HOME/.claude/skills/$skill
+        for skill in {{vault}}/claude/skills/*/; do
+            ln -sfn "$skill" $HOME/.claude/skills/"$(basename "$skill")"
         done
         ln -sfn {{vault}}/claude/commands $HOME/.claude/commands
-        echo "Claude Code config linked from DevBrain ({{vault}}/claude/)"
+        echo "Claude Code: DevBrain config linked"
     fi
+
+# Codex: config symlinks
+codex:
+    @mkdir -p $HOME/.codex
+    @ln -sf {{dotfiles}}/codex/AGENTS.md $HOME/.codex/AGENTS.md
+    @ln -sf {{dotfiles}}/codex/config.toml $HOME/.codex/config.toml
+    @echo "Codex: config linked"
+
+# OpenCode: config symlinks
+opencode:
+    @mkdir -p {{config}}/opencode
+    @ln -sf {{dotfiles}}/opencode/opencode.json {{config}}/opencode/opencode.json
+    @echo "OpenCode: config linked"
 
 # --- Scripts ---
 
