@@ -245,13 +245,22 @@ export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
 [[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
 [[ -f /opt/homebrew/opt/fzf/shell/completion.zsh ]] && source /opt/homebrew/opt/fzf/shell/completion.zsh
 
-# Lazy-load nvm (sourcing nvm.sh on every shell costs ~280ms)
+# nvm: put default node on PATH immediately (no sourcing cost),
+# lazy-load full nvm only when you run `nvm` directly.
 export NVM_DIR="$HOME/.nvm"
-_nvm_lazy_load() { unset -f nvm node npm npx; [[ -s "/opt/homebrew/opt/nvm/nvm.sh" ]] && source "/opt/homebrew/opt/nvm/nvm.sh"; }
-nvm()  { _nvm_lazy_load; nvm "$@"; }
-node() { _nvm_lazy_load; node "$@"; }
-npm()  { _nvm_lazy_load; npm "$@"; }
-npx()  { _nvm_lazy_load; npx "$@"; }
+if [[ -s "$NVM_DIR/alias/default" ]]; then
+  _nvm_ver=$(cat "$NVM_DIR/alias/default")
+  _nvm_dir="$NVM_DIR/versions/node/v${_nvm_ver}"
+  # Alias may be major-only (e.g. "22"), try exact then glob for latest patch
+  [[ -d "$_nvm_dir" ]] || _nvm_dir=$(ls -d "$NVM_DIR/versions/node/v${_nvm_ver}."* 2>/dev/null | sort -V | tail -1)
+  [[ -d "$_nvm_dir/bin" ]] && export PATH="$_nvm_dir/bin:$PATH"
+  unset _nvm_ver _nvm_dir
+fi
+nvm() {
+  unset -f nvm
+  [[ -s "/opt/homebrew/opt/nvm/nvm.sh" ]] && source "/opt/homebrew/opt/nvm/nvm.sh"
+  nvm "$@"
+}
 
 [[ -r "$HOME/.opam/opam-init/init.zsh" ]] && source "$HOME/.opam/opam-init/init.zsh" &>/dev/null
 
@@ -270,3 +279,6 @@ npx()  { _nvm_lazy_load; npx "$@"; }
 
 # uv-managed Python (must be last to ensure precedence over system Python)
 path=("$HOME/.local/bin" ${path:#$HOME/.local/bin})
+
+# opencode
+export PATH="$HOME/.opencode/bin:$PATH"

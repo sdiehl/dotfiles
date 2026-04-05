@@ -1,0 +1,127 @@
+name: Weekly Update Check
+
+on:
+  schedule:
+    - cron: "0 9 * * 1" # Monday 9am UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Check for updates
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          updates=""
+          body=""
+          branch="auto/weekly-updates-$(date +%Y%m%d)"
+
+          # --- Toolchain versions (from justfile) ---
+          current_python=$(grep '^python_version' justfile | cut -d'"' -f2)
+          current_node=$(grep '^node_version' justfile | cut -d'"' -f2)
+
+          # Latest stable Python 3.x
+          latest_python=$(curl -sf https://endoflife.date/api/python.json \
+            | jq -r '[.[] | select(.cycle | startswith("3.")) | select(.eol == false or (.eol | test("^[0-9]")))][0].cycle')
+
+          # Latest LTS Node
+          latest_node=$(curl -sf https://nodejs.org/dist/index.json \
+            | jq -r '[.[] | select(.lts != false)][0].version' \
+            | sed 's/^v//' | cut -d. -f1)
+
+          if [ -n "$latest_python" ] && [ "$latest_python" != "$current_python" ]; then
+            updates="yes"
+            body="${body}- Python: ${current_python} -> ${latest_python}\n"
+            sed -i "s/^python_version := \"${current_python}\"/python_version := \"${latest_python}\"/" justfile
+          fi
+
+          if [ -n "$latest_node" ] && [ "$latest_node" != "$current_node" ]; then
+            updates="yes"
+            body="${body}- Node LTS: ${current_node} -> ${latest_node}\n"
+            sed -i "s/^node_version := \"${current_node}\"/node_version := \"${latest_node}\"/" justfile
+          fi
+
+          # --- GitHub Actions versions ---
+          for action in actions/checkout actions/cache; do
+            short=$(echo "$action" | cut -d/ -f2)
+            current=$(grep -oP "uses: ${action}@v\K[0-9]+" .github/workflows/*.yml | sort -n | tail -1)
+            latest=$(gh api "repos/${action}/releases/latest" --jq '.tag_name' 2>/dev/null | sed 's/^v//')
+
+            if [ -n "$latest" ] && [ -n "$current" ] && [ "$latest" != "$current" ]; then
+              updates="yes"
+              body="${body}- ${action}: v${current} -> v${latest}\n"
+              for f in .github/workflows/*.yml; do
+                sed -i "s|uses: ${action}@v${current}|uses: ${action}@v${latest}|g" "$f"
+              done
+            fi
+          done
+
+          # --- Brewfile: check for removed/deprecated formulas ---
+          brew_issues=""
+          while IFS= read -r formula; do
+            status=$(curl -sf "https://formulae.brew.sh/api/formula/${formula}.json" \
+              | jq -r '.deprecated // false, .disabled // false' 2>/dev/null || echo "unknown")
+            if echo "$status" | grep -q "true"; then
+              brew_issues="yes"
+              body="${body}- Brewfile: \`${formula}\` is deprecated or disabled\n"
+            fi
+          done < <(grep '^brew ' Brewfile | sed 's/brew "\(.*\)"/\1/')
+
+          # --- Brewfile: check for cask renames ---
+          while IFS= read -r cask; do
+            http_code=$(curl -sf -o /dev/null -w "%{http_code}" \
+              "https://formulae.brew.sh/api/cask/${cask}.json" 2>/dev/null || echo "000")
+            if [ "$http_code" = "404" ]; then
+              brew_issues="yes"
+              body="${body}- Brewfile: cask \`${cask}\` not found (renamed or removed?)\n"
+            fi
+          done < <(grep '^cask ' Brewfile | sed 's/cask "\(.*\)"/\1/')
+
+          if [ -n "$brew_issues" ]; then
+            updates="yes"
+          fi
+
+          echo "updates=${updates}" >> "$GITHUB_OUTPUT"
+          echo "branch=${branch}" >> "$GITHUB_OUTPUT"
+
+          # Write body to file for multiline output
+          printf "%b" "$body" > /tmp/pr-body.txt
+
+      - name: Create PR
+        if: steps.check.outputs.updates == 'yes'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          branch="${{ steps.check.outputs.branch }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: weekly dependency updates $(date +%Y-%m-%d)"
+          git push -u origin "$branch"
+
+          body=$(cat /tmp/pr-body.txt)
+          gh pr create \
+            --title "Weekly updates $(date +%Y-%m-%d)" \
+            --body "$(cat <<EOF
+          ## Updates found
+
+          ${body}
+
+          ## Review
+
+          - [ ] Verify version bumps are correct
+          - [ ] Check for breaking changes in changelogs
+          EOF
+          )"
