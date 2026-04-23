@@ -249,10 +249,15 @@ export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
 # lazy-load full nvm only when you run `nvm` directly.
 export NVM_DIR="$HOME/.nvm"
 if [[ -s "$NVM_DIR/alias/default" ]]; then
-  _nvm_ver=$(cat "$NVM_DIR/alias/default")
+  _nvm_ver=$(<"$NVM_DIR/alias/default")
   _nvm_dir="$NVM_DIR/versions/node/v${_nvm_ver}"
-  # Alias may be major-only (e.g. "22"), try exact then glob for latest patch
-  [[ -d "$_nvm_dir" ]] || _nvm_dir=$(ls -d "$NVM_DIR/versions/node/v${_nvm_ver}."* 2>/dev/null | sort -V | tail -1)
+  # Alias may be major-only (e.g. "22"); fall back to latest matching patch.
+  # Use a zsh glob (not `ls`) so aliases/colorization don't poison the path.
+  if [[ ! -d "$_nvm_dir" ]]; then
+    _nvm_matches=("$NVM_DIR/versions/node/v${_nvm_ver}."*(/N))
+    (( ${#_nvm_matches} )) && _nvm_dir="${_nvm_matches[-1]}"
+    unset _nvm_matches
+  fi
   [[ -d "$_nvm_dir/bin" ]] && export PATH="$_nvm_dir/bin:$PATH"
   unset _nvm_ver _nvm_dir
 fi
