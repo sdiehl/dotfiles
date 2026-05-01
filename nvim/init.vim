@@ -63,6 +63,23 @@ require("lazy").setup({
   { "edwinb/idris2-vim", ft = { "idris", "idris2" } },
   { "souffle-lang/souffle.vim", ft = "souffle" },
   { "lifepillar/pgsql.vim", ft = { "sql", "pgsql" } },
+
+  -- Lean: LSP + infoview (proof state)
+  { "neovim/nvim-lspconfig", lazy = true },
+  {
+    "Julian/lean.nvim",
+    ft = "lean",
+    dependencies = { "neovim/nvim-lspconfig", "nvim-lua/plenary.nvim" },
+    opts = {
+      mappings = true,
+      infoview = {
+        autoopen = true,
+        width = 50,
+        horizontal_position = "bottom",
+      },
+      lsp = { on_attach = function() end },
+    },
+  },
 }, {
   ui = { border = "rounded" },
   checker = { enabled = false },
