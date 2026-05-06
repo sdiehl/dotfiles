@@ -28,8 +28,12 @@ sync_file ~/.zshrc "$DOTFILES_DIR/.zshrc"
 sync_file ~/.gitconfig "$DOTFILES_DIR/gitconfig"
 
 # Neovim
-sync_file ~/.config/nvim/init.vim "$DOTFILES_DIR/nvim/init.vim"
+sync_file ~/.config/nvim/init.lua "$DOTFILES_DIR/nvim/init.lua"
 sync_file ~/.config/nvim/lazy-lock.json "$DOTFILES_DIR/nvim/lazy-lock.json"
+if [ -d ~/.config/nvim/lua ] && [ ! -L ~/.config/nvim/lua ]; then
+    mkdir -p "$DOTFILES_DIR/nvim/lua"
+    cp -R ~/.config/nvim/lua/. "$DOTFILES_DIR/nvim/lua/"
+fi
 sync_file ~/.config/nvim/colors/jellybeans.vim "$DOTFILES_DIR/nvim/colors/jellybeans.vim"
 cp ~/.config/nvim/syntax/lean.vim "$DOTFILES_DIR/nvim/syntax/lean.vim" 2>/dev/null || true
 cp ~/.config/nvim/syntax/koka.vim "$DOTFILES_DIR/nvim/syntax/koka.vim" 2>/dev/null || true

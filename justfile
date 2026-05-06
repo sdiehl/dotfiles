@@ -63,7 +63,9 @@ nvim: nvim-config nvim-plugins
 # Neovim: config symlinks only
 nvim-config:
     @mkdir -p {{config}}/nvim/{colors,syntax,ftdetect}
-    @ln -sf {{dotfiles}}/nvim/init.vim {{config}}/nvim/init.vim
+    @rm -f {{config}}/nvim/init.vim
+    @ln -sf {{dotfiles}}/nvim/init.lua {{config}}/nvim/init.lua
+    @ln -sfn {{dotfiles}}/nvim/lua {{config}}/nvim/lua
     @ln -sf {{dotfiles}}/nvim/lazy-lock.json {{config}}/nvim/lazy-lock.json
     @[ -f "{{dotfiles}}/nvim/colors/jellybeans.vim" ] && ln -sf {{dotfiles}}/nvim/colors/jellybeans.vim {{config}}/nvim/colors/ || true
     @[ -f "{{dotfiles}}/nvim/syntax/lean.vim" ] && ln -sf {{dotfiles}}/nvim/syntax/lean.vim {{config}}/nvim/syntax/ || true
