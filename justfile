@@ -57,8 +57,8 @@ zsh:
 git:
     @ln -sf {{dotfiles}}/gitconfig $HOME/.gitconfig
 
-# Neovim: config symlinks and plugin sync
-nvim: nvim-config nvim-plugins
+# Neovim: full setup (config + lazy.nvim plugins + tree-sitter parsers)
+nvim: nvim-config nvim-plugins nvim-parsers
 
 # Neovim: config symlinks only
 nvim-config:
@@ -77,8 +77,12 @@ nvim-config:
 # Parser list mirrors `ensure_installed` in nvim/lua/plugins.lua. Keep in sync.
 ts_parsers := "python rust lua vim vimdoc json yaml toml markdown markdown_inline haskell sql bash dockerfile regex query comment bibtex typst"
 
+# Fast: lazy.nvim plugin clone/sync only. Used by CI.
 nvim-plugins:
     @nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+
+# Slow: download + compile tree-sitter parsers. Run once on a fresh dev machine.
+nvim-parsers:
     @nvim --headless "+Lazy load nvim-treesitter" "+silent! TSInstallSync {{ts_parsers}}" +qa 2>/dev/null || true
 
 nvim-update:
