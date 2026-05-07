@@ -52,3 +52,9 @@ repos:
         language: system
         files: ^justfile$
         pass_filenames: true
+
+      - id: stylua
+        name: stylua (Lua format)
+        entry: stylua
+        language: system
+        types: [lua]

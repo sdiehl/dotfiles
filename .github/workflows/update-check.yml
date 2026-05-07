@@ -15,6 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Install tools (just, neovim)
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+          wget -qO /tmp/nvim.tar.gz https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+          sudo tar -C /opt -xzf /tmp/nvim.tar.gz
+          sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
+          nvim --version | head -1
+
       - name: Check for updates
         id: check
         env:
@@ -89,6 +97,30 @@ jobs:
 
           if [ -n "$brew_issues" ]; then
             updates="yes"
+          fi
+
+          # --- Neovim plugins (lazy-lock.json) ---
+          # Wire ~/.config/nvim symlinks so nvim picks up our config and lock file.
+          just nvim-config
+          cp nvim/lazy-lock.json /tmp/lock-before.json
+
+          # Sync (install missing) then update (pull latest on tracked branch).
+          nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+          nvim --headless "+Lazy! update" +qa 2>/dev/null || true
+
+          if ! diff -q /tmp/lock-before.json nvim/lazy-lock.json >/dev/null 2>&1; then
+            updates="yes"
+            changed=$(jq -r --slurpfile before /tmp/lock-before.json '
+              to_entries[] as $e |
+              select(($before[0][$e.key].commit // "") != $e.value.commit) |
+              $e.key
+            ' nvim/lazy-lock.json | sort -u)
+            count=$(echo "$changed" | grep -c . || true)
+            body="${body}- Neovim: ${count} plugin(s) updated\n"
+            while IFS= read -r p; do
+              [ -z "$p" ] && continue
+              body="${body}  - ${p}\n"
+            done <<< "$changed"
           fi
 
           echo "updates=${updates}" >> "$GITHUB_OUTPUT"

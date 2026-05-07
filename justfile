@@ -62,23 +62,28 @@ nvim: nvim-config nvim-plugins
 
 # Neovim: config symlinks only
 nvim-config:
-    @mkdir -p {{config}}/nvim/{colors,syntax,ftdetect}
+    @mkdir -p {{config}}/nvim/{syntax,ftdetect}
     @rm -f {{config}}/nvim/init.vim
+    @rm -f {{config}}/nvim/colors/jellybeans.vim
     @ln -sf {{dotfiles}}/nvim/init.lua {{config}}/nvim/init.lua
     @ln -sfn {{dotfiles}}/nvim/lua {{config}}/nvim/lua
     @ln -sf {{dotfiles}}/nvim/lazy-lock.json {{config}}/nvim/lazy-lock.json
-    @[ -f "{{dotfiles}}/nvim/colors/jellybeans.vim" ] && ln -sf {{dotfiles}}/nvim/colors/jellybeans.vim {{config}}/nvim/colors/ || true
     @[ -f "{{dotfiles}}/nvim/syntax/lean.vim" ] && ln -sf {{dotfiles}}/nvim/syntax/lean.vim {{config}}/nvim/syntax/ || true
     @[ -f "{{dotfiles}}/nvim/syntax/koka.vim" ] && ln -sf {{dotfiles}}/nvim/syntax/koka.vim {{config}}/nvim/syntax/ || true
     @[ -f "{{dotfiles}}/nvim/ftdetect/koka.vim" ] && ln -sf {{dotfiles}}/nvim/ftdetect/koka.vim {{config}}/nvim/ftdetect/ || true
     @rm -f {{config}}/nvim/autoload/plug.vim 2>/dev/null || true
     @rmdir {{config}}/nvim/autoload 2>/dev/null || true
 
+# Parser list mirrors `ensure_installed` in nvim/lua/plugins.lua. Keep in sync.
+ts_parsers := "python rust lua vim vimdoc json yaml toml markdown markdown_inline haskell sql bash dockerfile regex query comment bibtex typst"
+
 nvim-plugins:
     @nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+    @nvim --headless "+Lazy load nvim-treesitter" "+silent! TSInstallSync {{ts_parsers}}" +qa 2>/dev/null || true
 
 nvim-update:
     @nvim --headless "+Lazy! update" +qa 2>/dev/null || true
+    @nvim --headless "+Lazy load nvim-treesitter" "+silent! TSUpdateSync" +qa 2>/dev/null || true
 
 ghostty:
     @mkdir -p "$HOME/Library/Application Support/com.mitchellh.ghostty"

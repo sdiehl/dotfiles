@@ -30,18 +30,21 @@ CapsLock = Escape.
 
 ## Neovim
 
-| Shortcut       | Action                  |
-| -------------- | ----------------------- |
-| Ctrl+J         | Next window split       |
-| Backtick       | Last edit position      |
-| gl             | Alternate file          |
-| F12            | Equalize splits         |
-| ff             | Case-insensitive search |
-| Enter          | Clear search highlight  |
-| Ctrl+T         | New tab                 |
-| tn / tp        | Next/prev tab           |
-| q              | Disabled (no macros)    |
-| Esc (terminal) | Exit terminal mode      |
+Leader is Space. Local-leader is backslash.
+
+| Shortcut       | Action                                 |
+| -------------- | -------------------------------------- |
+| Ctrl+J         | Next window split                      |
+| Backtick       | Last edit position                     |
+| gl             | Alternate file                         |
+| F12            | Equalize splits                        |
+| Space+/        | Case-insensitive search                |
+| Enter          | Clear search highlight                 |
+| Ctrl+T         | New tab                                |
+| tn / tp        | Next/prev tab                          |
+| q (then a-z)   | Record macro (q to stop)               |
+| q: / q/ / q?   | Disabled (avoid cmdline-window pop-up) |
+| Esc (terminal) | Exit terminal mode                     |
 
 ### Neo-tree
 
@@ -73,20 +76,21 @@ CapsLock = Escape.
 
 | Shortcut    | Action  |
 | ----------- | ------- |
-| \gd         | Diff    |
+| Space+gd    | Diff    |
 | gb          | Blame   |
 | do (visual) | Diffget |
 
-### Tabular (visual mode)
+### Easy-align (visual mode)
 
-| Shortcut | Align on |
-| -------- | -------- |
-| a=       | `=`      |
-| a;       | `::`     |
-| a,       | `,`      |
-| a-       | `->`     |
+| Shortcut | Align on    |
+| -------- | ----------- |
+| a=       | `=`         |
+| a;       | `::`        |
+| a,       | `,`         |
+| a-       | `->`        |
+| ga       | Interactive |
 
-### LSP (Rust)
+### LSP
 
 | Shortcut | Action               |
 | -------- | -------------------- |
@@ -95,19 +99,39 @@ CapsLock = Escape.
 | K        | Hover docs           |
 | gi       | Implementation       |
 | gr       | References           |
-| \rn      | Rename               |
-| \ca      | Code action          |
+| Space+rn | Rename               |
+| Space+ca | Code action          |
 | [d / ]d  | Prev/next diagnostic |
+
+Inlay hints are auto-enabled on attach (rust-analyzer and any other server that supports them).
+
+### Completion (blink.cmp)
+
+| Shortcut        | Action               |
+| --------------- | -------------------- |
+| Ctrl+Space      | Show completion menu |
+| Ctrl+y          | Accept selection     |
+| Ctrl+n / Ctrl+p | Next / prev item     |
+| Ctrl+e          | Hide menu            |
+
+### Copilot (copilot.lua)
+
+| Shortcut | Action                   |
+| -------- | ------------------------ |
+| Tab      | Accept inline suggestion |
+| Alt+]    | Next suggestion          |
+| Alt+[    | Previous suggestion      |
+| Ctrl+]   | Dismiss suggestion       |
 
 ### Trouble (diagnostics panel)
 
 | Shortcut           | Action                        |
 | ------------------ | ----------------------------- |
-| \\xx               | Toggle workspace diagnostics  |
-| \\xX               | Toggle buffer diagnostics     |
-| \\cs               | Toggle document symbols panel |
-| \\cl               | Toggle LSP defs/refs panel    |
-| \\xq               | Toggle quickfix list          |
+| Space+xx           | Toggle workspace diagnostics  |
+| Space+xX           | Toggle buffer diagnostics     |
+| Space+cs           | Toggle document symbols panel |
+| Space+cl           | Toggle LSP defs/refs panel    |
+| Space+xq           | Toggle quickfix list          |
 | Ctrl+Q (Telescope) | Send results to Trouble       |
 | q (in Trouble)     | Close Trouble                 |
 | o (in Trouble)     | Jump to item and close        |

@@ -41,42 +41,68 @@
 
 ## Neovim
 
+Pure-Lua config. Entry point `nvim/init.lua` requires `lua/plugins.lua` and `lua/editor.lua`.
+Leader key is Space. Local-leader is backslash.
+
+**Colorscheme:**
+
+- `metalelf0/jellybeans-nvim` - Lua port of jellybeans (covers tree-sitter capture groups)
+
 **Core Plugins:**
 
-- `copilot.vim` - GitHub Copilot
+- `copilot.lua` - GitHub Copilot (Lua port; Tab to accept, M-]/M-[ next/prev, C-] dismiss)
+- `blink.cmp` - LSP completion engine (C-Space show, C-y accept, C-n/C-p navigate)
 - `telescope.nvim` - Fuzzy finder (`Ctrl+P` files, `Ctrl+G` grep)
 - `neo-tree.nvim` - File explorer (`Ctrl+N` toggle)
-- `vim-airline` - Status line
-- `vim-fugitive` - Git integration (`gd` diff, `gb` blame)
-- `tabular` - Text alignment (`a=`, `a;`, `a,`, `a-`)
+- `lualine.nvim` - Status line
+- `vim-fugitive` - Git integration (`<leader>gd` diff, `gb` blame)
+- `vim-easy-align` - Text alignment (`a=`, `a;`, `a,`, `a-` in visual mode)
 
 **Editor Enhancements:**
 
-- `nvim-treesitter` - Syntax highlighting
+- `nvim-treesitter` (master branch, locked for Nvim 0.11) - 19 parsers: python, rust, lua, vim, vimdoc, json, yaml, toml, markdown, markdown_inline, haskell, sql, bash, dockerfile, regex, query, comment, bibtex, typst (LaTeX uses Neovim's built-in `tex` syntax)
 - `gitsigns.nvim` - Git diff in gutter
 - `Comment.nvim` - Toggle comments (`gcc`, `gc`)
-- `nvim-autopairs` - Auto close brackets
+- `nvim-autopairs` - Auto close brackets (treesitter-aware, no pairing in strings/comments)
 - `indent-blankline.nvim` - Visual indent guides
 - `which-key.nvim` - Keybinding hints
-- `trouble.nvim` - Aggregated diagnostics panel (`\xx` workspace, `\xX` buffer, `\cs` symbols)
+- `trouble.nvim` - Aggregated diagnostics panel (`<leader>xx` workspace, `<leader>xX` buffer, `<leader>cs` symbols)
 
 **LSP (Language Server Protocol):**
 
 - Native `vim.lsp.config` (Neovim 0.11+) with `rust-analyzer` (go-to-definition, hover, diagnostics, code actions)
 - Clippy integration via `check.command = "clippy"`
+- Inlay hints enabled on attach
+- Diagnostics: virtual_lines on current line, no virtual_text spam
+- blink.cmp completion capabilities advertised globally to all servers
+
+**Format on save (conform.nvim):**
+
+- Rust: nightly rustfmt (edition 2024)
+- Markdown: dprint
+- Python: black
+- TOML: taplo
+- JSON/YAML: prettier
+- Shell: shfmt
+
+**Lean:**
+
+- `Julian/lean.nvim` - LSP + infoview (proof state); auto-opens on `.lean` files
+- Custom `syntax/lean.vim` for highlighting
 
 **Language Support:**
 
 - `haskell-vim` - Haskell
-- `rust.vim` - Rust
 - `Coqtail` - Coq
-- `agda-vim` - Agda
-- `idris2-vim` - Idris 2
 - `souffle.vim` - Souffle/Datalog
-- `pgsql.vim` - PostgreSQL
-- Custom syntax: Lean, Koka, Typst
+- `pgsql.vim` - PostgreSQL (default for `.sql`)
+- Custom syntax: Lean, Koka
 
-**Keybindings:**
+**Filetype detection:**
+
+- `.kk` -> koka, `.dl` -> souffle, `.fp` -> haskell, `.lean` -> lean, `.typ` -> typst, `.v` -> coq (overrides Verilog default), `.ll` -> llvm, `.y` -> happy, `.x` -> alex
+
+**Keybindings (leader = Space):**
 
 - `Ctrl+P` - Find files
 - `Ctrl+G` - Live grep
@@ -84,7 +110,7 @@
 - `Ctrl+J` - Switch windows
 - `Ctrl+T` - New tab
 - `tn/tp` - Next/prev tab
-- `gd` - Git diff
+- `<leader>gd` - Git diff
 - `gb` - Git blame
 
 ## CLI Tools
@@ -138,6 +164,7 @@
 - `shellcheck` - Lint shell scripts
 - `taplo fmt` - Auto-format TOML
 - `dprint fmt` - Auto-format Markdown
+- `stylua` - Auto-format Lua (Neovim config)
 - `brewfile-syntax` - Validate Brewfile
 - `justfile-check` - Validate justfile syntax
 

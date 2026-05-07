@@ -28,7 +28,8 @@ jobs:
         run: |
           command -v taplo || cargo install taplo-cli
           command -v dprint || cargo install dprint
-          sudo apt-get install -y shfmt jq shellcheck
+          command -v stylua || cargo install stylua
+          sudo apt-get install -y shfmt jq shellcheck lua5.1
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
 
@@ -40,6 +41,12 @@ jobs:
 
       - name: Check shell formatting (shfmt)
         run: shfmt -d -i 4 sync.sh bin/*
+
+      - name: Check Lua formatting (stylua)
+        run: stylua --check nvim/
+
+      - name: Verify Lua parses (luac)
+        run: find nvim -name '*.lua' -exec luac5.1 -p {} +
 
       - name: Check JSON formatting (jq)
         run: |

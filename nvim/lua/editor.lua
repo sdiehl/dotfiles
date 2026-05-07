@@ -4,7 +4,10 @@
 -- KEYBINDINGS
 -- ==============================================
 
-vim.keymap.set("n", "q", "<Nop>")
+-- Disable cmdline-window pop-up (q:, q/, q?) but keep macro recording.
+vim.keymap.set("n", "q:", "<Nop>")
+vim.keymap.set("n", "q/", "<Nop>")
+vim.keymap.set("n", "q?", "<Nop>")
 vim.keymap.set("n", "<leader>/", [[/\c]])
 vim.keymap.set("n", "<CR>", ":noh<CR>", { silent = true })
 
@@ -42,8 +45,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   group = trailing_grp,
   pattern = { "*.py", "*.hs" },
   callback = function()
+    local view = vim.fn.winsaveview()
     vim.cmd([[silent! %s/\s\+$//e]])
     vim.cmd([[silent! %s/\(\s*\n\)\+\%$//e]])
+    vim.fn.winrestview(view)
   end,
 })
 
@@ -92,27 +97,21 @@ vim.api.nvim_create_user_command("Flush", function()
   vim.cmd([[!find . -name '.*.swp' | xargs rm -f]])
 end, {})
 
+-- Wipe every buffer that isn't visible in any window across all tabs.
 vim.api.nvim_create_user_command("Wipeout", function()
-  local buffers = vim.fn.range(1, vim.fn.bufnr("$"))
-  local current_tab = vim.fn.tabpagenr()
-  local ok, err = pcall(function()
-    for _ = 1, vim.fn.tabpagenr("$") do
-      for win = 1, vim.fn.winnr("$") do
-        local buf = vim.fn.winbufnr(win)
-        for i, b in ipairs(buffers) do
-          if b == buf then
-            table.remove(buffers, i)
-            break
-          end
-        end
-      end
+  local visible = {}
+  for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
+      visible[vim.api.nvim_win_get_buf(win)] = true
     end
-    if #buffers > 0 then
-      local strs = {}
-      for _, b in ipairs(buffers) do strs[#strs + 1] = tostring(b) end
-      vim.cmd("bwipeout " .. table.concat(strs, " "))
+  end
+  local victims = {}
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buflisted and not visible[buf] then
+      victims[#victims + 1] = buf
     end
-  end)
-  vim.cmd("tabnext " .. current_tab)
-  if not ok then error(err) end
+  end
+  if #victims > 0 then
+    vim.cmd("bwipeout " .. table.concat(victims, " "))
+  end
 end, {})
