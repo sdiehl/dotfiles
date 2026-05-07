@@ -60,7 +60,7 @@ Leader key is Space. Local-leader is backslash.
 
 **Editor Enhancements:**
 
-- `nvim-treesitter` (master branch, locked for Nvim 0.11) - 19 parsers: python, rust, lua, vim, vimdoc, json, yaml, toml, markdown, markdown_inline, haskell, sql, bash, dockerfile, regex, query, comment, bibtex, typst (LaTeX uses Neovim's built-in `tex` syntax)
+- `nvim-treesitter` (master branch, locked for Nvim 0.11) - 20 parsers: python, rust, lua, vim, vimdoc, json, yaml, toml, markdown, markdown_inline, haskell, sql, bash, dockerfile, regex, query, comment, bibtex, typst, lean (Lean parser via `Julian/tree-sitter-lean` registered as custom; queries from helix-editor; LaTeX uses Neovim's built-in `tex` syntax)
 - `gitsigns.nvim` - Git diff in gutter
 - `Comment.nvim` - Toggle comments (`gcc`, `gc`)
 - `nvim-autopairs` - Auto close brackets (treesitter-aware, no pairing in strings/comments)

@@ -67,6 +67,7 @@ nvim-config:
     @rm -f {{config}}/nvim/colors/jellybeans.vim
     @ln -sf {{dotfiles}}/nvim/init.lua {{config}}/nvim/init.lua
     @ln -sfn {{dotfiles}}/nvim/lua {{config}}/nvim/lua
+    @ln -sfn {{dotfiles}}/nvim/queries {{config}}/nvim/queries
     @ln -sf {{dotfiles}}/nvim/lazy-lock.json {{config}}/nvim/lazy-lock.json
     @[ -f "{{dotfiles}}/nvim/syntax/lean.vim" ] && ln -sf {{dotfiles}}/nvim/syntax/lean.vim {{config}}/nvim/syntax/ || true
     @[ -f "{{dotfiles}}/nvim/syntax/koka.vim" ] && ln -sf {{dotfiles}}/nvim/syntax/koka.vim {{config}}/nvim/syntax/ || true
@@ -75,7 +76,7 @@ nvim-config:
     @rmdir {{config}}/nvim/autoload 2>/dev/null || true
 
 # Parser list mirrors `ensure_installed` in nvim/lua/plugins.lua. Keep in sync.
-ts_parsers := "python rust lua vim vimdoc json yaml toml markdown markdown_inline haskell sql bash dockerfile regex query comment bibtex typst"
+ts_parsers := "python rust lua vim vimdoc json yaml toml markdown markdown_inline haskell sql bash dockerfile regex query comment bibtex typst lean"
 
 # Fast: lazy.nvim plugin clone/sync only. Used by CI.
 nvim-plugins:

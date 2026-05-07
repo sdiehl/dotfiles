@@ -131,6 +131,19 @@ require("lazy").setup({
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
     config = function()
+      -- Register Julian/tree-sitter-lean (not in nvim-treesitter master registry).
+      -- Same author as lean.nvim. parser.c + scanner.c are pre-generated, so no
+      -- tree-sitter CLI needed.
+      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+      parser_config.lean = {
+        install_info = {
+          url = "https://github.com/Julian/tree-sitter-lean",
+          files = { "src/parser.c", "src/scanner.c" },
+          branch = "main",
+        },
+        filetype = "lean",
+      }
+
       require("nvim-treesitter.configs").setup({
         ensure_installed = {
           "python",
@@ -153,7 +166,7 @@ require("lazy").setup({
           -- "latex" requires tree-sitter CLI to build; built-in tex syntax is fine.
           "bibtex",
           "typst",
-          -- "lean" is not in master parser registry; syntax/lean.vim covers it.
+          "lean", -- via custom parser_config registered above (Julian/tree-sitter-lean)
         },
         highlight = { enable = true },
       })
