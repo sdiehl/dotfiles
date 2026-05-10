@@ -84,10 +84,10 @@ Leader is Space. Local-leader is backslash.
 
 Interactive flow: press `ga` (or `gA` to preview), then a textobject/motion, then the split character.
 
-| Shortcut | Action                                  |
-| -------- | --------------------------------------- |
-| ga       | Align (operator, normal/visual)         |
-| gA       | Align with preview (normal/visual)      |
+| Shortcut | Action                             |
+| -------- | ---------------------------------- |
+| ga       | Align (operator, normal/visual)    |
+| gA       | Align with preview (normal/visual) |
 
 Examples: `gaip=` aligns the inner paragraph on `=`; visually select then `ga,` aligns on `,`.
 
@@ -101,15 +101,15 @@ Examples: `gaip=` aligns the inner paragraph on `=`; visually select then `ga,` 
 
 ### Treesitter textobjects
 
-| Shortcut  | Action                       |
-| --------- | ---------------------------- |
-| af / if   | Around / inside function     |
-| ac / ic   | Around / inside class        |
-| aa / ia   | Around / inside parameter    |
-| ]m / [m   | Next / prev function start   |
-| ]M / [M   | Next / prev function end     |
-| ]] / [[   | Next / prev class start      |
-| ][ / []   | Next / prev class end        |
+| Shortcut | Action                     |
+| -------- | -------------------------- |
+| af / if  | Around / inside function   |
+| ac / ic  | Around / inside class      |
+| aa / ia  | Around / inside parameter  |
+| ]m / [m  | Next / prev function start |
+| ]M / [M  | Next / prev function end   |
+| ]] / [[  | Next / prev class start    |
+| ][ / []  | Next / prev class end      |
 
 ### LSP
 
@@ -128,14 +128,14 @@ Inlay hints are auto-enabled on attach (rust-analyzer and any other server that 
 
 ### Completion (blink.cmp)
 
-| Shortcut        | Action                       |
-| --------------- | ---------------------------- |
-| Ctrl+Space      | Show completion menu         |
-| Ctrl+y          | Accept selection             |
-| Ctrl+n / Ctrl+p | Next / prev item             |
-| Ctrl+e          | Hide menu                    |
-| Ctrl+l          | Snippet: jump to next field  |
-| Ctrl+h          | Snippet: jump to prev field  |
+| Shortcut        | Action                      |
+| --------------- | --------------------------- |
+| Ctrl+Space      | Show completion menu        |
+| Ctrl+y          | Accept selection            |
+| Ctrl+n / Ctrl+p | Next / prev item            |
+| Ctrl+e          | Hide menu                   |
+| Ctrl+l          | Snippet: jump to next field |
+| Ctrl+h          | Snippet: jump to prev field |
 
 ### Copilot (copilot.lua)
 
