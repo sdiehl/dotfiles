@@ -43,7 +43,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
 local trailing_grp = vim.api.nvim_create_augroup("sd_trailing_whitespace", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = trailing_grp,
-  pattern = { "*.py", "*.hs" },
+  pattern = { "*.hs" },
   callback = function()
     local view = vim.fn.winsaveview()
     vim.cmd([[silent! %s/\s\+$//e]])

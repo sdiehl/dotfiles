@@ -111,17 +111,14 @@ require("lazy").setup({
     },
   },
 
-  -- Alignment (replaces godlygeek/tabular which was last touched in 2018)
+  -- Alignment
   {
-    "junegunn/vim-easy-align",
-    cmd = "EasyAlign",
-    keys = {
-      { "ga", "<Plug>(EasyAlign)", mode = { "n", "x" }, desc = "Align (interactive)" },
-      { "a=", ":EasyAlign =<cr>", mode = "x", desc = "Align by =" },
-      { "a;", ":EasyAlign /::/<cr>", mode = "x", desc = "Align by ::" },
-      { "a,", ":EasyAlign ,<cr>", mode = "x", desc = "Align by ," },
-      { "a-", ":EasyAlign /->/<cr>", mode = "x", desc = "Align by ->" },
-    },
+    "echasnovski/mini.align",
+    version = false,
+    keys = { { "ga", mode = { "n", "x" } }, { "gA", mode = { "n", "x" } } },
+    config = function()
+      require("mini.align").setup()
+    end,
   },
 
   -- Treesitter (master branch: locked but supported on Nvim 0.11)
@@ -188,8 +185,20 @@ require("lazy").setup({
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
       },
+      snippets = { preset = "luasnip" },
       signature = { enabled = true },
     },
+  },
+
+  -- Snippet engine (drives blink.cmp's "snippets" source)
+  {
+    "L3MON4D3/LuaSnip",
+    version = "v2.*",
+    build = "make install_jsregexp",
+    dependencies = { "rafamadriz/friendly-snippets" },
+    config = function()
+      require("luasnip.loaders.from_vscode").lazy_load()
+    end,
   },
 
   -- Editor enhancements
@@ -203,6 +212,39 @@ require("lazy").setup({
     opts = {},
   },
   { "folke/which-key.nvim", event = "VeryLazy", opts = {} },
+
+  -- Motion
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    opts = {},
+    keys = {
+      {
+        "s",
+        function()
+          require("flash").jump()
+        end,
+        mode = { "n", "x", "o" },
+        desc = "Flash",
+      },
+      {
+        "S",
+        function()
+          require("flash").treesitter()
+        end,
+        mode = { "n", "x", "o" },
+        desc = "Flash Treesitter",
+      },
+      {
+        "r",
+        function()
+          require("flash").remote()
+        end,
+        mode = "o",
+        desc = "Remote Flash",
+      },
+    },
+  },
 
   -- Diagnostics panel
   {
@@ -271,7 +313,6 @@ require("lazy").setup({
   { "lifepillar/pgsql.vim", ft = { "sql", "pgsql" } },
 
   -- Lean: LSP + infoview (proof state)
-  { "neovim/nvim-lspconfig", lazy = true },
   {
     "Julian/lean.nvim",
     ft = "lean",
