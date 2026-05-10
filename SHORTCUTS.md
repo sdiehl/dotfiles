@@ -80,15 +80,36 @@ Leader is Space. Local-leader is backslash.
 | gb          | Blame   |
 | do (visual) | Diffget |
 
-### Easy-align (visual mode)
+### mini.align
 
-| Shortcut | Align on    |
-| -------- | ----------- |
-| a=       | `=`         |
-| a;       | `::`        |
-| a,       | `,`         |
-| a-       | `->`        |
-| ga       | Interactive |
+Interactive flow: press `ga` (or `gA` to preview), then a textobject/motion, then the split character.
+
+| Shortcut | Action                                  |
+| -------- | --------------------------------------- |
+| ga       | Align (operator, normal/visual)         |
+| gA       | Align with preview (normal/visual)      |
+
+Examples: `gaip=` aligns the inner paragraph on `=`; visually select then `ga,` aligns on `,`.
+
+### Flash (motion)
+
+| Shortcut       | Action                                |
+| -------------- | ------------------------------------- |
+| s              | Flash jump (type chars, then label)   |
+| S              | Flash treesitter (jump to TS node)    |
+| r (op-pending) | Remote flash (operate at jump target) |
+
+### Treesitter textobjects
+
+| Shortcut  | Action                       |
+| --------- | ---------------------------- |
+| af / if   | Around / inside function     |
+| ac / ic   | Around / inside class        |
+| aa / ia   | Around / inside parameter    |
+| ]m / [m   | Next / prev function start   |
+| ]M / [M   | Next / prev function end     |
+| ]] / [[   | Next / prev class start      |
+| ][ / []   | Next / prev class end        |
 
 ### LSP
 
@@ -107,12 +128,14 @@ Inlay hints are auto-enabled on attach (rust-analyzer and any other server that 
 
 ### Completion (blink.cmp)
 
-| Shortcut        | Action               |
-| --------------- | -------------------- |
-| Ctrl+Space      | Show completion menu |
-| Ctrl+y          | Accept selection     |
-| Ctrl+n / Ctrl+p | Next / prev item     |
-| Ctrl+e          | Hide menu            |
+| Shortcut        | Action                       |
+| --------------- | ---------------------------- |
+| Ctrl+Space      | Show completion menu         |
+| Ctrl+y          | Accept selection             |
+| Ctrl+n / Ctrl+p | Next / prev item             |
+| Ctrl+e          | Hide menu                    |
+| Ctrl+l          | Snippet: jump to next field  |
+| Ctrl+h          | Snippet: jump to prev field  |
 
 ### Copilot (copilot.lua)
 
@@ -142,13 +165,15 @@ Inlay hints are auto-enabled on attach (rust-analyzer and any other server that 
 | s                  | Cycle severity filter         |
 | gb (in Trouble)    | Toggle current-buffer-only    |
 
-### Comment.nvim
+### Commenting (built-in)
+
+Native Neovim 0.10+ commenting (no plugin).
 
 | Shortcut    | Action                   |
 | ----------- | ------------------------ |
 | gcc         | Toggle line comment      |
 | gc (visual) | Toggle selection comment |
-| gbc         | Toggle block comment     |
+| gcap        | Comment paragraph        |
 
 ## Shell
 

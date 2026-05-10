@@ -32,6 +32,14 @@ require("lazy").setup({
       },
       panel = { enabled = false },
       filetypes = { ["*"] = true },
+      should_attach = function()
+        local name = vim.api.nvim_buf_get_name(0)
+        local size = vim.fn.getfsize(name)
+        if size > 100000 or size == -2 then
+          return false
+        end
+        return true
+      end,
     },
   },
 
@@ -127,6 +135,7 @@ require("lazy").setup({
     branch = "master",
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
+    dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
     config = function()
       -- Register Julian/tree-sitter-lean (not in nvim-treesitter master registry).
       -- Same author as lean.nvim. parser.c + scanner.c are pre-generated, so no
@@ -166,6 +175,28 @@ require("lazy").setup({
           "lean", -- via custom parser_config registered above (Julian/tree-sitter-lean)
         },
         highlight = { enable = true },
+        textobjects = {
+          select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+              ["af"] = "@function.outer",
+              ["if"] = "@function.inner",
+              ["ac"] = "@class.outer",
+              ["ic"] = "@class.inner",
+              ["aa"] = "@parameter.outer",
+              ["ia"] = "@parameter.inner",
+            },
+          },
+          move = {
+            enable = true,
+            set_jumps = true,
+            goto_next_start = { ["]m"] = "@function.outer", ["]]"] = "@class.outer" },
+            goto_next_end = { ["]M"] = "@function.outer", ["]["] = "@class.outer" },
+            goto_previous_start = { ["[m"] = "@function.outer", ["[["] = "@class.outer" },
+            goto_previous_end = { ["[M"] = "@function.outer", ["[]"] = "@class.outer" },
+          },
+        },
       })
     end,
   },
@@ -176,7 +207,13 @@ require("lazy").setup({
     lazy = false,
     version = "1.*",
     opts = {
-      keymap = { preset = "default" },
+      keymap = {
+        preset = "default",
+        ["<Tab>"] = {},
+        ["<S-Tab>"] = {},
+        ["<C-l>"] = { "snippet_forward", "fallback" },
+        ["<C-h>"] = { "snippet_backward", "fallback" },
+      },
       appearance = { nerd_font_variant = "mono" },
       completion = {
         documentation = { auto_show = true, auto_show_delay_ms = 200 },
@@ -203,7 +240,6 @@ require("lazy").setup({
 
   -- Editor enhancements
   { "lewis6991/gitsigns.nvim", event = "VeryLazy", opts = {} },
-  { "numToStr/Comment.nvim", event = "VeryLazy", opts = {} },
   { "windwp/nvim-autopairs", event = "InsertEnter", opts = { check_ts = true } },
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -307,7 +343,6 @@ require("lazy").setup({
   },
 
   -- Language syntax (lazy-loaded by filetype)
-  { "neovimhaskell/haskell-vim", ft = "haskell" },
   { "whonore/Coqtail", ft = "coq" },
   { "souffle-lang/souffle.vim", ft = "souffle" },
   { "lifepillar/pgsql.vim", ft = { "sql", "pgsql" } },
@@ -339,18 +374,6 @@ require("lazy").setup({
 
 -- PostgreSQL: prefer pgsql syntax for ambiguous .sql files
 vim.g.sql_type_default = "pgsql"
-
--- Disable Copilot for very large files.
-local copilot_grp = vim.api.nvim_create_augroup("sd_copilot", { clear = true })
-vim.api.nvim_create_autocmd("BufReadPre", {
-  group = copilot_grp,
-  callback = function(args)
-    local f = vim.fn.getfsize(vim.fn.expand("<afile>"))
-    if f > 100000 or f == -2 then
-      vim.b[args.buf].copilot_enabled = false
-    end
-  end,
-})
 
 -- ==============================================
 -- DIAGNOSTICS
@@ -406,7 +429,11 @@ vim.lsp.config("rust_analyzer", {
   settings = {
     ["rust-analyzer"] = {
       check = { command = "clippy" },
-      cargo = { allFeatures = true },
+      cargo = {
+        allFeatures = true,
+        buildScripts = { enable = true },
+      },
+      procMacro = { enable = true },
     },
   },
 })
