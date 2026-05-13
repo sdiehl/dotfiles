@@ -1,0 +1,65 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+# Jujutsu (jj) user config.
+# Docs: https://docs.jj-vcs.dev/latest/config/
+# Edit with `jj config edit --user`; show resolved values with `jj config list`.
+
+[user]
+name = "sdiehl"
+email = "stephen.m.diehl@gmail.com"
+
+[ui]
+# Default to `jj log` when invoked with no subcommand.
+default-command = "log"
+# Built-in side-by-side diff editor; press `c` to confirm.
+diff-editor = ":builtin"
+# Use git-style unified diffs in `jj diff` / `jj show`.
+diff-formatter = ":git"
+# Pipe output through delta so diffs render like the git pager does.
+pager = ["delta", "--pager", "less -FRX"]
+paginate = "auto"
+
+[ui.movement]
+# `jj next` / `jj prev` create a new working-copy commit on top of the target
+# instead of silently rewriting the current one. Safer when iterating.
+edit = false
+
+[git]
+# Don't auto-create local bookmarks for every fetched remote ref; explicit
+# tracking keeps the bookmark namespace clean.
+auto-local-bookmark = false
+# Write the change-id into the git commit header so colocated repos preserve
+# jj identity across `git` operations. Recommended default since jj 0.30.
+write-change-id-header = true
+
+[revsets]
+# `jj log` default: show work that diverges from main, plus a little context.
+log = "present(@) | ancestors(immutable_heads().., 2) | present(trunk())"
+
+[revset-aliases]
+# Relax immutability to the trunk only. Default also locks all remote
+# bookmarks, which gets in the way when rewriting local stacks before push.
+"immutable_heads()" = "present(trunk()) | tags()"
+"trunk()" = "present(main@origin) | present(master@origin) | root()"
+# Used by the `tug` alias: nearest bookmark at-or-before the given revision.
+"closest_bookmark(x)" = "(bookmarks() & ::x).heads()"
+
+[aliases]
+# Common shortcuts. `jj l` mirrors `git log --oneline` ergonomics; `jj s` is
+# status; `jj d` is diff; `tug` advances the nearest bookmark to @-.
+l = ["log"]
+s = ["status"]
+d = ["diff"]
+n = ["new"]
+e = ["edit"]
+ds = ["describe"]
+nuke = ["abandon"]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
+
+[snapshot]
+# Don't auto-snapshot huge artifacts into the working copy.
+max-new-file-size = "32MiB"
+
+[merge-tools.delta]
+# Make `jj diff --tool delta` work cleanly.
+diff-args = ["--color=always", "$left", "$right"]

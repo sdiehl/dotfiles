@@ -233,6 +233,18 @@ _cached_init zoxide
 _cached_init atuin
 unfunction _cached_init
 
+# jj completions (uses `jj util completion zsh`, not `jj init zsh`).
+if (( $+commands[jj] )); then
+  _jj_cache="$HOME/.cache/zsh/jj.zsh"
+  _jj_bin=$(command -v jj)
+  if [[ ! -f "$_jj_cache" || "$_jj_bin" -nt "$_jj_cache" ]]; then
+    mkdir -p "$HOME/.cache/zsh"
+    jj util completion zsh > "$_jj_cache" 2>/dev/null
+  fi
+  source "$_jj_cache"
+  unset _jj_cache _jj_bin
+fi
+
 eval "$(starship init zsh)"
 
 # fzf: use fd for file search, bat for preview

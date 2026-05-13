@@ -50,6 +50,10 @@ sync_file ~/.config/starship.toml "$DOTFILES_DIR/starship.toml"
 # Atuin
 sync_file ~/.config/atuin/config.toml "$DOTFILES_DIR/atuin/config.toml"
 
+# Jujutsu (jj)
+mkdir -p "$DOTFILES_DIR/jj"
+sync_file ~/.config/jj/config.toml "$DOTFILES_DIR/jj/config.toml"
+
 # Ripgrep
 sync_file ~/.ripgreprc "$DOTFILES_DIR/ripgreprc"
 
