@@ -26,6 +26,8 @@ sync_file ~/.zshrc "$DOTFILES_DIR/.zshrc"
 
 # Git
 sync_file ~/.gitconfig "$DOTFILES_DIR/gitconfig"
+mkdir -p "$HOME/.config/git"
+sync_file ~/.config/git/ignore "$DOTFILES_DIR/gitignore_global"
 
 # Neovim
 sync_file ~/.config/nvim/init.lua "$DOTFILES_DIR/nvim/init.lua"

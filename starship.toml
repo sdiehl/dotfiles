@@ -4,6 +4,7 @@ format = """
 $directory\
 $git_branch\
 $git_status\
+${custom.jj}\
 $line_break\
 $character"""
 
@@ -22,3 +23,14 @@ style = "red"
 [character]
 success_symbol = "[>](green)"
 error_symbol = "[>](red)"
+
+# jj status: shows short change_id + description when inside a jj repo.
+# `--ignore-working-copy` skips the snapshot so the prompt stays fast.
+# `when = "jj root"` keeps this module silent outside jj repos.
+[custom.jj]
+description = "Jujutsu change id and description"
+when = "jj root"
+command = "jj log -r @ --ignore-working-copy --no-graph --color=never -T 'separate(\" \", change_id.shortest(8), if(description, description.first_line(), \"(empty)\"))' 2>/dev/null"
+format = "[jj:$output]($style) "
+style = "cyan"
+ignore_timeout = true
