@@ -143,7 +143,7 @@ macos:
 
 devenv: lean4 python-tools
     @mkdir -p $HOME/.nvm
-    @export NVM_DIR="$HOME/.nvm" && . /opt/homebrew/opt/nvm/nvm.sh && nvm install {{node_version}} && npm install -g typescript typescript-language-server
+    @export NVM_DIR="$HOME/.nvm" && . /opt/homebrew/opt/nvm/nvm.sh && nvm install {{node_version}}
     @rustup default {{rust_channel}}
     @rustup component add rust-analyzer clippy rustfmt
     @gh extension install dlvhdr/gh-dash 2>/dev/null || true
