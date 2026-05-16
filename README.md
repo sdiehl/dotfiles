@@ -49,7 +49,7 @@ just clean            Remove all symlinks
 
 Agent configs (Claude Code, Codex, OpenCode) are managed here. Claude Code config
 lives in `~/Documents/DevBrain/claude/` and is symlinked into `~/.claude/` via
-`just claude-config`. Codex and OpenCode configs are symlinked directly from this repo.
+`just claude`. Codex and OpenCode configs are symlinked directly from this repo.
 
 All agents share read-only git rules, worktree conventions, and access to an
 Obsidian knowledge graph via MCP (`just claude` / `just codex` / `just opencode`).

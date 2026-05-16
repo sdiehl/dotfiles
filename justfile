@@ -25,8 +25,9 @@ default: basic
 # Basic: install + configure shell and editor essentials
 basic: brew-essentials zsh git nvim starship ripgrep lean4
 
-# Full: packages, all configs, devenv, AI tooling, macOS, scripts
-full: brew configs nvim-plugins macos devenv obsidian ai scripts
+# Full: packages, all configs, devenv, macOS, scripts
+# (AI configs are part of `configs`; `ai` recipe stays as a standalone shortcut)
+full: brew configs nvim-plugins macos devenv obsidian scripts
 
 # --- Package management ---
 
@@ -142,7 +143,7 @@ macos:
 
 devenv: lean4 python-tools
     @mkdir -p $HOME/.nvm
-    @export NVM_DIR="$HOME/.nvm" && . /opt/homebrew/opt/nvm/nvm.sh && nvm install {{node_version}}
+    @export NVM_DIR="$HOME/.nvm" && . /opt/homebrew/opt/nvm/nvm.sh && nvm install {{node_version}} && npm install -g typescript typescript-language-server
     @rustup default {{rust_channel}}
     @rustup component add rust-analyzer clippy rustfmt
     @gh extension install dlvhdr/gh-dash 2>/dev/null || true
@@ -197,10 +198,12 @@ claude:
         echo "Claude Code: Lean LSP MCP configured"
         claude plugin marketplace add cameronfreer/lean4-skills 2>/dev/null || true
         claude plugin install lean4@lean4-skills 2>/dev/null || true
-        echo "Claude Code: lean4-skills plugin installed"
         claude plugin install rust-analyzer-lsp@claude-plugins-official 2>/dev/null || true
         claude plugin install pyright-lsp@claude-plugins-official 2>/dev/null || true
-        echo "Claude Code: LSP plugins installed (rust-analyzer, pyright)"
+        claude plugin install typescript-lsp@claude-plugins-official 2>/dev/null || true
+        claude plugin install claude-md-management@claude-plugins-official 2>/dev/null || true
+        claude plugin install skill-creator@claude-plugins-official 2>/dev/null || true
+        echo "Claude Code: plugins installed (lean4, rust-analyzer, pyright, typescript, claude-md-management, skill-creator)"
         if [ -n "$OBSIDIAN_MCP_KEY" ]; then
             claude mcp add obsidian --scope user -- npx mcp-remote http://localhost:3001/mcp --header "Authorization: Bearer $OBSIDIAN_MCP_KEY" 2>/dev/null || true
             echo "Claude Code: Obsidian MCP configured"
