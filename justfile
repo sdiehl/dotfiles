@@ -159,6 +159,7 @@ python-tools:
     @uv python install {{python_version}}
     @echo "Installing Python {{python_version}} CLI tools via uv..."
     @uv tool install --python {{python_version}} black || true
+    @uv tool install --python {{python_version}} pyright || true
     @uv tool install --python {{python_version}} huggingface-hub || true
     @uv tool install --python {{python_version}} jpterm || true
     @uv tool install --python {{python_version}} nbconvert || true
@@ -197,6 +198,9 @@ claude:
         claude plugin marketplace add cameronfreer/lean4-skills 2>/dev/null || true
         claude plugin install lean4@lean4-skills 2>/dev/null || true
         echo "Claude Code: lean4-skills plugin installed"
+        claude plugin install rust-analyzer-lsp@claude-plugins-official 2>/dev/null || true
+        claude plugin install pyright-lsp@claude-plugins-official 2>/dev/null || true
+        echo "Claude Code: LSP plugins installed (rust-analyzer, pyright)"
         if [ -n "$OBSIDIAN_MCP_KEY" ]; then
             claude mcp add obsidian --scope user -- npx mcp-remote http://localhost:3001/mcp --header "Authorization: Bearer $OBSIDIAN_MCP_KEY" 2>/dev/null || true
             echo "Claude Code: Obsidian MCP configured"

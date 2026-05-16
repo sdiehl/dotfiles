@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-make        # bootstrap: installs just, then runs default (shell + editor)
+make # bootstrap: installs just, then runs default
 ```
 
 This installs the minimal packages (neovim, starship, ripgrep, delta, zoxide,
