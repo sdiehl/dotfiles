@@ -220,7 +220,8 @@ alias ticky='~/Git/pygui/pygui.py'
 
 # Cache tool init output, keyed on binary mtime
 _cached_init() {
-  local tool=$1 cache="$HOME/.cache/zsh/${tool}.zsh"
+  local tool=$1
+  local cache="$HOME/.cache/zsh/${tool}.zsh"
   local bin=$(command -v "$tool" 2>/dev/null) || return
   mkdir -p "$HOME/.cache/zsh"
   if [[ ! -f "$cache" || "$bin" -nt "$cache" ]]; then
