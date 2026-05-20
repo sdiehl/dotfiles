@@ -27,3 +27,5 @@
 	helper = !/opt/homebrew/bin/gh auth git-credential
 [branch]
 	autoSetupMerge = simple
+[init]
+	defaultBranch = main

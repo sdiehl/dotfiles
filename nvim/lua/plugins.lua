@@ -129,75 +129,109 @@ require("lazy").setup({
     end,
   },
 
-  -- Treesitter (master branch: locked but supported on Nvim 0.11)
+  -- Treesitter (main branch: supported on Nvim 0.10+, required on 0.12)
   {
     "nvim-treesitter/nvim-treesitter",
-    branch = "master",
+    branch = "main",
+    lazy = false,
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
-    dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
     config = function()
-      -- Register Julian/tree-sitter-lean (not in nvim-treesitter master registry).
-      -- Same author as lean.nvim. parser.c + scanner.c are pre-generated, so no
-      -- tree-sitter CLI needed.
-      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-      parser_config.lean = {
-        install_info = {
-          url = "https://github.com/Julian/tree-sitter-lean",
-          files = { "src/parser.c", "src/scanner.c" },
-          branch = "main",
-        },
-        filetype = "lean",
-      }
-
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = {
-          "python",
-          "rust",
-          "lua",
-          "vim",
-          "vimdoc",
-          "json",
-          "yaml",
-          "toml",
-          "markdown",
-          "markdown_inline",
-          "haskell",
-          "sql",
-          "bash",
-          "dockerfile",
-          "regex",
-          "query",
-          "comment",
-          -- "latex" requires tree-sitter CLI to build; built-in tex syntax is fine.
-          "bibtex",
-          "typst",
-          "lean", -- via custom parser_config registered above (Julian/tree-sitter-lean)
-        },
-        highlight = { enable = true },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
-              ["ac"] = "@class.outer",
-              ["ic"] = "@class.inner",
-              ["aa"] = "@parameter.outer",
-              ["ia"] = "@parameter.inner",
+      -- Register Julian/tree-sitter-lean via the User TSUpdate hook.
+      -- `install()` calls `reload_parsers()` which clears
+      -- `package.loaded['nvim-treesitter.parsers']` and fires this autocmd
+      -- right after, so any inline assignment beforehand is wiped.
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "TSUpdate",
+        callback = function()
+          require("nvim-treesitter.parsers").lean = {
+            install_info = {
+              url = "https://github.com/Julian/tree-sitter-lean",
+              files = { "src/parser.c", "src/scanner.c" },
+              branch = "main",
             },
-          },
-          move = {
-            enable = true,
-            set_jumps = true,
-            goto_next_start = { ["]m"] = "@function.outer", ["]]"] = "@class.outer" },
-            goto_next_end = { ["]M"] = "@function.outer", ["]["] = "@class.outer" },
-            goto_previous_start = { ["[m"] = "@function.outer", ["[["] = "@class.outer" },
-            goto_previous_end = { ["[M"] = "@function.outer", ["[]"] = "@class.outer" },
-          },
-        },
+          }
+        end,
       })
+
+      require("nvim-treesitter").setup({
+        install_dir = vim.fn.stdpath("data") .. "/site",
+      })
+
+      require("nvim-treesitter").install({
+        "python",
+        "rust",
+        "lua",
+        "vim",
+        "vimdoc",
+        "json",
+        "yaml",
+        "toml",
+        "markdown",
+        "markdown_inline",
+        "haskell",
+        "sql",
+        "bash",
+        "dockerfile",
+        "regex",
+        "query",
+        "comment",
+        "bibtex",
+        "typst",
+        "lean",
+      })
+
+      vim.api.nvim_create_autocmd("FileType", {
+        callback = function(args)
+          local ft = vim.bo[args.buf].filetype
+          local lang = vim.treesitter.language.get_lang(ft) or ft
+          pcall(vim.treesitter.start, args.buf, lang)
+        end,
+      })
+    end,
+  },
+
+  -- Treesitter textobjects (main branch: keymaps registered manually)
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    event = { "BufReadPost", "BufNewFile" },
+    config = function()
+      require("nvim-treesitter-textobjects").setup({
+        select = { lookahead = true },
+        move = { set_jumps = true },
+      })
+
+      local select = require("nvim-treesitter-textobjects.select").select_textobject
+      for _, m in ipairs({
+        { "af", "@function.outer" },
+        { "if", "@function.inner" },
+        { "ac", "@class.outer" },
+        { "ic", "@class.inner" },
+        { "aa", "@parameter.outer" },
+        { "ia", "@parameter.inner" },
+      }) do
+        vim.keymap.set({ "x", "o" }, m[1], function()
+          select(m[2], "textobjects")
+        end)
+      end
+
+      local move = require("nvim-treesitter-textobjects.move")
+      local mode = { "n", "x", "o" }
+      for _, m in ipairs({
+        { "]m", "goto_next_start", "@function.outer" },
+        { "]]", "goto_next_start", "@class.outer" },
+        { "]M", "goto_next_end", "@function.outer" },
+        { "][", "goto_next_end", "@class.outer" },
+        { "[m", "goto_previous_start", "@function.outer" },
+        { "[[", "goto_previous_start", "@class.outer" },
+        { "[M", "goto_previous_end", "@function.outer" },
+        { "[]", "goto_previous_end", "@class.outer" },
+      }) do
+        vim.keymap.set(mode, m[1], function()
+          move[m[2]](m[3], "textobjects")
+        end)
+      end
     end,
   },
 

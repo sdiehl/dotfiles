@@ -31,7 +31,8 @@ export PATH=$HOME/.cargo/bin:$PATH
 # ==============================================
 
 export EDITOR='nvim'
-export LD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
+# export LD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
+export DYLD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${DYLD_LIBRARY_PATH:+:"${DYLD_LIBRARY_PATH}"}"
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export WORKTREE_ROOT="$HOME/work"
 
