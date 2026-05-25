@@ -15,14 +15,14 @@ repos:
     hooks:
       - id: shfmt
         args: [-i, "4"]
-        files: ^(sync\.sh|bin/.*)$
+        files: ^sync\.sh$
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.10.0.1
     hooks:
       - id: shellcheck
         args: [-x]
-        files: ^(sync\.sh|bin/.*)$
+        files: ^sync\.sh$
 
   - repo: local
     hooks:

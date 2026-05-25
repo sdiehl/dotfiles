@@ -25,9 +25,9 @@ default: basic
 # Basic: install + configure shell and editor essentials
 basic: brew-essentials zsh git nvim starship ripgrep lean4
 
-# Full: packages, all configs, devenv, macOS, scripts
+# Full: packages, all configs, devenv, macOS
 # (AI configs are part of `configs`; `ai` recipe stays as a standalone shortcut)
-full: brew configs nvim-plugins macos devenv obsidian scripts
+full: brew configs nvim-plugins macos devenv obsidian
 
 # --- Package management ---
 
@@ -242,17 +242,6 @@ opencode:
     @mkdir -p {{config}}/opencode
     @ln -sf {{dotfiles}}/opencode/opencode.json {{config}}/opencode/opencode.json
     @echo "OpenCode: config linked"
-
-# --- Scripts ---
-
-scripts:
-    @echo "Installing scripts..."
-    @mkdir -p $HOME/bin
-    @ln -sf {{dotfiles}}/bin/lib-common.sh $HOME/bin/lib-common.sh
-    @ln -sf {{dotfiles}}/bin/morning $HOME/bin/morning
-    @ln -sf {{dotfiles}}/bin/eod $HOME/bin/eod
-    @chmod +x $HOME/bin/morning $HOME/bin/eod 2>/dev/null || true
-    @echo "Installed: lib-common.sh, morning, eod"
 
 # --- Cleanup ---
 

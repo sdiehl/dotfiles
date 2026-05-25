@@ -90,12 +90,6 @@ if [ -d "$HOME/.codex" ]; then
     cp "$HOME/.codex/config.toml" "$DOTFILES_DIR/codex/config.toml" 2>/dev/null || true
 fi
 
-# Scripts
-mkdir -p "$DOTFILES_DIR/bin"
-cp "$HOME/bin/lib-common.sh" "$DOTFILES_DIR/bin/lib-common.sh" 2>/dev/null || true
-cp "$HOME/bin/morning" "$DOTFILES_DIR/bin/morning" 2>/dev/null || true
-cp "$HOME/bin/eod" "$DOTFILES_DIR/bin/eod" 2>/dev/null || true
-
 # Auto-format synced files for CI
 if command -v taplo &>/dev/null; then
     taplo fmt "$DOTFILES_DIR" 2>/dev/null || true

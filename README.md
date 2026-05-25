@@ -37,7 +37,6 @@ just devenv           Node (LTS), Rust (nightly), Lean 4, gh-dash
 just python-tools     Python CLI tools via uv
 just obsidian         DevBrain vault structure + plugin configs
 just ai               All AI agent configs (Claude, Codex, OpenCode)
-just scripts          ~/bin scripts (morning, eod)
 just clean            Remove all symlinks
 ```
 

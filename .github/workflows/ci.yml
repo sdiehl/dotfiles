@@ -40,7 +40,7 @@ jobs:
         run: taplo fmt --check
 
       - name: Check shell formatting (shfmt)
-        run: shfmt -d -i 4 sync.sh bin/*
+        run: shfmt -d -i 4 sync.sh
 
       - name: Check Lua formatting (stylua)
         run: stylua --check nvim/
@@ -58,7 +58,7 @@ jobs:
       - name: Lint shell scripts (shellcheck)
         run: |
           bash -n sync.sh
-          shellcheck -x sync.sh bin/*
+          shellcheck -x sync.sh
 
       - name: Validate Brewfile syntax
         run: ruby -c Brewfile

@@ -168,19 +168,6 @@ Leader key is Space. Local-leader is backslash.
 - `brewfile-syntax` - Validate Brewfile
 - `justfile-check` - Validate justfile syntax
 
-## Claude Code Config
-
-All config lives in `~/Documents/DevBrain/claude/` (git-tracked, Obsidian-ignored)
-and is symlinked into `~/.claude/` via `just claude-config`.
-
-**Skills:** morning, eod, standup, weekly, sync
-
-**Commands:** `/morning`, `/eod`, `/sync`
-
-**Hooks:** session-end (appends timestamp to daily note)
-
-**Rules:** CLAUDE.md (global), onechronos.md (work repos)
-
 ## Development Environments
 
 **Node.js:**

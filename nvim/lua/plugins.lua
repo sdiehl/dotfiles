@@ -32,6 +32,12 @@ require("lazy").setup({
       },
       panel = { enabled = false },
       filetypes = { ["*"] = true },
+      -- Force Full text-sync: dodges the nvim 0.12 incremental-sync
+      -- assert in vim/lsp/sync.lua:136 that fires when Copilot's LSP
+      -- client tracks markdown / fast edits.
+      server_opts_overrides = {
+        flags = { allow_incremental_sync = false },
+      },
       should_attach = function()
         local name = vim.api.nvim_buf_get_name(0)
         local size = vim.fn.getfsize(name)
