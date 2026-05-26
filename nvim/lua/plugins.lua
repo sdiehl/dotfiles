@@ -383,7 +383,6 @@ require("lazy").setup({
   },
 
   -- Language syntax (lazy-loaded by filetype)
-  { "whonore/Coqtail", ft = "coq" },
   { "souffle-lang/souffle.vim", ft = "souffle" },
   { "lifepillar/pgsql.vim", ft = { "sql", "pgsql" } },
 

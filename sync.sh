@@ -37,8 +37,6 @@ if [ -d ~/.config/nvim/lua ] && [ ! -L ~/.config/nvim/lua ]; then
     cp -R ~/.config/nvim/lua/. "$DOTFILES_DIR/nvim/lua/"
 fi
 cp ~/.config/nvim/syntax/lean.vim "$DOTFILES_DIR/nvim/syntax/lean.vim" 2>/dev/null || true
-cp ~/.config/nvim/syntax/koka.vim "$DOTFILES_DIR/nvim/syntax/koka.vim" 2>/dev/null || true
-cp ~/.config/nvim/ftdetect/koka.vim "$DOTFILES_DIR/nvim/ftdetect/koka.vim" 2>/dev/null || true
 
 # Ghostty
 sync_file "$HOME/Library/Application Support/com.mitchellh.ghostty/config" "$DOTFILES_DIR/ghostty/config"

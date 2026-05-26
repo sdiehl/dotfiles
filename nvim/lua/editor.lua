@@ -67,7 +67,6 @@ vim.filetype.add({
     dl = "souffle",
     lean = "lean",
     typ = "typst",
-    v = "coq",
   },
 })
 

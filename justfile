@@ -63,16 +63,14 @@ nvim: nvim-config nvim-plugins nvim-parsers
 
 # Neovim: config symlinks only
 nvim-config:
-    @mkdir -p {{config}}/nvim/{syntax,ftdetect}
+    @mkdir -p {{config}}/nvim/syntax
     @rm -f {{config}}/nvim/init.vim
     @rm -f {{config}}/nvim/colors/jellybeans.vim
     @ln -sf {{dotfiles}}/nvim/init.lua {{config}}/nvim/init.lua
     @ln -sfn {{dotfiles}}/nvim/lua {{config}}/nvim/lua
     @ln -sfn {{dotfiles}}/nvim/queries {{config}}/nvim/queries
     @ln -sf {{dotfiles}}/nvim/lazy-lock.json {{config}}/nvim/lazy-lock.json
-    @[ -f "{{dotfiles}}/nvim/syntax/lean.vim" ] && ln -sf {{dotfiles}}/nvim/syntax/lean.vim {{config}}/nvim/syntax/ || true
-    @[ -f "{{dotfiles}}/nvim/syntax/koka.vim" ] && ln -sf {{dotfiles}}/nvim/syntax/koka.vim {{config}}/nvim/syntax/ || true
-    @[ -f "{{dotfiles}}/nvim/ftdetect/koka.vim" ] && ln -sf {{dotfiles}}/nvim/ftdetect/koka.vim {{config}}/nvim/ftdetect/ || true
+    @ln -sf {{dotfiles}}/nvim/syntax/lean.vim {{config}}/nvim/syntax/lean.vim
     @rm -f {{config}}/nvim/autoload/plug.vim 2>/dev/null || true
     @rmdir {{config}}/nvim/autoload 2>/dev/null || true
 
@@ -178,10 +176,10 @@ obsidian:
     @cp {{dotfiles}}/obsidian/core-plugins.json {{vault}}/.obsidian/ 2>/dev/null || true
     @cp {{dotfiles}}/obsidian/app.json {{vault}}/.obsidian/ 2>/dev/null || true
     @cp {{dotfiles}}/obsidian/appearance.json {{vault}}/.obsidian/ 2>/dev/null || true
-    @echo "NOTE: Install plugins via Obsidian GUI:"
-    @echo "  1. Enable community plugins"
-    @echo "  2. Install BRAT, add: aaronsb/obsidian-mcp-plugin"
-    @echo "  3. Configure API key in Semantic MCP settings"
+    @echo "NOTE: community-plugins.json lists plugin IDs but Obsidian won't auto-download the code."
+    @echo "After first launch, install each plugin via Settings > Community plugins:"
+    @jq -r '.[] | "  - " + .' {{dotfiles}}/obsidian/community-plugins.json
+    @echo "Then configure the API key for semantic-vault-mcp."
 
 # --- AI tooling ---
 

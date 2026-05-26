@@ -56,13 +56,12 @@ Leader key is Space. Local-leader is backslash.
 - `neo-tree.nvim` - File explorer (`Ctrl+N` toggle)
 - `lualine.nvim` - Status line
 - `vim-fugitive` - Git integration (`<leader>gd` diff, `gb` blame)
-- `vim-easy-align` - Text alignment (`a=`, `a;`, `a,`, `a-` in visual mode)
+- `mini.align` - Text alignment (`ga`, `gA` in normal/visual mode)
 
 **Editor Enhancements:**
 
-- `nvim-treesitter` (master branch, locked for Nvim 0.11) - 20 parsers: python, rust, lua, vim, vimdoc, json, yaml, toml, markdown, markdown_inline, haskell, sql, bash, dockerfile, regex, query, comment, bibtex, typst, lean (Lean parser via `Julian/tree-sitter-lean` registered as custom; queries from helix-editor; LaTeX uses Neovim's built-in `tex` syntax)
+- `nvim-treesitter` (main branch, Nvim 0.10+ / required on 0.12) - 20 parsers: python, rust, lua, vim, vimdoc, json, yaml, toml, markdown, markdown_inline, haskell, sql, bash, dockerfile, regex, query, comment, bibtex, typst, lean (Lean parser via `Julian/tree-sitter-lean` registered as custom)
 - `gitsigns.nvim` - Git diff in gutter
-- `Comment.nvim` - Toggle comments (`gcc`, `gc`)
 - `nvim-autopairs` - Auto close brackets (treesitter-aware, no pairing in strings/comments)
 - `indent-blankline.nvim` - Visual indent guides
 - `which-key.nvim` - Keybinding hints
@@ -92,15 +91,13 @@ Leader key is Space. Local-leader is backslash.
 
 **Language Support:**
 
-- `haskell-vim` - Haskell
-- `Coqtail` - Coq
 - `souffle.vim` - Souffle/Datalog
 - `pgsql.vim` - PostgreSQL (default for `.sql`)
-- Custom syntax: Lean, Koka
+- Custom syntax: Lean
 
 **Filetype detection:**
 
-- `.kk` -> koka, `.dl` -> souffle, `.fp` -> haskell, `.lean` -> lean, `.typ` -> typst, `.v` -> coq (overrides Verilog default), `.ll` -> llvm, `.y` -> happy, `.x` -> alex
+- `.dl` -> souffle, `.fp` -> haskell, `.lean` -> lean, `.typ` -> typst, `.ll` -> llvm, `.y` -> happy, `.x` -> alex, `.idr` -> idris, `.agda` -> agda
 
 **Keybindings (leader = Space):**
 
@@ -196,7 +193,7 @@ Leader key is Space. Local-leader is backslash.
 **Python:**
 
 - `uv` - Fast package manager
-- `python@3.13` (via uv)
+- `python@3.14` (via uv)
 - `black` - Code formatter
 - `huggingface-hub` - HuggingFace CLI (model downloads, repo management)
 - `jpterm` - Jupyter notebooks in the terminal

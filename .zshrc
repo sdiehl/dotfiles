@@ -20,11 +20,7 @@ source $ZSH/oh-my-zsh.sh
 # PATH
 # ==============================================
 
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH=/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH
-export PATH=/opt/homebrew/opt/grep/libexec/gnubin:$PATH
-export PATH=/opt/homebrew/opt/llvm/bin:$PATH
-export PATH=$HOME/.cargo/bin:$PATH
+export PATH="$HOME/.cargo/bin:/opt/homebrew/opt/llvm/bin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:$HOME/bin:/usr/local/bin:$PATH"
 
 # ==============================================
 # ENVIRONMENT
@@ -212,8 +208,6 @@ wts() {
     printf "  %-${maxname}s  %-${maxbranch}s  %s\n" "$n" "$b" "$i"
   done
 }
-
-alias ticky='~/Git/pygui/pygui.py'
 
 # ==============================================
 # TOOLS (cached init: regenerates when binary changes)
