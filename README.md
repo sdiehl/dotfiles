@@ -73,5 +73,5 @@ With ❤️ from Stephen
 
 [WTFPL](LICENSE), or [MIT](LICENSE-MIT) if you live somewhere whose legal system
 is too unfun for "do what the fuck you want" to count as binding prose (DE, where
-*gute Sitten* (lol) frowns on profanity in contracts; FR, IT, ES, BE, NL, BR, MX,
+_gute Sitten_ (lol) frowns on profanity in contracts; FR, IT, ES, BE, NL, BR, MX,
 and friends).
