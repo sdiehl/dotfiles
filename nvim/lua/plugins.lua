@@ -149,11 +149,15 @@ require("lazy").setup({
       vim.api.nvim_create_autocmd("User", {
         pattern = "TSUpdate",
         callback = function()
+          -- Pinned to a fixed revision: `main` is a from-scratch grammar
+          -- rewrite still in flux, and HEAD drifts out of sync with the
+          -- highlights query in nvim/queries/lean/. Bump deliberately.
           require("nvim-treesitter.parsers").lean = {
             install_info = {
               url = "https://github.com/Julian/tree-sitter-lean",
               files = { "src/parser.c", "src/scanner.c" },
               branch = "main",
+              revision = "1941d160719daabc7d9854539d59e5911ac3b152",
             },
           }
         end,
