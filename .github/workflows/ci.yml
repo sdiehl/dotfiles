@@ -22,9 +22,14 @@ jobs:
             ~/.cargo/bin
             ~/.cargo/registry
             ~/.cargo/git
-          key: ${{ runner.os }}-cargo-lint-v1
+          key: ${{ runner.os }}-cargo-lint-v2
 
       - name: Install formatters
+        env:
+          # Disable HTTP/2 multiplexing and retry hard: crates.io downloads
+          # intermittently fail with "HTTP2 framing layer" connection resets.
+          CARGO_HTTP_MULTIPLEXING: "false"
+          CARGO_NET_RETRY: "10"
         run: |
           command -v taplo || cargo install taplo-cli
           command -v dprint || cargo install dprint
