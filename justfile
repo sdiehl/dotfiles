@@ -14,7 +14,7 @@ vault := env("HOME") / "Documents/DevBrain"
 lean_full := env("LEAN_FULL", "false")
 
 # Toolchain versions (bump here)
-python_version := "3.14"
+python_version := "3.15"
 node_version := "24"
 rust_channel := "nightly"
 lean_toolchain := "leanprover/lean4:stable"
