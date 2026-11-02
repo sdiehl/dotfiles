@@ -28,7 +28,10 @@ export PATH="$HOME/.cargo/bin:/opt/homebrew/opt/llvm/bin:/opt/homebrew/opt/grep/
 
 export EDITOR='nvim'
 # export LD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
-export DYLD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${DYLD_LIBRARY_PATH:+:"${DYLD_LIBRARY_PATH}"}"
+# Global DYLD_LIBRARY_PATH shadows dylibs by leaf name for ALL programs (overrides
+# absolute install paths), which breaks nix and other self-contained tools (e.g. loads
+# Homebrew boost 1.90 into a binary linked against 1.87). Scope it per-tool instead.
+# export DYLD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${DYLD_LIBRARY_PATH:+:"${DYLD_LIBRARY_PATH}"}"
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export WORKTREE_ROOT="$HOME/work"
 

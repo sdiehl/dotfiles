@@ -13,42 +13,6 @@ require("lazy").setup({
     end,
   },
 
-  -- Copilot (Lua port: faster, lazy-loadable, better integration)
-  {
-    "zbirenbaum/copilot.lua",
-    event = "InsertEnter",
-    cmd = "Copilot",
-    opts = {
-      suggestion = {
-        auto_trigger = true,
-        keymap = {
-          accept = "<Tab>",
-          accept_word = false,
-          accept_line = false,
-          next = "<M-]>",
-          prev = "<M-[>",
-          dismiss = "<C-]>",
-        },
-      },
-      panel = { enabled = false },
-      filetypes = { ["*"] = true },
-      -- Force Full text-sync: dodges the nvim 0.12 incremental-sync
-      -- assert in vim/lsp/sync.lua:136 that fires when Copilot's LSP
-      -- client tracks markdown / fast edits.
-      server_opts_overrides = {
-        flags = { allow_incremental_sync = false },
-      },
-      should_attach = function()
-        local name = vim.api.nvim_buf_get_name(0)
-        local size = vim.fn.getfsize(name)
-        if size > 100000 or size == -2 then
-          return false
-        end
-        return true
-      end,
-    },
-  },
-
   -- Plenary (shared dep)
   { "nvim-lua/plenary.nvim", lazy = true },
 
@@ -482,3 +446,11 @@ vim.lsp.config("rust_analyzer", {
   },
 })
 vim.lsp.enable("rust_analyzer")
+
+-- prism-lsp (cargo install --path ~/Git/prism-lsp)
+vim.lsp.config("prism", {
+  cmd = { "prism-lsp" },
+  filetypes = { "prism" },
+  root_markers = { "prism.toml", ".git" },
+})
+vim.lsp.enable("prism")

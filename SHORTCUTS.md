@@ -137,15 +137,6 @@ Inlay hints are auto-enabled on attach (rust-analyzer and any other server that 
 | Ctrl+l          | Snippet: jump to next field |
 | Ctrl+h          | Snippet: jump to prev field |
 
-### Copilot (copilot.lua)
-
-| Shortcut | Action                   |
-| -------- | ------------------------ |
-| Tab      | Accept inline suggestion |
-| Alt+]    | Next suggestion          |
-| Alt+[    | Previous suggestion      |
-| Ctrl+]   | Dismiss suggestion       |
-
 ### Trouble (diagnostics panel)
 
 | Shortcut           | Action                        |

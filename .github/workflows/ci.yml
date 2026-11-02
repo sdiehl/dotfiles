@@ -68,10 +68,10 @@ jobs:
       - name: Validate Brewfile syntax
         run: ruby -c Brewfile
 
+      - uses: extractions/setup-just@v3
+
       - name: Validate justfile syntax
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
-          just --list
+        run: just --list
 
       - name: Validate YAML syntax
         run: |

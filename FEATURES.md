@@ -50,7 +50,6 @@ Leader key is Space. Local-leader is backslash.
 
 **Core Plugins:**
 
-- `copilot.lua` - GitHub Copilot (Lua port; Tab to accept, M-]/M-[ next/prev, C-] dismiss)
 - `blink.cmp` - LSP completion engine (C-Space show, C-y accept, C-n/C-p navigate)
 - `telescope.nvim` - Fuzzy finder (`Ctrl+P` files, `Ctrl+G` grep)
 - `neo-tree.nvim` - File explorer (`Ctrl+N` toggle)
