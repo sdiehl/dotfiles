@@ -68,7 +68,7 @@ jobs:
       - name: Validate Brewfile syntax
         run: ruby -c Brewfile
 
-      - uses: extractions/setup-just@v3
+      - uses: extractions/setup-just@v4
 
       - name: Validate justfile syntax
         run: just --list
